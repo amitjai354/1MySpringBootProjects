@@ -36,5 +36,4 @@ public class Cart {
     //cascadetype.remove: deletion of an entity and its child entity
 
     //in tcs, not used @joincolumn so column is user_user_id as class is user
-    //complete notes for all these
 }
