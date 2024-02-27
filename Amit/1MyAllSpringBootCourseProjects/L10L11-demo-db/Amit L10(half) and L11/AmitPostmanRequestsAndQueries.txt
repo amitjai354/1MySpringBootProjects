@@ -1,0 +1,57 @@
+use jbdl27_bookdb;
+select * from author;
+select * from my_book;
+select * from hibernate_sequence;
+
+
+Post localhost:8080/book  // id not passed as id auto incremented
+{
+	
+	"name":"Intro to Programming",
+	"authorName":"William",
+	"cost":800
+}
+
+
+
+Put localhost:8080/book
+{
+	"id":2,
+	"name":"Intro to Programming",
+	"authorName":"William",
+	"cost":800
+}
+
+{
+    "id":1,.. now id auto inc done by hibernate so no need to give.. earlier we wrote auto incr in sql query to done by that db
+    "name":"Intro to CS",
+    "authorName":"William",
+    "cost":1000
+}
+
+
+
+PUT localhost:8080/book
+{
+	"id":2,
+	"name":"Intro to Programming",
+	"authorName":"William",
+	"cost":1000
+}
+
+
+
+
+
+
+Post localhost:8080/author
+{
+	"name":"Peter",
+	"age":60
+}
+
+
+Get localhost:8080/book?id=1
+Get localhost:8080/book/all
+
+delete localhost:8080/book?id=1

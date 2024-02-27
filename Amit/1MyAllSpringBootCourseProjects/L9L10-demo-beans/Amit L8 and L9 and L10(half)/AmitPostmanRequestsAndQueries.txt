@@ -1,0 +1,34 @@
+
+
+Psot localhost:8080/demo3/config
+
+
+https://picsum.photos/id/1/200/300
+get localhost:8080/api/v1/image?id=1
+get localhost:8080/api/v1/image?id=1&l=720&b=1280
+
+
+
+
+
+Postman  Body then form data
+part1 file sample.csv
+part2 txt this is a sdample file
+Post localhost:8080/api/v1/file/parse
+
+
+
+
+
+
+Post localhost:8080/author
+{
+	"name":"Peter",
+	"age":60
+}
+
+
+Get localhost:8080/book?id=1
+Get localhost:8080/book/all
+
+

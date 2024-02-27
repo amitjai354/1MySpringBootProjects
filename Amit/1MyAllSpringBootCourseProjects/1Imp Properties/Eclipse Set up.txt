@@ -1,0 +1,13 @@
+just search setuop maven on eclip[se... can download from eclipse marketplace or by providing maven url..
+
+i just imp[ortefd project and it automaticaslly asked me to download maven plugins and install software.
+
+
+First time open maven maven project.. it will install swome plgin and software by default.. leave for some time
+When open project(maven).. leave for some time, it will try to download all the depemndencies.
+
+if not resolving dependencies.. gop to project tab then click update then check force update then ok.. it willl forcely download dependencies... otherewise due to slow connection does not downloads dependeniesc.
+
+******************
+
+uninstall eclipse.. delete .eclipse and eclipse folders in users folder and normally eclipse folder is also in users folder but i have kept that in c program files.. so delete from there
