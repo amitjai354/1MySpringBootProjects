@@ -25,9 +25,10 @@ public class CartProduct {
     @JoinColumn(name = "cart_id", referencedColumnName = "cartId")
     @JsonIgnore // do not want to see this filed in json response that we return
     private Cart cart;
-    //join column and mappedBy.. which one to write where..FK here also there also
+    //join column and mappedBy.. Fk created there where write jpoin column not there where mapped by
     //in insert, we are only passing  cartId and productId, quantity
     //this means.. we will write join coulmn here with name of new column.. cartId
+    //cart id will be FK in this table
 
     @ManyToOne()
     @JoinColumn(name = "product_id", referencedColumnName = "productId")

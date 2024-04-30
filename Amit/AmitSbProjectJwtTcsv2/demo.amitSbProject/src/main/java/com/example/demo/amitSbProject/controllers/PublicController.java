@@ -1,10 +1,18 @@
 package com.example.demo.amitSbProject.controllers;
 
+import com.example.demo.amitSbProject.configs.JwtUtil;
+import com.example.demo.amitSbProject.models.JwtRequest;
+import com.example.demo.amitSbProject.models.JwtResponse;
 import com.example.demo.amitSbProject.models.MyUser;
 import com.example.demo.amitSbProject.models.Product;
 import com.example.demo.amitSbProject.repositories.ProductRepo;
+import com.example.demo.amitSbProject.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +25,15 @@ public class PublicController {
 
     @Autowired
     ProductRepo productRepo;
+
+    @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @GetMapping("/test")
     public String test(){
@@ -57,9 +74,28 @@ public class PublicController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MyUser myUser){
+    public ResponseEntity<String> login(@RequestBody JwtRequest jwtRequest) throws Exception {
         //to take response body from api as input, need one class that has username and password as attribute
         //getting 403 Forbidden on wrong credentials, but it should give 401 so create class to send 401
-        return null;
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new
+                UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword());
+
+        try{
+            authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception();
+            //this throw is mandatory otherwise will print error thyen below code will execute and generate token even if
+            //wrong credentials provided
+        }
+        UserDetails myUserDetails = myUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
+        String token = jwtUtil.generateToken(myUserDetails);
+        //JwtResponse jwtResponse = new JwtResponse(token);
+
+        //return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.OK);
+
     }
 }

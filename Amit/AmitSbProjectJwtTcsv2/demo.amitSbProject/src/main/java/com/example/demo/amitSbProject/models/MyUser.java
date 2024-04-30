@@ -54,8 +54,7 @@ public class MyUser implements UserDetails {
 
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "userId"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "userId"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;// = new HashSet<>(); //working on both for enum..
 
@@ -70,6 +69,7 @@ public class MyUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //need to return something which is extending GrantedAuthority
         return this.roles.stream().map(r->new RoleGrantedAuthority(r.name())).collect(Collectors.toList());
+        //just using new RoleGrantedAuthority(String role) => this converts role to granted authority
     }
 
     @Override

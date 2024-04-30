@@ -1,4 +1,7 @@
 package com.example.demo.amitSbProject.repositories;
 
-public class CartProductRepo {
+import com.example.demo.amitSbProject.models.CartProduct;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CartProductRepo extends JpaRepository<CartProduct, Integer> {
 }
