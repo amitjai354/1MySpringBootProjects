@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
@@ -24,4 +25,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     // convert to upper or lower case
 
     //if you are writing your query you must fetch all columns otherwise error..* also does not work so write all cloumn names
+
+    List<Product> findBySellerUserId(Integer sellerId);
+    Optional<Product> findBySellerUserIdAndProductId(Integer sellerId, Integer productId);
 }

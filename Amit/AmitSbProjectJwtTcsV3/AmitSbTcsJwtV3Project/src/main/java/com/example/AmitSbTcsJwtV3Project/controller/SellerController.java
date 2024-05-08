@@ -102,6 +102,11 @@ public class SellerController {
             //return ResponseEntity.ok(productRepo.saveAndFlush(product));
             return ResponseEntity.ok(productRepo.save(product));
             //saveandflush immediately save data
+            //should we check if product already exists for given product id and seller id, if product not exists then
+            //save product othjeriwse error, seller id will not be blank so while checking product id check seller id also
+            //and also there are 2 sellers so each seller can save same product but for this primary key should include
+            //seller id as well
+            //there is one query findbyselller id and product id what is use of that
         }
         catch (Exception e){
             e.printStackTrace();
@@ -123,28 +128,73 @@ public class SellerController {
 
     @GetMapping("/product")
     public ResponseEntity<Object> getAllProduct(){
-        List<Product> allProduct = productRepo.findAll();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User myUser=userRepo.findByUsername(username);
+        List<Product> allProduct = productRepo.findBySellerUserId(myUser.getUserId());
         if(allProduct.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(productRepo.findAll());
+        return ResponseEntity.ok(allProduct);
     }
 
     @GetMapping("/product/{productId}")
     public ResponseEntity<Object> getProduct(@PathVariable("productId") int productId){
-        if(productRepo.findById(productId).isPresent()){
-            return ResponseEntity.ok(productRepo.findById(productId).get());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User myUser = userRepo.findByUsername(username);
+        //if use findById then user can see products of other users also, this is not right
+        //seller should be able to see product by id only from the products which he added
+        if(productRepo.findBySellerUserIdAndProductId(myUser.getUserId(),productId).isPresent()){
+            return ResponseEntity.ok(productRepo.findBySellerUserIdAndProductId(myUser.getUserId(),productId).get());
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PutMapping("/product")
-    public ResponseEntity<Object> putProduct(){
-        return null;
+    public ResponseEntity<Object> putProduct(@RequestBody Product product){
+        try{
+            if (product.getProductId()==null){
+                return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            }
+            else {
+                String username=SecurityContextHolder.getContext().getAuthentication().getName();
+                User myUser=userRepo.findByUsername(username);
+                Product productFromDb=productRepo.findBySellerUserIdAndProductId(myUser.getUserId(), product.getProductId()).orElse(null);
+                if (productFromDb==null){
+                    productFromDb=new Product();
+                }
+                productFromDb.setProductId(product.getProductId());
+                productFromDb.setProductName(product.getProductName());
+                productFromDb.setPrice(product.getPrice());
+                productFromDb.setSeller(myUser);
+
+                Category categoryFromDb=categoryRepo.findByCategoryName(product.getCategory().getCategoryName()).orElse(null);
+                if (categoryFromDb==null) {
+                    categoryFromDb = categoryRepo.save(product.getCategory());
+                }
+                productFromDb.setCategory(categoryFromDb);
+                productFromDb=productRepo.save(productFromDb);
+                return ResponseEntity.ok(productFromDb);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+        }
+
     }
 
     @DeleteMapping("/product/{productId}")
-    public ResponseEntity<Product> deleteProduct(){
-        return null;
+    public ResponseEntity<Product> deleteProduct(@PathVariable("productId") int productId){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        User myUser = userRepo.findByUsername(username);
+        Product productFromDb=productRepo.findBySellerUserIdAndProductId(myUser.getUserId(), productId).orElse(null);
+        if (productFromDb==null){
+            return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).build();
+        }
+        else {
+            productRepo.deleteById(productId);
+            return ResponseEntity.ok().build();
+        }
     }
 }

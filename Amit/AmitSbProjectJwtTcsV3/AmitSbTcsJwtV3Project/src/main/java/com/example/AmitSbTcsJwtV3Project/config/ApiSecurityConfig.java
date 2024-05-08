@@ -35,7 +35,8 @@ public class ApiSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 //.authorizeHttpRequests(a->a.requestMatchers("/product").authenticated().anyRequest().permitAll())
-                .authorizeHttpRequests(a->a.requestMatchers("/product").hasAuthority("SELLER").anyRequest().permitAll())
+                .authorizeHttpRequests(a->a.requestMatchers("/product").hasAuthority("SELLER")
+                        .requestMatchers("/cart").hasAuthority("CONSUMER").anyRequest().permitAll())
                 //hasAuthory is working perfectly, hasRole is giving forbidden for Seller as well.
                 //has Role automatically adds ROLE_SELLER so ROLE_SELLER does not matches with SELLER so FOrbidden
                 .exceptionHandling(e->e.authenticationEntryPoint(apiAuthenticationEntryPoint));
