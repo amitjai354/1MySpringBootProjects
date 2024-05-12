@@ -44,6 +44,9 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+	//here i user can be both customer and seller if many to many using, many to many means one user has many roles and one role has many users
+	//Many to one means many user can have one role/one role can have many users
+    //but one user can not have many roles, he can not be both owner and customer
     //enumerated is just to tell want to consider string or ordinal 1, 2.. string so in user_role table string column
     //CollectionTable is to create new table user_role and we are givinf column name as user_id, we can give referenced
     //column name also means pk of other table rhat will be fk here
