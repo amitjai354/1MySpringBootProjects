@@ -27,6 +27,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     LoginService loginService;
 
+    @Autowired
+    UserService userService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //we are gettiong request and response in input so means header code here
@@ -49,7 +52,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 //once got the user name get userdetails
                 //and same UsernamePasswordAuthenticationToken is used here afterall setting this autyentication only
                 //also we got token so validate token also
-                UserDetails userDetails = loginService.loadUserByUsername(username);
+                //UserDetails userDetails = loginService.loadUserByUsername(username);
+                UserDetails userDetails= userService.getUserByUsername(username);
                 Boolean validateToken = jwtUtil.validateToken(token, userDetails);
                 if (validateToken){
                     //set the authentication

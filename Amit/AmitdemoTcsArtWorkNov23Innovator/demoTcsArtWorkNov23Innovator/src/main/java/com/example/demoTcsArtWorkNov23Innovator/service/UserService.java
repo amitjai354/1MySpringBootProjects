@@ -16,6 +16,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    //given in exam
     public UserModel getUserByEmail(String email){
         //return userRepository.findByEmail(email).orElseThrow(()->new RuntimeException());
         return userRepository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("Username not found"));
@@ -39,4 +40,7 @@ public class UserService {
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //        return userRepository.findByUsername(username);
 //    }
+    public UserModel getUserByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("Username not found!!"));
+    }
 }

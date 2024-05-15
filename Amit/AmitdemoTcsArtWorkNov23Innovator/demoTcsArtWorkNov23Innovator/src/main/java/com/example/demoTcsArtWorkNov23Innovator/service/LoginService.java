@@ -41,7 +41,11 @@ public class LoginService implements UserDetailsService {
     }
 
     private UserDetails buildUserForAuthentication(UserModel userModel){
-        return null;
+        //can not use above method in filter for authentication as there Token returns username from token
+        //Claims::getSubject returns username not emails.. so can not use above method.. loadUserbyUsername(email)
+        //use this one method in filter for authentication
+        //we can generate usermodel from jwt util and then use this method to get user details
+        return userModel;
     }
 
     private List<GrantedAuthority> buildUserAuthority(String u){

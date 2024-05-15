@@ -1,10 +1,8 @@
 package com.example.demoTcsArtWorkNov23Innovator.security;
 
 import com.example.demoTcsArtWorkNov23Innovator.service.LoginService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -26,7 +24,7 @@ public class SecurityConfiguration {
     AuthenticationFilter authenticationFilter;
 
     @Autowired
-    myAuthenticationEntryPoint myAuthenticationEntryPoint;
+    MyAuthenticationEntryPoint myAuthenticationEntryPoint;
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
@@ -39,7 +37,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c->c.disable())
-                .authorizeHttpRequests(a->a.anyRequest().permitAll())
+                .authorizeHttpRequests(a->a.requestMatchers("/artWork/add").hasAuthority("Owner")
+                        .requestMatchers("/artWork/list").hasAnyAuthority("Owner","Customer")
+                        .requestMatchers("/artWork/update/**").hasAnyAuthority("Owner","Customer")
+                        .anyRequest().permitAll())
                 .exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
     //add required annotation to make the art repository
-    //UserModel findByUsername(String username);
+    Optional<UserModel> findByUsername(String username);
     Optional<UserModel> findByEmail(String email);
 }

@@ -37,7 +37,7 @@ public class DataLoader implements ApplicationRunner {
 
         userRepository.save(new UserModel( 1,"owner1", "owner123$", "owneremail@gmail.com",roleRepository.findById(1).orElse(null)));
         userRepository.save(new UserModel(2,"owner2","owner789$","owneremail2@gmail.com",roleRepository.findById(1).orElse(null)));
-        userRepository.save(new UserModel(3,"customer","customer123$","customeremail2@gmail.com", roleRepository.findById(2).orElse(null)));
+        userRepository.save(new UserModel(3,"customer","customer123$","customeremail@gmail.com", roleRepository.findById(2).orElse(null)));
 //        UserModel user1=userRepository.save(new UserModel( "owner1", "owner123$", "owneremail@gmail.com",role1));
 //        UserModel user2=userRepository.save(new UserModel("owner2","owner789$","owneremail2@gmail.com",role1));
 
