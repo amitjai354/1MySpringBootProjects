@@ -104,7 +104,30 @@ public class ArtService {
     //only the owner of that particular artwork can update
     //no content 204 and bad request 400 and forbidden 403
     public ResponseEntity<Object> deleteArtWork(int id){
-        return null;
+        try{
+            UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            //will get class cast exception here if token not passed in header and security configuration not
+            //defined properly or permit all, if properly written request matcher then 403 forbidden
+            String email = userModel.getEmail();
+            UserModel userModelFromDb = userService.getUserByEmail(email);
+            ArtModel artModelFromDb = artRepository.findById(id).orElse(null);
+            if (artModelFromDb==null){
+                return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("not found");
+            }
+            if(artModelFromDb.getOwnerId()!=userModelFromDb.getId()){
+                return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("you don't have permission");
+            }
+            artRepository.deleteById(id);
+            return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+            //204 is not error, this means successfukly deleted 2xx is successful, 4xx is error
+            //204 successfuly No content means does not return anything in response body
+            //it discards response body
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+        }
+
     }
 
 }

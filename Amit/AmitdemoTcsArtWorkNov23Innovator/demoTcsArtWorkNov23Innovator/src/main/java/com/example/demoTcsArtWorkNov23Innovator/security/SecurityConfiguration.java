@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(a->a.requestMatchers("/artWork/add").hasAuthority("Owner")
                         .requestMatchers("/artWork/list").hasAnyAuthority("Owner","Customer")
                         .requestMatchers("/artWork/update/**").hasAnyAuthority("Owner","Customer")
+                        .requestMatchers("/artWork/delete/id/**").hasAnyAuthority("Owner", "Customer")
                         .anyRequest().permitAll())
                 .exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

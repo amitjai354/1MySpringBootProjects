@@ -43,7 +43,7 @@ public class ArtController {
     }
 
     @DeleteMapping("/delete/id")
-    public ResponseEntity<Object> deleteArtWork(int id){
-        return null;
+    public ResponseEntity<Object> deleteArtWork(@RequestParam("id") int id){
+        return artService.deleteArtWork(id);
     }
 }
