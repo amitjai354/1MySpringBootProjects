@@ -19,6 +19,21 @@ import java.util.function.Function;
 
 @Configuration
 public class JwtUtil {
+    // <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+		// <dependency>
+		// 	<groupId>io.jsonwebtoken</groupId>
+		// 	<artifactId>jjwt</artifactId>
+		// 	<version>0.9.0</version>
+		// </dependency>
+
+		// <dependency>
+		// 	<groupId>javax.xml.bind</groupId>
+		// 	<artifactId>jaxb-api</artifactId>
+		// 	<version>2.3.0</version>
+		// </dependency>
+        //eith above dependency working with 
+        //String jwtSecret="amit"; as well
+        //but woth new jjwt dependecy where impl jackson, not working with this
     String jwtSecret = "4261656C64756E67456G66879855555432H45562J2234";
     public static final long JWT_TOKEN_VALIDITY=5*60*60*1000;
 
@@ -143,3 +158,115 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
+
+
+
+// package com.example.demoTcsArtWorkNov23Innovator.security;
+
+// import com.example.demoTcsArtWorkNov23Innovator.service.UserService;
+// import io.jsonwebtoken.Claims;
+// import io.jsonwebtoken.Jwts;
+// import io.jsonwebtoken.SignatureAlgorithm;
+// import io.jsonwebtoken.io.Decoders;
+// import io.jsonwebtoken.security.Keys;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.stereotype.Component;
+
+// import javax.crypto.SecretKey;
+// import java.io.Serializable;
+// import java.nio.charset.StandardCharsets;
+// import java.util.Date;
+// import java.util.HashMap;
+// import java.util.Map;
+// import java.util.function.Function;
+
+// @Component
+// public class JWTUtil implements Serializable {
+
+//     @Autowired
+//     UserService userService;
+
+//     public static final long JWT_TOKEN_VALIDITY=500*60*60*1000;//5*60*60*1000
+//     String secretKey="randomkey123tooShortKeyE1234567898ABHGVVNgfdmhjn475877988";
+//     //String secretKey="andomkey1234261656C64756E67";//in 0.11.5 generated token but not in 0.12.5
+//     //String secretKey="randomkey123";//working with this as well in 0.11.5 but in DoGenerate method need to comment sign with line completely
+//     //working with this always even with parser builder just comment sign with in do generate
+//     //if write signWith then sayoing 72 bit less than 256 bit in 0.11.5 also Durgesh also said that keep string large
+//     //The JWT JWA Specification (RFC 7518, Section 3.2) states that keys used with HMAC-SHA algorithms
+//     // MUST have a size >= 256 bits (the key size must be greater than or equal to the hash output size).
+//     // Consider using the Jwts.SIG.HS256.key() builder (or HS384.key() or HS512.key()) to create a key
+//     // guaranteed to be secure enough for your preferred HMAC-SHA algorithm.
+//     //error when login api if secret key is too short.. it shoyld be 256 bit, but randomKey123 is 72 bit
+//     //is there any security where this short one will work.. there is one 64 bit as well
+
+//     private SecretKey getSigningKey() {
+//         //byte[] keyBytes = Decoders.decode(secretKey);// this will not work, error Base64 is must
+//         byte[] keyBytes = Decoders.BASE64.decode(secretKey);//works with both 0.11.5 and 0.12.5, usese our String jwtSecret
+//         //byte[] keyBytes = this.secretKey.getBytes(StandardCharsets.UTF_8);//with this also key short error, if complete key then generating token
+//         return Keys.hmacShaKeyFor(keyBytes);
+//     }
+
+//     public String getUsernameFromToken(String token){
+//         return getClaimFromToken(token, Claims::getSubject);
+//     }
+
+//     public Date getExpirationDateFromToken(String token){
+//         return getClaimFromToken(token, Claims::getExpiration);
+//     }
+
+//     public <T> T getClaimFromToken(String token, Function<Claims, T> claimResolver){
+//         //We have 2 T in return Type, must remember that other wise error
+//         final Claims claims = getAllClaimsFromToken(token);
+//         return claimResolver.apply(claims);
+//     }
+
+//     private Claims getAllClaimsFromToken(String token){
+//         //return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();//deprecated parser and signing key
+//         //return Jwts.parser().parseClaimsJws(token).getBody();//parser is deprecated use parseBuilder instead say
+//         //return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();//no deprecated here in 0.11.5 and generating token with long string
+//         //parserBuilder not present in 0.12.5 here verifyWith only verifyWith not present in 0.11.5
+//         return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();//verify with does not work with 0.12.5
+//     }
+
+//     private Boolean isTokenExpired(String token){
+//         final Date expiration = this.getExpirationDateFromToken(token);
+//         return expiration.before(new Date());
+//     }
+
+//     public String generateToken(UserDetails userDetails){
+//         Map<String, Object> claims = new HashMap<>();
+//         return doGenerateToken(claims, userDetails.getUsername());
+//     }
+
+//     private String doGenerateToken(Map<String, Object> claims, String subject){
+//         return Jwts.builder() ///version 0.12.5
+//                 .claims(claims)
+//                 .subject(subject)
+//                 .issuedAt(new Date(System.currentTimeMillis()))
+//                 .expiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))//this is inside new date
+//                 .signWith(getSigningKey()) // if comment this generating token but later when access any api with token then saying boit is small
+//                 //now this is rule that string must be greater because in older jwt this same code used to work which we have wrtten in 0.11.5
+//                 //but now this same code does not work for smaller string
+//                 //.signWith(getSigningKey(), SignatureAlgorithm.HS256)//thi si deprecated in 0.12.5 but not in 0.11.5
+//                 .compact();
+// //        return Jwts.builder()
+// //                .setClaims(claims)
+// //                .setSubject(subject)
+// //                .setIssuedAt(new Date(System.currentTimeMillis()))
+// //                .setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
+// //                //.signWith(SignatureAlgorithm.HS256, secretKey)//deperecated and same error also bit is less, if comment this line sign with
+// //                //and compact without signWith then this is working with any length of string
+// //                //.signWith(secretKey, SignatureAlgorithm.HS256) key, Algorithm we need to pass can use in 0.12.5 not deprecated
+// //                //.signWith(getSigningKey(),SignatureAlgorithm.HS256)//this is not dep[recated, can tell Base 64 encoded key to which algop use to encrypt
+// //                //.signWith(getSigningKey(),SignatureAlgorithm.ES384)//this is not dep[recated, can tell Base 64 encoded key to which algop use to encrypt
+// //                //.signWith(getSigningKey(),SignatureAlgorithm.RS256)//same error
+// //                .compact();
+//     }
+
+//     public Boolean validateToken(String token, UserDetails userDetails){
+//         final String username = this.getUsernameFromToken(token);
+//         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+//     }
+// }
+
