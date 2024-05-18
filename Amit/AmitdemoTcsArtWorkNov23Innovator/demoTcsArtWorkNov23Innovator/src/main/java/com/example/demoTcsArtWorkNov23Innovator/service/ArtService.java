@@ -24,7 +24,7 @@ public class ArtService {
     //created 201 and bad request 400
     public ResponseEntity<Object> postArtWork(ArtModel artModel){
         try{
-            String email1=SecurityContextHolder.getContext().getAuthentication().getName();//owner1
+            //String email1=SecurityContextHolder.getContext().getAuthentication().getName();//owner1
             //UserDetails userDetails= (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel userModel1= (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             //Both userDetails and userModel has email in debug mode

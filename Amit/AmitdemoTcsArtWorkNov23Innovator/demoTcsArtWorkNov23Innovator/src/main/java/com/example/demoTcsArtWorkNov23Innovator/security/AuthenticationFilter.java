@@ -52,8 +52,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 //once got the user name get userdetails
                 //and same UsernamePasswordAuthenticationToken is used here afterall setting this autyentication only
                 //also we got token so validate token also
-                //UserDetails userDetails = loginService.loadUserByUsername(username);
-                UserDetails userDetails= userService.getUserByUsername(username);
+                UserDetails userDetails = loginService.loadUserByUsername(username);
+                //UserDetails userDetails= userService.getUserByUsername(username);
                 Boolean validateToken = jwtUtil.validateToken(token, userDetails);
                 if (validateToken){
                     //set the authentication
