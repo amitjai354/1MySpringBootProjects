@@ -163,6 +163,7 @@ public class JwtUtil {
 
 // package com.example.demoTcsArtWorkNov23Innovator.security;
 
+// import com.example.demoTcsArtWorkNov23Innovator.model.UserModel;
 // import com.example.demoTcsArtWorkNov23Innovator.service.UserService;
 // import io.jsonwebtoken.Claims;
 // import io.jsonwebtoken.Jwts;
@@ -236,7 +237,11 @@ public class JwtUtil {
 
 //     public String generateToken(UserDetails userDetails){
 //         Map<String, Object> claims = new HashMap<>();
-//         return doGenerateToken(claims, userDetails.getUsername());
+//         UserModel userModel = (UserModel) userDetails;
+//         System.out.println(userModel.getEmail());//this is working perfectly,
+//         //so we can create one method getEmail
+//         //return doGenerateToken(claims, userDetails.getUsername());
+//         return doGenerateToken(claims, userModel.getEmail());
 //     }
 
 //     private String doGenerateToken(Map<String, Object> claims, String subject){
@@ -266,7 +271,10 @@ public class JwtUtil {
 
 //     public Boolean validateToken(String token, UserDetails userDetails){
 //         final String username = this.getUsernameFromToken(token);
-//         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+//         UserModel userModel = (UserModel) userDetails;
+//         //return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+//         return username.equals(userModel.getEmail()) && !isTokenExpired(token);
 //     }
 // }
+
 
