@@ -1,11 +1,9 @@
 package com.example.demoTcsArtWorkNov23Innovator.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+//@Table(indexes = @ForeignKey(value = ConstraintMode.CONSTRAINT(foreignKeyDefinition = "ownerId")))
 public class ArtModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +16,32 @@ public class ArtModel {
     private boolean isAvailable=true;
     private String dimensions;
     private String imageLink;
+
+//    @OneToOne
+//    @JoinColumn(name = "ownerId", referencedColumnName = "id")
+    //@Column()//no any field for fk
     private int ownerId;
+    //private UserModel Ownner;//can not write this 2we hav egetter setter for owner id
+    //unable to start tomcat if write join column at int,
+    //also if do not write then in db FK constraint not showing
+    //this int owner id they have given himself
+    //here this is: int owner id not as private UserModel ownerId;
+    //so can not use @One to one or join column, it should be some class to use these
+    //But how it is foreign key then..
+    //in java code when saving art model, I am getting user by owner id from db
+    //in product.java :
+    //@ManyToOne()
+    //    @JoinColumn(name = "seller_id", referencedColumnName = "userId", updatable = false)
+    //    @JsonIgnore
+    //    private User seller;
+    //    //here up[datable is false so no need to pass seller object while trying to crerte Product object
+    //
+    //    //Unidirectional Relationship, using cascade, any changes made to Product willl propagate to Category
+    //    //cascade we must use as if this category does not exist, but if exist then need to do some if check herer
+    //    //@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})//cascade = CascadeType.MERGE)
+    //    @ManyToOne()
+    //    @JoinColumn(name = "category_id", referencedColumnName = "categoryId")
+    //    private Category category;
 
     //constructor
 

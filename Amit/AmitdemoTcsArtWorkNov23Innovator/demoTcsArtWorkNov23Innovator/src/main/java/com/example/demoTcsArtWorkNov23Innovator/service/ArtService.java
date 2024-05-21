@@ -48,6 +48,15 @@ public class ArtService {
             //not taking username directly
             UserModel userModel=userService.getUserByEmail(email);
             artModel.setOwnerId(userModel.getId());
+            //in model class if we make it as User ownerId then need to set: artModel.setOwner(userModel);
+            // Cart cartFromDb = cartRepo.findCartByUserUsername(username).orElse(null);
+            //            if(cartFromDb==null){
+            //                //need to save new cart
+            //                Cart cart = new Cart();
+            //                cart.setUser(user);
+            //                cart.setTotalAmount(0.0);
+            //                cartFromDb=cartRepo.save(cart);
+            //            }
             artModel.setAvailable(true);
             artModel=artRepository.save(artModel);
             return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(artModel);

@@ -40,6 +40,10 @@ public class LoginService implements UserDetailsService {
         //when returning username not found we are getting 500 bad request Bad credential exception
     }
 
+    //below methods are private then how will we call them in other classes, we need getter setter
+    //so can not use in other classes.. can use in other methods in same class
+    //if passing username in loadeUser by username there we can use this this method to get User details
+    //then get emails then call find By username
     private UserDetails buildUserForAuthentication(UserModel userModel){
         //can not use above method in filter for authentication as there Token returns username from token
         //Claims::getSubject returns username not emails.. so can not use above method.. loadUserbyUsername(email)
