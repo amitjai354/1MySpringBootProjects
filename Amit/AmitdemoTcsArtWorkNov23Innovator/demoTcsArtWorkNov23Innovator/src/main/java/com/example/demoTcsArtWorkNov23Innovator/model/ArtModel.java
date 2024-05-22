@@ -8,6 +8,7 @@ public class ArtModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
     private String title;
     private String description;
     private String artist;
@@ -17,9 +18,14 @@ public class ArtModel {
     private String dimensions;
     private String imageLink;
 
-//    @OneToOne
-//    @JoinColumn(name = "ownerId", referencedColumnName = "id")
     //@Column()//no any field for fk
+//    @OneToOne
+    //@JoinColumn(name = "ownerId", referencedColumnName = "id")//no error but no FK in db if write this alone
+    //@JoinColumn(referencedColumnName = "id")
+    //@JoinColumn(foreignKey = @ForeignKey(foreignKeyDefinition = "id"))
+    //@JoinColumn(foreignKey = @ForeignKey(UserModel))
+    //@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "FK_ART_USER"))//Fk not creating
+    //@Column()//FK not creating
     private int ownerId;
     //private UserModel Ownner;//can not write this 2we hav egetter setter for owner id
     //unable to start tomcat if write join column at int,
