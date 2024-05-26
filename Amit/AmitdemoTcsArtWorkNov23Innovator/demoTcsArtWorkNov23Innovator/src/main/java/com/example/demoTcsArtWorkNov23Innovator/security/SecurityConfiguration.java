@@ -39,8 +39,8 @@ public class SecurityConfiguration {
         http.csrf(c->c.disable())
                 .authorizeHttpRequests(a->a.requestMatchers("/artWork/add").hasAuthority("Owner")
                         .requestMatchers("/artWork/list").hasAnyAuthority("Owner","Customer")
-                        .requestMatchers("/artWork/update/**").hasAnyAuthority("Owner","Customer")
-                        .requestMatchers("/artWork/delete/id/**").hasAnyAuthority("Owner", "Customer")
+                        .requestMatchers("/artWork/update/**").hasAuthority("Owner")
+                        .requestMatchers("/artWork/delete/id/**").hasAuthority("Owner")
                         .anyRequest().permitAll())
                 .exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

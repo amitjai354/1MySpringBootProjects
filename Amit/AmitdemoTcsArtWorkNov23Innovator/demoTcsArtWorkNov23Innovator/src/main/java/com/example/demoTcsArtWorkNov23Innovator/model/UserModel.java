@@ -33,11 +33,15 @@ public class UserModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        //Here return any collection, ? means collection can be anything list set vector
+        //but it should extend GrantedAuthority
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRolename());
         //return List.of(authority);
-        return Collections.singletonList(grantedAuthority
-        );
+        return Collections.singletonList(grantedAuthority);
         //used in security filter chain to get authority
+        //we are returning singleton list because ManyToOne means each user has only one role
+        //but if manyToMany then this will be list of roles
+        //return role.stream.map(r-> new SimpleGrantedAuthority(r.getName()).collect(Collectors.toList());
     }
 
     //constructor
