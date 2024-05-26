@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
+    //here in last can write : like upeer ('%' || ?1 || '%') but in controller when passing keyword, passiung keywors.toUpperCase() so not writting upper here with like
     @Query(nativeQuery = true, value = "select p.category_id, p.price, p.product_id, p.seller_id, p.product_name from Product p, Category c where p.category_id = c.category_id and upper(p.product_name) like '%' || ?1 || '%' or upper(c.category_name) like '%' || ?2 || '%'")
     public List<Product> findByProductNameIgnoreCaseContainingOrCategoryCategoryNameIgnoreCaseContaining(String keyword, String keyword1);
     //Most imp if write OR instead of Or will not work, keyword is case sensitive.. camel case Or
