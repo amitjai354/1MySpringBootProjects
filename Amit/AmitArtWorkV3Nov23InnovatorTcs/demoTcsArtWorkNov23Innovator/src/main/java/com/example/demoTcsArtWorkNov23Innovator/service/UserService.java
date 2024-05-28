@@ -40,7 +40,7 @@ public class UserService {
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //        return userRepository.findByUsername(username);
 //    }
-    public UserModel getUserByUsername(String username){
+        public UserModel getUserByUsername(String username){
         return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("Username not found!!"));
     }
 }

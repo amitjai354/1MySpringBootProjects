@@ -52,6 +52,11 @@ public class LoginService implements UserDetailsService {
         return userModel;
     }
 
+//    //my method
+//    public UserDetails getUserDetailsForFilterAuthentication(){
+//        return this.buildUserForAuthentication(u)
+//    }
+
     private List<GrantedAuthority> buildUserAuthority(String u){
         return null;
     }

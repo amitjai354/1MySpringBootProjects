@@ -5,6 +5,7 @@ import com.example.demoTcsArtWorkNov23Innovator.model.UserModel;
 import com.example.demoTcsArtWorkNov23Innovator.repository.ArtRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -127,10 +128,13 @@ public class ArtService {
                 return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("you don't have permission");
             }
             artRepository.deleteById(id);
-            return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+            //return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
             //204 is not error, this means successfukly deleted 2xx is successful, 4xx is error
             //204 successfuly No content means does not return anything in response body
             //it discards response body
+            //HttpServletResponse response = null;
+            //response.getWriter().println("deleted");
+            return new ResponseEntity<>("deleted successfully", HttpStatus.NO_CONTENT);
         }
         catch (Exception e){
             e.printStackTrace();
