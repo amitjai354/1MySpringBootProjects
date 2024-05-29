@@ -4,7 +4,10 @@ import com.example.BirthCertificate.model.UserModel;
 import com.example.BirthCertificate.repository.RoleRepository;
 import com.example.BirthCertificate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
 
     @Autowired
@@ -14,7 +17,12 @@ public class UserService {
     private RoleRepository roleRepository;
 
     public UserModel getUserByEmail(String email){
-        return null;
+        //return userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("username not found"));
+        UserModel userModel = userRepository.findByEmail(email).orElse(null);
+        if (userModel==null){
+            throw new UsernameNotFoundException("username not found");
+        }
+        return userModel;
     }
 
 }

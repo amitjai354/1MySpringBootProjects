@@ -4,8 +4,16 @@ import com.example.BirthCertificate.model.CertificateModel;
 import com.example.BirthCertificate.repository.CertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CertificateService {
+
+    //if do not write @Service here as not needed this service initially for creating token
+    //but will give error as we have written @Autowired here inside class
+    //and error given is for login service while we have we already written @Service there
+    //so better in starting only write all the annotations after writing config class codes
+    //keep writing when writting code somewhere for config classes
 
     @Autowired
     private CertificateRepository certificateRepository;

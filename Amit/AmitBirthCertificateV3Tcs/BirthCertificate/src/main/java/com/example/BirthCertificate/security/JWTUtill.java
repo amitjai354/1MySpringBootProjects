@@ -24,7 +24,7 @@ public class JWTUtill implements Serializable {
 
     private static final long serialVersionUID = 654352132132L;
     public static final long JWT_TOKEN_VALIDITY = 500*60*60;
-    private final String secretKey = "randomKey";
+    private final String secretKey = "randomKeyE57768gfjkjJKKO876876cgfhdeu4676HJYV5768778"; //around 50 characters
 
     public String getUserNameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);
