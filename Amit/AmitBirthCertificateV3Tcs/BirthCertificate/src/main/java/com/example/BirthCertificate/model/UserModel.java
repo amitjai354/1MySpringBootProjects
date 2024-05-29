@@ -26,6 +26,8 @@ public class UserModel implements UserDetails {
     @ManyToOne()
     @JoinColumn(name = "role", referencedColumnName = "id")
     private RoleModel role;
+    //in Tcs paper, wriiten role data type as Integer but this code tcs itself provided..
+    //in table this is created as Integer role
 
 //    @ElementCollection(targetClass = RoleModel.class, fetch = FetchType.EAGER)
 //    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -48,22 +50,26 @@ public class UserModel implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        //return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        //return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        //return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        //return UserDetails.super.isEnabled();
+        return true;
     }
 
     public UserModel() {

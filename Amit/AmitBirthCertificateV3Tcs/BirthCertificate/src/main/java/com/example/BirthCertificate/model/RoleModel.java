@@ -1,9 +1,6 @@
 package com.example.BirthCertificate.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class RoleModel {
@@ -12,6 +9,7 @@ public class RoleModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(unique = true)
     private String roleName;
 
     public RoleModel() {

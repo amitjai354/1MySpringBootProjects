@@ -1,9 +1,6 @@
 package com.example.BirthCertificate.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class CertificateModel {
@@ -11,6 +8,8 @@ public class CertificateModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true)
     private int certificateNumber;
     private String applicantName;
     private String dateOfBirth;
@@ -20,12 +19,21 @@ public class CertificateModel {
     private String address;
     private String nationality;
     private String verificationStatus = "pending";
-    private int doctorId;
+
+    @ManyToOne()
+    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    private UserModel doctor;
+    //private int doctorId;
+
+    //foreign key Integer doctor id given here as well,
+    //so if write UserModel doctor, this will create fk doctorId of integer type in table
+    //but in getter, setter, constructor.. it should be UserModel everwhere not doctorId
 
     public CertificateModel() {
     }
 
-    public CertificateModel(int id, int certificateNumber, String applicantName, String dateOfBirth, String gender, String fatherName, String motherName, String address, String nationality, String verificationStatus, int doctorId) {
+    //public CertificateModel(int id, int certificateNumber, String applicantName, String dateOfBirth, String gender, String fatherName, String motherName, String address, String nationality, String verificationStatus, int doctorId) {
+    public CertificateModel(int id, int certificateNumber, String applicantName, String dateOfBirth, String gender, String fatherName, String motherName, String address, String nationality, String verificationStatus, UserModel doctor) {
         this.id = id;
         this.certificateNumber = certificateNumber;
         this.applicantName = applicantName;
@@ -36,7 +44,8 @@ public class CertificateModel {
         this.address = address;
         this.nationality = nationality;
         this.verificationStatus = verificationStatus;
-        this.doctorId = doctorId;
+        //this.doctorId = doctorId;
+        this.doctor=doctor;
     }
 
     public CertificateModel(int certificateNumber, String applicantName, String dateOfBirth, String gender, String fatherName, String motherName, String address, String nationality) {
@@ -134,11 +143,17 @@ public class CertificateModel {
         this.verificationStatus = verificationStatus;
     }
 
-    public int getDoctorId() {
-        return doctorId;
+//    public int getDoctorId() {
+//        return doctorId;
+//    }
+    public UserModel getDoctor() {
+        return doctor;
     }
 
-    public void setDoctorId(int doctorId) {
-        this.doctorId = doctorId;
+//    public void setDoctorId(int doctorId) {
+//        this.doctorId = doctorId;
+//    }
+    public void setDoctor(UserModel doctor) {
+        this.doctor = doctor;
     }
 }
