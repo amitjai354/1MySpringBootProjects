@@ -33,6 +33,14 @@ public class SellerController {
     @Autowired
     JwtUtil jwtUtil;
 
+    //{output seller is ignored in json response
+    //    "productId": 3,
+    //    "productName": "iPhone 12 Pro Max",
+    //    "price": 98000.0,
+    //    "category": {
+    //        "categoryName": "Electronics"
+    //    }
+    //}
     @PostMapping("/product")
     public ResponseEntity<Object> postProduct(@RequestBody Product product){
         //whatever input taking from json, creating object of that first then passing to db for saving

@@ -10,18 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CertificateController {
 
-    //3 mistakes I did,
-    // did not write H2 database dependency
-
-    //did not write property correctly , missed S from NON_KEYWORDS=user
-    
-    //SecurityContext Holder is giving class cast exception..  did noty pass token, and when passed key passed
-    // was Jwt but in Filter key is Authentication so user details was not set in security context holder
-    //SecurityContextHolder takes user details from loadUserByUsername
-
-    // UserModel from Security context can be proxy data so first get data from db..
-    //same for category.. non persisted data, get category from db first
-
     @Autowired
     private CertificateService certificateService;
 

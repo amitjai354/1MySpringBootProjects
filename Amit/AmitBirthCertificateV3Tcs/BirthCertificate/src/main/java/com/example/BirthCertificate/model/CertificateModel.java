@@ -1,5 +1,7 @@
 package com.example.BirthCertificate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,12 +24,32 @@ public class CertificateModel {
 
     @ManyToOne()
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    //@JsonIgnore
+    @JsonIgnoreProperties(value = {"username", "password", "email", "role", "enabled", "authorities", "accountNonLocked", "accountNonExpired", "credentialsNonExpired"})
+    //@JsonIgnoreProperties(value = {"role", "authorities"})
     private UserModel doctor;
     //private int doctorId;
 
     //foreign key Integer doctor id given here as well,
     //so if write UserModel doctor, this will create fk doctorId of integer type in table
     //but in getter, setter, constructor.. it should be UserModel everwhere not doctorId
+
+    //{
+    //    "id": 1,
+    //    "certificateNumber": 268,
+    //    "applicantName": "Richard Bebb",
+    //    "dateOfBirth": "26-02-1979",
+    //    "gender": "Male",
+    //    "fatherName": "George McCurry",
+    //    "motherName": "Rose Belle Ashley",
+    //    "address": "Beverly Hill, Los Angeles",
+    //    "nationality": "American",
+    //    "verificationStatus": "pending",
+    //    "doctor": {
+    //        "id": 1
+    //    }
+    //}
+    //if creating foreign key by UserModel doctor in CertificateModel and ignoring all properties except id
 
     public CertificateModel() {
     }

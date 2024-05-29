@@ -1,5 +1,6 @@
 package com.example.BirthCertificate.security;
 
+import com.example.BirthCertificate.model.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -51,7 +52,9 @@ public class JWTUtill implements Serializable {
 
     public String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        UserModel userModel = (UserModel) userDetails;
+        //return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, userModel.getEmail());
     }
 
     public String doGenerateToken(Map<String, Object> claims, String subject){
@@ -78,6 +81,8 @@ public class JWTUtill implements Serializable {
 
     public Boolean validateToken(String token, UserDetails userDetails){
         String username=getUserNameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !(isTokenExpired(token)));
+        UserModel userModel = (UserModel) userDetails;
+        //return (username.equals(userDetails.getUsername()) && !(isTokenExpired(token)));
+        return (username.equals(userModel.getEmail()) && !(isTokenExpired(token)));
     }
 }

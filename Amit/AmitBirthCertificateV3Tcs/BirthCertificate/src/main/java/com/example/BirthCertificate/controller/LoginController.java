@@ -36,9 +36,14 @@ public class LoginController {
         }
         catch (BadCredentialsException e){
             e.printStackTrace();
+            //throw new BadCredentialsException("invalid credentials");
+            //@RestControllerAdvise then @ExceptionHandler to print msg when this Bad credential exception
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials");
+            //this is must to return or throw error otherwise on wrong credentials still working
         }
         catch (Exception e){
             e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials");
         }
         UserDetails userDetails = loginService.loadUserByUsername(authenticationRequest.getEmail());
         String token = jwtUtill.generateToken(userDetails);

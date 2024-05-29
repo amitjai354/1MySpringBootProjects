@@ -30,9 +30,25 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c->c.disable())
-                .authorizeHttpRequests(a->a.requestMatchers("/post/**").hasAuthority("OWNER")
-                        .requestMatchers("/get/**").hasAnyAuthority("SELLER", "OWNER")
+                .authorizeHttpRequests(a->a.requestMatchers("/certificate/add/**").hasAuthority("DOCTOR")
+                        //.requestMatchers("/login").permitAll()
+                        //.requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/certificate/list/**").hasAnyAuthority("MEDICALOFFICER", "DOCTOR")
+                        //.anyRequest().authenticated())
                         .anyRequest().permitAll())
+                //permit all is perfect as if any wrong url then 404 Not Found but if make all autyenticated then
+                //giving you dont have permisssion for wrong urls as well.. just make sure that all your api are
+                // properly written here
+                // problem is if our request matcher is wrong then also all our
+                //api will work and if wrong token passed then also it will work as permit all so
+                //authentication not required.. security context holder gives class cast exception
+                //String can not be cast to User
+                //if anyRequest.authenticated then once I restart app only first time this is working
+                //after than saying you dont have permisiion authentication..
+                //is this because filter is this oonce per request only
+                //actually after once post was not working as already saved certificate..
+                // unique certificate number so when second time error uniw key
+                //but instead of error authenticated was saying you dont have permission
                 .exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -30,6 +30,19 @@ public class ConsumerController {
     @Autowired
     CategoryRepo categoryRepo;
 
+    //{ output
+    //    "cpId": 2,
+    //    "product": {
+    //        "productId": 3,
+    //        "productName": "iPhone 12 Pro Max",
+    //        "price": 98000.0,
+    //        "category": {
+    //            "categoryName": "Electronics"
+    //        }
+    //    },
+    //    "quantity": 1
+    //}
+
     @GetMapping("/cart")
     public ResponseEntity<Object> getCart(){
         String username=SecurityContextHolder.getContext().getAuthentication().getName();

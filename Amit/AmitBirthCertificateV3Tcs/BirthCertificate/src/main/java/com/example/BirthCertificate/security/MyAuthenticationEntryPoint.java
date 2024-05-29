@@ -13,7 +13,10 @@ import java.io.IOException;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        //response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        //response.getWriter().println("You don't have permission!! "+authException.getMessage());
+        //response.sendError(HttpServletResponse.SC_BAD_REQUEST);//Not printing msg with sendError in Postman
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.getWriter().println("You don't have permission!! "+authException.getMessage());
     }
 }
