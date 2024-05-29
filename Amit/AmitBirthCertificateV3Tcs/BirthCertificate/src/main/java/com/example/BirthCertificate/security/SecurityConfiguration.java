@@ -31,11 +31,16 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c->c.disable())
                 .authorizeHttpRequests(a->a.requestMatchers("/certificate/add/**").hasAuthority("DOCTOR")
-                        //.requestMatchers("/login").permitAll()
-                        //.requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/certificate/list/**").hasAnyAuthority("MEDICALOFFICER", "DOCTOR")
-                        //.anyRequest().authenticated())
-                        .anyRequest().permitAll())
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().authenticated())
+                        //.anyRequest().permitAll())
+                //order of writting matters here
+                //in authenticated: /addghhj api is giving you dont have permission 400 bad request instaed of Not Found 404
+                //by rule all authenticated it should be otherwise anyone can write any api and fetch all
+                //all apis should be properly authenticated except /login and /h2-console
+                //in exam, you can make permit all, but actually authenticated it should be
                 //permit all is perfect as if any wrong url then 404 Not Found but if make all autyenticated then
                 //giving you dont have permisssion for wrong urls as well.. just make sure that all your api are
                 // properly written here
