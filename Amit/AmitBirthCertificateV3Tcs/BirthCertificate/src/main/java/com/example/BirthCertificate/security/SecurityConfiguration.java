@@ -29,9 +29,11 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.headers(h->h.frameOptions(f->f.disable()));//to run h2 frames in browser.. created WebSecurityCustomizer bean so this is not needed now
         http.csrf(c->c.disable())
                 .authorizeHttpRequests(a->a.requestMatchers("/certificate/add/**").hasAuthority("DOCTOR")
                         .requestMatchers("/certificate/list/**").hasAnyAuthority("MEDICALOFFICER", "DOCTOR")
+                        .requestMatchers("/certificate/update/id/**").hasAuthority("MEDICALOFFICER")
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())
@@ -41,6 +43,8 @@ public class SecurityConfiguration {
                 //by rule all authenticated it should be otherwise anyone can write any api and fetch all
                 //all apis should be properly authenticated except /login and /h2-console
                 //in exam, you can make permit all, but actually authenticated it should be
+                //if not making authenticated and requqest matcher not written correctly, and passing no token
+                //then also api will work but Securiy context holder will not give user details so class cast exception
                 //permit all is perfect as if any wrong url then 404 Not Found but if make all autyenticated then
                 //giving you dont have permisssion for wrong urls as well.. just make sure that all your api are
                 // properly written here
@@ -62,7 +66,7 @@ public class SecurityConfiguration {
     @Bean
     WebSecurityCustomizer webSecurityCustomizer(){
         return (web -> web.ignoring().requestMatchers("/h2-console/**")
-                .requestMatchers("/logon"));
+                .requestMatchers("/login"));
     }
 
     @Bean

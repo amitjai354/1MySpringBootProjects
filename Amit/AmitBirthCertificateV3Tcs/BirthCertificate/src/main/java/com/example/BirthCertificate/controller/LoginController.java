@@ -40,6 +40,8 @@ public class LoginController {
             //@RestControllerAdvise then @ExceptionHandler to print msg when this Bad credential exception
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials");
             //this is must to return or throw error otherwise on wrong credentials still working
+            //Message this is printing but status is not 400 it is 200 ok
+            //so response entity is good.. this is working with 400
         }
         catch (Exception e){
             e.printStackTrace();

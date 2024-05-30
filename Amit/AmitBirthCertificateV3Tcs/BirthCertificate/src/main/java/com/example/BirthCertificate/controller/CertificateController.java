@@ -23,6 +23,7 @@ public class CertificateController {
         return certificateService.getCertificate(certificateNumber);
     }
 
+    //Be very carefull in Path variable directly pass id.. /1, no need to write /id=1 this is wrong
     @PatchMapping("/update/{id}")
     public ResponseEntity<Object> updateCertificate(@PathVariable("id") int id, @RequestBody CertificateModel certificateModel){
         return certificateService.updateCertificate(id, certificateModel);
