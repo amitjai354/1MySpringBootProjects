@@ -131,6 +131,22 @@ public class CertificateService {
     //only the doctor of that particular certificate can delete
     //no content 204, bad request 400, forbidden 403
     public ResponseEntity<Object> deleteCertificate(int id){
-        return null;
+        try{
+            UserModel userModel=(UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            CertificateModel certificateModelFromDb=certificateRepository.findById(id).orElse(null);
+            if (certificateModelFromDb==null){
+                return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("not found");
+            }
+            if (userModel.getId()!=certificateModelFromDb.getDoctor().getId()){
+                return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("You don't have permission!!");
+            }
+            certificateRepository.deleteById(id);
+            ResponseEntity.status(HttpServletResponse.SC_OK).body("Deleted");
+            return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("Successfully deleted");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+        }
     }
 }
