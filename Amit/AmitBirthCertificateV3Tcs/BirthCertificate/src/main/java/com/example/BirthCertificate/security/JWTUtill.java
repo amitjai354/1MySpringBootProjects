@@ -41,8 +41,8 @@ public class JWTUtill implements Serializable {
     }
 
     private Claims getAllClaimFromToken(String token){
-        return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
-        //return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        //return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     public SecretKey getSigningKey(){
@@ -58,20 +58,21 @@ public class JWTUtill implements Serializable {
     }
 
     public String doGenerateToken(Map<String, Object> claims, String subject){
-        return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-                .signWith(getSigningKey())
-                .compact();
 //        return Jwts.builder()
-//                .setClaims(claims)
-//                .setSubject(subject)
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-//                .signWith(SignatureAlgorithm.HS256, secretKey)
+//                .claims(claims)
+//                .subject(subject)
+//                .issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
+//                .signWith(getSigningKey())
 //                .compact();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                //.signWith(secretKey, SignatureAlgorithm.HS256)//does not work with 0.11.5 no such method
+                .compact();
     }
 
     public Boolean isTokenExpired(String token){
