@@ -66,17 +66,45 @@ public class UserModel implements UserDetails{
 //		return Collections.singletonList(grantedAuthority);
 	}
 
+	//Very very important
+	//if implementing user details before writting getter setter, always username not found exception
+	//as below code is returning null
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.password;
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.username;
 	}
+	
+	//working without this code as well, now does not override these below codes
+	@Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();//works with this code also
+        //return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+        //return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+        //return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+        //return true;
+    }
 
 	public UserModel() {
 		super();

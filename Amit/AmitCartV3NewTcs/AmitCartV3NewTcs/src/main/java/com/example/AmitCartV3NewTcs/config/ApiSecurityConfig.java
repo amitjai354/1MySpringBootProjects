@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.AmitCartV3NewTcs.service.MyUserDetailsService;
 
@@ -20,6 +21,12 @@ public class ApiSecurityConfig {
 	
 	@Autowired
 	MyUserDetailsService myUserDetailsService;
+	
+	@Autowired
+	MyAuthenticationEntryPoint myAuthenticationEntryPoint;
+	
+	@Autowired
+	MyAuthenticationFilter myAuthenticationFilter;
 	
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
@@ -30,7 +37,14 @@ public class ApiSecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		//http.headers(h->h.frameOptions(f->f.disable()));
-		http.csrf(c->c.disable());
+		http.csrf(c->c.disable())
+		.authorizeHttpRequests(a->a.requestMatchers("/login").permitAll()
+				.requestMatchers("/product/search/**").permitAll()
+				.requestMatchers("/consumer/cart/**").hasAuthority("CONSUMER")
+				.anyRequest().permitAll())
+		.exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
+		
+		http.addFilterBefore(myAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 	
@@ -44,7 +58,7 @@ public class ApiSecurityConfig {
 	
 	@Bean
 	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(); //in postman simply pass unencrypted password, only in db, saving encrypted password
 		//return NoOpPasswordEncoder.getInstance();
 	}
 	

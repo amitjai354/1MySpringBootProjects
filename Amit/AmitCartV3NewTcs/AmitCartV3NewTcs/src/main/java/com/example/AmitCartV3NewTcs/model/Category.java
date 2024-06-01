@@ -1,5 +1,7 @@
 package com.example.AmitCartV3NewTcs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import jakarta.persistence.Id;
 public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore//ignoring id because when fetching products, getting category then category id also in response
 	private Integer categoryId;
 	
 	@Column(unique = true)

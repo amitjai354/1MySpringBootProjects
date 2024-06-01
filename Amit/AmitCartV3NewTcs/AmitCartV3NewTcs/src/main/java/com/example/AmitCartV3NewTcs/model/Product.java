@@ -1,5 +1,7 @@
 package com.example.AmitCartV3NewTcs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +19,7 @@ public class Product {
     
     @ManyToOne
     @JoinColumn(name="seller_id", referencedColumnName="userId")
+    @JsonIgnore//in response getting complete user details with product so ignore this
     private UserModel seller;
     
     @ManyToOne

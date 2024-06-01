@@ -2,6 +2,8 @@ package com.example.AmitCartV3NewTcs.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,12 +22,17 @@ public class Cart {
 	private Double totalAmount;
 	
 	@OneToMany(mappedBy = "cart")
+	@JsonIgnore
 	//@JoinColumn(name="cp_id", referencedColumnName="cpId")
 	//writting mapped so not write @JoinColumn as we do not need FK here in cart, here FK will be list
 	//as for one cart id there can be multiple cart products so cart products id will be list here
 	//also OneToMany means Cart product will be list
 	private Set<CartProduct> cartProduct;
 	//Biderectional when getting cart will get cart products details as well
+	//Very very imp:
+	//in Bidirectional, always ignore any one side otherwise infinite records.. because
+	//when gettong carts, It will fetch cartProducts also
+	//but when fetching cartProducts then there again we have cart so will fetch cart again.. so on
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinColumn(name="user_id", referencedColumnName="userId", updatable=false)

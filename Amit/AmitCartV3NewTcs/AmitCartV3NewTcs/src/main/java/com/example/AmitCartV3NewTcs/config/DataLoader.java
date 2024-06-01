@@ -81,6 +81,7 @@ public class DataLoader implements ApplicationRunner {
 		//these codes are working for both BCrypt and NoOp Password Encoders
 		//userRepo.save(new UserModel("amit", "pass_word" , "amit@gmail.com", roleSellerCustomer));//if NoOpPasswordEncoder
 		//above one also will work, it will just store password as it is
+		//in postman simply pass unencrypted password, only in db, saving encrypted password
 
 		
 		//Category category1= categoryRepo.save(new Category("Fashion"));
