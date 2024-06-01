@@ -2,7 +2,9 @@ package com.example.AmitCartV3NewTcs.model;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +27,59 @@ public class Cart {
 	private Set<CartProduct> cartProduct;
 	//Biderectional when getting cart will get cart products details as well
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinColumn(name="user_id", referencedColumnName="userId", updatable=false)
 	private UserModel user;
+	//Users_User_Id will be column name if do not write user_id here in name
+	
+	public Cart() {
+		super();
+	}
+	public Cart(Integer cartId, Double totalAmount, Set<CartProduct> cartProduct, UserModel user) {
+		super();
+		this.cartId = cartId;
+		this.totalAmount = totalAmount;
+		this.cartProduct = cartProduct;
+		this.user = user;
+	}
+	
+	public Cart(Double totalAmount, Set<CartProduct> cartProduct, UserModel user) {
+		super();
+		this.totalAmount = totalAmount;
+		this.cartProduct = cartProduct;
+		this.user = user;
+	}
+	
+	public Cart(Double totalAmount, UserModel user) {
+		super();
+		this.totalAmount = totalAmount;
+		this.user = user;
+	}
+	
+	public Integer getCartId() {
+		return cartId;
+	}
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
+	}
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public Set<CartProduct> getCartProduct() {
+		return cartProduct;
+	}
+	public void setCartProduct(Set<CartProduct> cartProduct) {
+		this.cartProduct = cartProduct;
+	}
+	public UserModel getUser() {
+		return user;
+	}
+	public void setUser(UserModel user) {
+		this.user = user;
+	}
+	
+	
 }

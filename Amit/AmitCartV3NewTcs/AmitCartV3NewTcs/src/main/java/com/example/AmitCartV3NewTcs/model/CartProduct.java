@@ -17,7 +17,10 @@ public class CartProduct {
 	
 	private Integer quantity;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	//@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL) 
+	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.MERGE) 
+	//if writing cascade then in data loader giving error
+	//@ManyToOne()
 	@JoinColumn(name="product_id", referencedColumnName="productId")
 	private Product product;
 	//one product eg s24 can be added in many carts as cartProduct
@@ -25,4 +28,58 @@ public class CartProduct {
 	@ManyToOne()
 	@JoinColumn(name="cart_id", referencedColumnName = "cartId")
 	private Cart cart;
+	
+	public CartProduct() {
+		super();
+	}
+
+	public CartProduct(Integer cpId, Integer quantity, Product product, Cart cart) {
+		super();
+		this.cpId = cpId;
+		this.quantity = quantity;
+		this.product = product;
+		this.cart = cart;
+	}
+	
+
+	public CartProduct(Integer quantity, Product product, Cart cart) {
+		super();
+		this.quantity = quantity;
+		this.product = product;
+		this.cart = cart;
+	}
+
+	public Integer getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Integer cpId) {
+		this.cpId = cpId;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+	
+	
 }

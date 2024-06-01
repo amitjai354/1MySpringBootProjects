@@ -1,13 +1,21 @@
 package com.example.AmitCartV3NewTcs.model;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,29 +23,47 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="Users")
 public class UserModel implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer userId;
 	
 	String username;
-	String paswword;
+	String password;
 	
 	@Column(unique = true)
 	String email;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
-				inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "roleId"))
+	
+	@ElementCollection(targetClass = RoleModel.class, fetch=FetchType.EAGER)
+	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name="user_id"))//user_id, roles is created in user_role
+	@Enumerated(EnumType.STRING)
 	private Set<RoleModel> roles;
+	
+//	@ManyToMany(fetch=FetchType.EAGER)
+//	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+//				inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "roleId"))
+//	private Set<RoleModel> roles;
+	
+//	@ManyToOne
+//	@JoinColumn(name = "role_id", referencedColumnName = "roleId")
+//	private RoleModel role;
 	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+		//return roles.stream().map(r->new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());//class RoleModel
+		return roles.stream().map(r->new SimpleGrantedAuthority(r.name())).collect(Collectors.toList());//enum RoleModel
+		
+//		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getName());
+//		return List.of(grantedAuthority);
+//		return Collections.singletonList(grantedAuthority);
 	}
 
 	@Override
@@ -60,7 +86,22 @@ public class UserModel implements UserDetails{
 		super();
 		this.userId = userId;
 		this.username = username;
-		this.paswword = paswword;
+		this.password = paswword;
+		this.email = email;
+		this.roles = roles;
+	}
+
+	public UserModel(String username, String paswword, String email) {
+		super();
+		this.username = username;
+		this.password = paswword;
+		this.email = email;
+	}
+
+	public UserModel(String username, String paswword, String email, Set<RoleModel> roles) {
+		super();
+		this.username = username;
+		this.password = paswword;
 		this.email = email;
 		this.roles = roles;
 	}
@@ -74,11 +115,11 @@ public class UserModel implements UserDetails{
 	}
 
 	public String getPaswword() {
-		return paswword;
+		return password;
 	}
 
 	public void setPaswword(String paswword) {
-		this.paswword = paswword;
+		this.password = paswword;
 	}
 
 	public String getEmail() {
