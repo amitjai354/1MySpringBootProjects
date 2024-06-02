@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.AmitCartV3NewTcs.model.CartProduct;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CartProductRepo extends JpaRepository<CartProduct, Integer>{
 	

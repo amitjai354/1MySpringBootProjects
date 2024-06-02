@@ -105,13 +105,21 @@ public class ConsumerService {
 			cartFromDb.setTotalAmount(amount);
 			cartFromDb=cartRepo.save(cartFromDb);
 			//return ResponseEntity.ok(cartProductFromDb);
-			return ResponseEntity.ok(cartFromDb);
+			//return ResponseEntity.ok(cartFromDb);
 			//this is returning cartProduct as null but in db, relation created
 			//after this if get/cart then getting cartPeoduct
 			//either can do saveAndFlush. this immediately saves and commit
 			//but do fetch = fetch type eager on cartProduct in cart, i have only written mapped by
 			//this way it will eagerly push cart prodecut otherwise when i do select query then only gives result lazy
 			//with save and flush, and Fetch Eager but still giving same null for cart Product
+
+			//if we are not setting attributes, jpa does not set attributtes while saving, need to call find from db
+
+			//we can return findByCartUserId
+			cartFromDb=cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+			return ResponseEntity.ok(cartFromDb);
+			//still cartProduct is null, but if after this call findCart thenh giving cart product
+			//this is SB issue as per stacksover flow
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -134,9 +142,9 @@ public class ConsumerService {
 						cartFromDb.setTotalAmount(amount);
 						cartFromDb = cartRepo.save(cartFromDb);
 					}
-//					else {
-//						return ResponseEntity.badRequest().body("No cart present for logged in User");
-//					}
+					else {
+						return ResponseEntity.badRequest().body("No cart present for logged in User");
+					}
 					
 					//we have to delete cart product from cart so cartProduct Repo.delete by id
 					//but thios way it will delete cart product from any other persons cart as well
@@ -145,14 +153,22 @@ public class ConsumerService {
 					//as data may currupt in deleting
 					//@Transactional
 	                //cartProductRepo.deleteByCartUserUserIdAndProductProductId(   myUser.getUserId(), cartProduct.getProduct().getProductId());
-//					cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), cartProduct.getProduct().getProductId());		
-//					return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+					cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), cartProduct.getProduct().getProductId());
+					return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+					//this delete was not working and even no error if i add cadcadeAll in Cart above cartProduct
+					//this cascade behaviors is arbitrary in Bidirectional mainly.. persist in one side
+					//not in sync in both side
+					//Delete Not Working with JpaRepository stack over flow
+					//Most probably such behaviour occurs when you have bidirectional relationship and you're not
+					//synchronizing both sides WHILE having both parent and child persisted (attached to the current session).
+					//The delete here didn't work because we didn't synchronized the other part of relationship which
+					// is PERSISTED IN CURRENT SESSION. If Parent wasn't associated with current session our test would pass
 				}
-				cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), cartProduct.getProduct().getProductId());		
-				return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
-//				else {
-//					return ResponseEntity.badRequest().body("No cart Product with given id, present in cart for logged in User");
-//				}
+//				cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), cartProduct.getProduct().getProductId());
+//				return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+				else {
+					return ResponseEntity.badRequest().body("No cart Product with given id, present in cart for logged in User");
+				}
 			}
 			else {
 				Product productFromDb= productRepo.findById(cartProduct.getProduct().getProductId()).orElse(null);
@@ -186,8 +202,15 @@ public class ConsumerService {
 					cartProductFromDb.setCart(cartFromDb);//add FK relationship as in passed cartProduct json, cart details not present
 					cartProductFromDb.setQuantity(cartProduct.getQuantity());//this is very must
 					cartProductFromDb = cartProductRepo.save(cartProductFromDb);
-					return ResponseEntity.ok(cartFromDb);
+					//return ResponseEntity.ok(cartFromDb);
 					//return ResponseEntity.ok(cartProductFromDb);
+					//if we are not setting attributes, jpa does not set attributtes while saving, need to call find from db
+
+					//we can return findByCartUserId
+					cartFromDb=cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+					return ResponseEntity.ok(cartFromDb);
+					//still cartProduct is null, but if after this call findCart thenh giving cart product
+					//this is SB issue as per stacksover flow
 				}
 //				cartProductFromDb = cartProductRepo.save(cartProductFromDb);
 //				return ResponseEntity.ok(cartProductFromDb);
@@ -219,6 +242,21 @@ public class ConsumerService {
 				//but in cart product there is product id also..
 				//currently it is returning me product id = 2 also as this is crocin
 				//but in cart product jsomn we are passing product id as 3 thyat is iphone
+
+
+				//Related entities are null after calling saveAll in Spring JPA
+				//As you stated in the comments you did not set those values before saving.
+				//
+				//JPA does not load them for you. JPA pretty much doesn't load anything upon
+				// saving except the id if it is generated by the database.
+				//
+				//A more common case of the same problem/limitation/misconceptions are
+				// bidirectional relationships: JPA pretty much ignores the not owning side
+				// and the developer has to make sure that both sides are in sync at all times.
+				//
+				//You would have to refresh the entity yourself. Note that just loading it
+				// in the same transaction would have no effect because it would come
+				// from the 1st level cache and would be exactly the same instance.
 			}			
 		}
 		catch (Exception e) {

@@ -22,10 +22,11 @@ public class Cart {
 	private Double totalAmount;
 	
 	//cascadePersist means when petrsisting an entity, persistthe entitoies held in its fields
-	//@OneToMany(fetch = FetchType.EAGER,  mappedBy = "cart")
+	// delete was not working and even no error if i add cadcadeAll in Cart above cartProduct
+	@OneToMany(fetch = FetchType.EAGER,  mappedBy = "cart")
 	//@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.PERSIST, mappedBy = "cart")
 	//@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.REFRESH, mappedBy = "cart")//in consumer update api
-	@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL, mappedBy = "cart")
+	//@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL, mappedBy = "cart")
 	//@JsonIgnore we will ignore cart in cart product as when looking cart product no need of cart details
 	//@JoinColumn(name="cp_id", referencedColumnName="cpId")
 	//writting mapped so not write @JoinColumn as we do not need FK here in cart, here FK will be list
