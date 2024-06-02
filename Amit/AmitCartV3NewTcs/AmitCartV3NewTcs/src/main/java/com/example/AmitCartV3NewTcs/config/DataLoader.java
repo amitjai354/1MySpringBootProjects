@@ -97,7 +97,7 @@ public class DataLoader implements ApplicationRunner {
 		Product product1 = productRepo.save(new Product("Apple iPad 10.2 8th Gen WiFi iOS Tablet", 29190.0, userModel3, category2));
 		Product product2 = productRepo.save(new Product("Crocin pain relief tablet", 10.0, userModel4, category5));
 		
-		cartProductRepo.save(new CartProduct(2, product2, cart2));
+		cartProductRepo.save(new CartProduct(2, product2, cart1));
 		//in cartProduct class:if writing cascade then in data loader giving error: detached entity passed to persist: 
 		//use cascade=CascadeType.MERGE. no error with this
 		//@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)

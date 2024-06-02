@@ -22,6 +22,17 @@ public class Product {
     @JsonIgnore//in response getting complete user details with product so ignore this
     private UserModel seller;
     
+    //Sringboot returns null for relational(FK) entity after saving
+	//in ManyToOne missed cascadeType.Persist
+	//Persist, Merge, Remove, Refresh, Detach
+	//Remove means if removing here, remove in other class also 
+	//eg if removing product, remove seller user from db also, reverse is good that if remove user, 
+	//then remove products added by user seller
+	//we should not write cascadeAll on ManyToOne side instead, write on OneToMany side
+	//as Many products related to one user, if delete any product then delete user also then means
+	//delete all products, reverse is correct if remove user, remove all products
+
+    
     @ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "categoryId")
     private Category category;

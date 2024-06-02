@@ -21,8 +21,12 @@ public class Cart {
 	private Integer cartId;
 	private Double totalAmount;
 	
-	@OneToMany(mappedBy = "cart")
-	@JsonIgnore
+	//cascadePersist means when petrsisting an entity, persistthe entitoies held in its fields
+	//@OneToMany(fetch = FetchType.EAGER,  mappedBy = "cart")
+	//@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.PERSIST, mappedBy = "cart")
+	//@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.REFRESH, mappedBy = "cart")//in consumer update api
+	@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL, mappedBy = "cart")
+	//@JsonIgnore we will ignore cart in cart product as when looking cart product no need of cart details
 	//@JoinColumn(name="cp_id", referencedColumnName="cpId")
 	//writting mapped so not write @JoinColumn as we do not need FK here in cart, here FK will be list
 	//as for one cart id there can be multiple cart products so cart products id will be list here
@@ -36,6 +40,7 @@ public class Cart {
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinColumn(name="user_id", referencedColumnName="userId", updatable=false)
+	@JsonIgnore
 	private UserModel user;
 	//Users_User_Id will be column name if do not write user_id here in name
 	

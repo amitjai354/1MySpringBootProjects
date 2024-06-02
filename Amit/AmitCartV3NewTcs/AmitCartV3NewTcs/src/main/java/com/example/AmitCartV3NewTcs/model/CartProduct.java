@@ -1,5 +1,7 @@
 package com.example.AmitCartV3NewTcs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,8 +27,9 @@ public class CartProduct {
 	private Product product;
 	//one product eg s24 can be added in many carts as cartProduct
 	
-	@ManyToOne()
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="cart_id", referencedColumnName = "cartId")
+	@JsonIgnore
 	private Cart cart;
 	
 	public CartProduct() {

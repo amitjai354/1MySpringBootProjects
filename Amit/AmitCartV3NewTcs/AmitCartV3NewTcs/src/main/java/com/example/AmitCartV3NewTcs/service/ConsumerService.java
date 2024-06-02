@@ -1,0 +1,257 @@
+package com.example.AmitCartV3NewTcs.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import com.example.AmitCartV3NewTcs.model.Cart;
+import com.example.AmitCartV3NewTcs.model.CartProduct;
+import com.example.AmitCartV3NewTcs.model.Product;
+import com.example.AmitCartV3NewTcs.model.UserModel;
+import com.example.AmitCartV3NewTcs.repository.CartProductRepo;
+import com.example.AmitCartV3NewTcs.repository.CartRepo;
+import com.example.AmitCartV3NewTcs.repository.ProductRepo;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+@Service
+public class ConsumerService {
+
+	
+	@Autowired
+	CartRepo cartRepo;
+	
+	@Autowired
+	ProductRepo productRepo;
+	
+	@Autowired
+	CartProductRepo cartProductRepo;
+
+	public ResponseEntity<Object> getConsumerCart(){
+		//it will automatically give 403 if Seller tries to access this as in security filter chain have givrn 
+		//request matcher so from securirty Filter chain returns 403 we need not to set anything in 
+		//authentication entry point..
+		//authenbtication entry point is for when no token passed
+		//but 403 will be returned only if we write anyrequest.permitAll
+		//if we make it authenticatred then in all cases only authentication entry point
+		//with anyrequest permitall, we are getting proper 401 when no token passed due to authentication entry point
+		//and getting 403 if any sellertries to access consumer api
+		
+		//amit is both seller and consumer so api is working for amit but not for glaxo user seller
+		try {
+			UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			//List<Cart> cartList = cartRepo.findAll();
+			//problem with findAll is that we will get cart details of all consumers(jack and bob and amit)
+			//but it should be like that which user logged in only that user should see the his cart not others cart
+			//we need to make any such method where we can pass user id as well
+			
+			Cart cart = cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+			//this is working perfectrly.. now getting details of only logged in consumer not all consumers
+			//same way there can findByCartIdAndUserUserId(int cartId, int userId)
+			
+			//if(cartList.isEmpty()) {
+			if(cart==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("cart is empty");
+			}
+			return ResponseEntity.ok(cart);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+		}
+	}
+	
+	public ResponseEntity<Object> postProductToCart(Product product) {
+		//this is consumer api and consumer will not add product to website, so just find by id, we will not find by
+		//userid because seller is adding product but comnsumer is here fetching product from db
+		//if product not present in db, product not in stock.. 
+		//also check if this logged in user has cart or not, if not then create new cart for user
+		//add product to cart product if not present, if already present in cart product, return 409
+		try{
+			Product productFromDb = productRepo.findById(product.getProductId()).orElse(null);
+			if(productFromDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Product Not In Stock");
+			}
+			
+			UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			//Now find cart by logged in user id, do not findAll it will fetch other user cart also
+			Cart cartFromDb = cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+			if(cartFromDb==null) {
+				//if logged in user does not have cart then create new one
+				cartFromDb= cartRepo.save(new Cart(0.0, userModel));
+			}
+			
+			//Now add product to cart Product then add cart Product to cart
+			//But cart product does not have User in its model class, it has product and cart
+			//can not serach cartProduct from db based on product so search by cartId
+			//and Cart we have to search for logged in user id , can not take cart product from some other users cart
+			CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(userModel.getUserId(), product.getProductId());
+			if(cartProductFromDb!=null) {
+				return ResponseEntity.status(HttpServletResponse.SC_CONFLICT).body("Product already present in cart");
+			}
+			//cartProductFromDb = cartProductRepo.saveAndFlush(new CartProduct(1, productFromDb, cartFromDb));
+			cartProductFromDb = cartProductRepo.save(new CartProduct(1, productFromDb, cartFromDb));
+
+//			cartProductFromDb.setCart(cartFromDb);
+//			cartProductFromDb.setQuantity(1);
+//			cartProductFromDb.setProduct(productFromDb);
+//			cartProductFromDb = cartProductRepo.save(cartProductFromDb);
+			//now cart product is added to cart as cartProduct has Cart FK
+			Double amount = cartFromDb.getTotalAmount()+product.getPrice()*cartProductFromDb.getQuantity();
+			//we have to update price in cart as well
+			cartFromDb.setTotalAmount(amount);
+			cartFromDb=cartRepo.save(cartFromDb);
+			//return ResponseEntity.ok(cartProductFromDb);
+			return ResponseEntity.ok(cartFromDb);
+			//this is returning cartProduct as null but in db, relation created
+			//after this if get/cart then getting cartPeoduct
+			//either can do saveAndFlush. this immediately saves and commit
+			//but do fetch = fetch type eager on cartProduct in cart, i have only written mapped by
+			//this way it will eagerly push cart prodecut otherwise when i do select query then only gives result lazy
+			//with save and flush, and Fetch Eager but still giving same null for cart Product
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+		}
+	}
+	
+	
+	
+	public ResponseEntity<Object> updateConsumerCart(CartProduct cartProduct){
+		try {
+			UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			if(cartProduct.getQuantity()==0) {
+				CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(userModel.getUserId(),cartProduct.getProduct().getProductId());
+				if(cartProductFromDb!=null) {
+					Cart cartFromDb= cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+					if(cartFromDb!=null) {
+						Double amount = cartFromDb.getTotalAmount() - (cartProductFromDb.getQuantity()*cartProductFromDb.getProduct().getPrice());
+						cartFromDb.setTotalAmount(amount);
+						cartFromDb = cartRepo.save(cartFromDb);
+					}
+//					else {
+//						return ResponseEntity.badRequest().body("No cart present for logged in User");
+//					}
+					
+					//we have to delete cart product from cart so cartProduct Repo.delete by id
+					//but thios way it will delete cart product from any other persons cart as well
+					//so delete by cartid and user id as well only for logged in user
+					//whenever some other Entity or more than one entity involved in deleting it should be @Transactional
+					//as data may currupt in deleting
+					//@Transactional
+	                //cartProductRepo.deleteByCartUserUserIdAndProductProductId(   myUser.getUserId(), cartProduct.getProduct().getProductId());
+//					cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), cartProduct.getProduct().getProductId());		
+//					return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+				}
+				cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), cartProduct.getProduct().getProductId());		
+				return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
+//				else {
+//					return ResponseEntity.badRequest().body("No cart Product with given id, present in cart for logged in User");
+//				}
+			}
+			else {
+				Product productFromDb= productRepo.findById(cartProduct.getProduct().getProductId()).orElse(null);
+				if(productFromDb==null) {
+					return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Product out of stock");
+				}
+				
+				Cart cartFromDb= cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+				if(cartFromDb==null) {
+					//if cart is not present for this user, create one cart first
+					cartFromDb = cartRepo.save(new Cart(0.0, userModel));
+				}
+				
+				//cart has set of CartProducts so can not get quantity from cart. instead we will find 
+				//cartProduct by cart id and user id and get quantity from here
+				//cartProductFrom db has older quantity and cartProduct has new quantity
+				CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(userModel.getUserId(),cartProduct.getProduct().getProductId());
+				if(cartProductFromDb==null) {
+					cartProductFromDb = cartProduct;
+					Double amount = cartFromDb.getTotalAmount() + (cartProduct.getQuantity()*cartProduct.getProduct().getPrice());
+					cartFromDb.setTotalAmount(amount);
+					cartFromDb=cartRepo.save(cartFromDb);
+					cartProductFromDb.setCart(cartFromDb);//add FK relationship as in passed cartProduct json, cart details not present
+					cartProductFromDb = cartProductRepo.save(cartProductFromDb);
+					return ResponseEntity.ok(cartFromDb);
+				}
+				else {
+					Double amount = cartFromDb.getTotalAmount() - (cartProductFromDb.getQuantity()*cartProductFromDb.getProduct().getPrice()) + (cartProduct.getQuantity()*cartProduct.getProduct().getPrice());
+					cartFromDb.setTotalAmount(amount);
+					cartFromDb=cartRepo.save(cartFromDb);		
+					cartProductFromDb.setCart(cartFromDb);//add FK relationship as in passed cartProduct json, cart details not present
+					cartProductFromDb.setQuantity(cartProduct.getQuantity());//this is very must
+					cartProductFromDb = cartProductRepo.save(cartProductFromDb);
+					return ResponseEntity.ok(cartFromDb);
+					//return ResponseEntity.ok(cartProductFromDb);
+				}
+//				cartProductFromDb = cartProductRepo.save(cartProductFromDb);
+//				return ResponseEntity.ok(cartProductFromDb);
+				//return ResponseEntity.ok(cartFromDb); returning cart produsct as well even after eager fetch
+				
+				//My biggest mistake here was that i was trying to write common code instead of writting codes in 
+				//if and else blocks separately.. 
+				//but first write codes in if and else block then if possible make coomon code	
+				//redability also decreses if write common code if write separately then easily read code
+				
+				//Sringboot returns null for relational(FK) entity after saving
+				//in ManyToOne missed cascadeType.Persist
+				//Persist, Merge, Remove, Refresh, Detach
+				//Remove means if removing here, remove in other class also 
+				//eg if removing product, remove seller user from db also, reverse is good that if remove user, 
+				//then remove products added by user seller
+				//we should not write cascadeAll on ManyToOne side instead, write on OneToMany side
+				//as Many products related to one user, if delete any product then delete user also then means
+				//delete all products, reverse is correct if remove user, remove all products
+				
+				//cascadePersist means when petrsisting an entity, persistthe entitoies held in its fields
+				//But with cascadePersist as well not returning result immediatley.. when get separately then gives result of cart products
+
+				
+				
+				//CartProduct cartProductFromDb = cartProductRepo.findByCartCartIdAndCartUserUserId(cartFromDb.getCartId(), userModel.getUserId());
+				//CartProduct findByCartCartIdAndCartUserUserId(int cartId, int userId);
+				//if getting by cartid and cart user id, will return any product from cart, will not consider product id
+				//but in cart product there is product id also..
+				//currently it is returning me product id = 2 also as this is crocin
+				//but in cart product jsomn we are passing product id as 3 thyat is iphone
+			}			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	
+	
+	
+	public ResponseEntity<Object> deleteProductFromConsumerCart(Product product){
+		UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		try {
+			CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(userModel.getUserId(), product.getProductId());
+			if(cartProductFromDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Product Not Present in cart");
+			}
+			
+			Cart cartFromDb = cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
+			if(cartFromDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("No cart present for logged in user");
+			}
+			Double amount = cartFromDb.getTotalAmount()-( product.getPrice()*cartProductFromDb.getQuantity());
+			cartFromDb.setTotalAmount(amount);
+			cartRepo.save(cartFromDb);
+			cartProductRepo.deleteByCartUserUserIdAndProductProductId(userModel.getUserId(), product.getProductId());
+			return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("successfully deleted");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+}

@@ -3,6 +3,7 @@ package com.example.AmitCartV3NewTcs.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -39,8 +40,13 @@ public class ApiSecurityConfig {
 		//http.headers(h->h.frameOptions(f->f.disable()));
 		http.csrf(c->c.disable())
 		.authorizeHttpRequests(a->a.requestMatchers("/login").permitAll()
-				.requestMatchers("/product/search/**").permitAll()
+				//.requestMatchers("/product/search/**").permitAll() //can acces without token
+				.requestMatchers("/product/search/**").hasAnyAuthority("CONSUMER", "SELLER") //access with token only, only consumer or seller can access
+				.requestMatchers(HttpMethod.GET, "/consumer/cart/**").hasAuthority("CONSUMER")
 				.requestMatchers("/consumer/cart/**").hasAuthority("CONSUMER")
+				.requestMatchers(HttpMethod.GET, "/seller/product/**").hasAuthority("SELLER")
+				.requestMatchers(HttpMethod.POST, "/seller/product/**").hasAuthority("SELLER")
+				.requestMatchers("/seller/product/**").hasAuthority("SELLER")
 				.anyRequest().permitAll())
 		.exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
 		
