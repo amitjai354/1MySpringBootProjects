@@ -47,7 +47,9 @@ public class ApiSecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/seller/product/**").hasAuthority("SELLER")
 				.requestMatchers(HttpMethod.POST, "/seller/product/**").hasAuthority("SELLER")
 				.requestMatchers("/seller/product/**").hasAuthority("SELLER")
-				.anyRequest().permitAll())
+				.anyRequest().permitAll())//with permitAll we can see 403 forbidden if consumer tries to access sellere api
+				//and if no token passed then unAuthorised we will get that we gave in authentication entry point
+				//but if make anyrequest authenticated then we will see everywhereonly what we gave in authentication entry point
 		.exceptionHandling(e->e.authenticationEntryPoint(myAuthenticationEntryPoint));
 		
 		http.addFilterBefore(myAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

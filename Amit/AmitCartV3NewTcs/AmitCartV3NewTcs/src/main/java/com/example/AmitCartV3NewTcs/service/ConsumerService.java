@@ -69,6 +69,26 @@ public class ConsumerService {
 		//if product not present in db, product not in stock.. 
 		//also check if this logged in user has cart or not, if not then create new cart for user
 		//add product to cart product if not present, if already present in cart product, return 409
+
+		//so basically we have product we will add it to cartOrudct then add/save cart product to cart, update price also in cart
+		//cart has list of cart products, as ManyToOne from cart to cartProduct Many means list,, so can not call save on cart
+		//with cart product, instead we can save cartProduct with each cartproduct we can pass cart to create FK relationship
+		//and after savingg cartProduct we can save cart again to update price
+
+		//productFromDb = findById, if null return out of stck
+		//cartFromDb=cartRepo.findByUserUserId/UserName/email(), if null create new cart for user
+		//cartFromDb=cartRepo.save(new Cart(0.0, userModel.getUserId/username/email)
+		//cartPrdocutFromDb=cartProductRepo.findByUserUserIdAndProductProductId(userModel.getUserId, product.getProductId)
+		//if not null return product already present in cart
+		//if null, save prodcut to cart product and cart product to  cart..
+		// cartProductFromDb= cartProductRepo.save(new cartProduct(1, productFromDb, cartFromDb)
+		//Now update proice.. amount = cartFromdb.getTotalAmount+(product.getPrice*cartProduct.getQuantity)
+		//cartFromDb.setTotalAmount(amount)
+		//cartFromDb=cartRepo.save(cartFromDb)
+
+		//saving cartProduct with cart will be complicated as cart has list of cartProducts so we need to pass list
+		//but cartProduct has single cartId so while saving cartProduct , pass single cartId, now FK relation created in db
+
 		try{
 			Product productFromDb = productRepo.findById(product.getProductId()).orElse(null);
 			if(productFromDb==null) {
@@ -130,6 +150,52 @@ public class ConsumerService {
 	
 	
 	public ResponseEntity<Object> updateConsumerCart(CartProduct cartProduct){
+		//My biggest mistake here was that i was trying to write common code instead of writting codes in
+		//if and else blocks separately..
+		//but first write codes in if and else block then if possible make coomon code
+		//redability also decreses if write common code if write separately then easily read code
+
+		//3 cases here, do each separately, otherwise it will get very complicated
+		//if quantity=0, delete and reduce amount from cart... if cartProductFromDb==null, simpley save new cartProduct as
+		//in above post api and if cartProductFromDb is not null then get older amount From db substract this from totral amount
+		//and get new updated amount for cartProduct and add this to cartAmount
+
+		//so basically we have product we will add it to cartOrudct then add/save cart product to cart, update price also in cart
+		//cart has list of cart products, as ManyToOne from cart to cartProduct Many means list,, so can not call save on cart
+		//with cart product, instead we can save cartProduct with each cartproduct we can pass cart to create FK relationship
+		//and after savingg cartProduct we can save cart again to update price
+
+		//saving cartProduct with cart will be complicated as cart has list of cartProducts so we need to pass list
+		//but cartProduct has single cartId so while saving cartProduct , pass single cartId, now FK relation created in db
+
+		//update if cartProduct is not null..
+		//productFromDb = findById, if null return out of stck
+		//cartFromDb=cartRepo.findByUserUserId/UserName/email(), if null create new cart for user
+		//cartFromDb=cartRepo.save(new Cart(0.0, userModel.getUserId/username/email)
+		//cartPrdocutFromDb=cartProductRepo.findByUserUserIdAndProductProductId(userModel.getUserId, product.getProductId)
+		//if not null return product already present in cart in save api but here not..
+		//now cartProductFromDb has older qunatity in cart and cartProduct that was passed in json has new quantity.. so get
+		// old amount=cartProductFromDb.getProduct.getPrice*cartProductFromDb.getQuantity
+		//new amount= cartProduct.getProduct.getPrice*cartProduct.getQuantity
+		//total amount=cartFromDb.getTotalAmount+newAmount-oldAmount
+		//cartFromDb.setTotalAmount(totalAmount)
+		//cartFromDb.save(cartFromDb)
+
+		//if cartProductFromDb null.. simply save new cartProduct, save prodcut to cart product and cart product to  cart..
+		//cartProductFromDb=cartProduct passedFromjson
+		// cartProductFromDb= cartProductRepo.save(cartProductFromDb)
+		//Now update proice.. amount = cartFromdb.getTotalAmount+(cartProductFromDb.getproduct.getPrice*cartProduct.getQuantity)
+		//cartFromDb.setTotalAmount(amount)
+		//cartFromDb=cartRepo.save(cartFromDb)
+
+		//if quantity = 0, delete cartProduct and reduce amount from cart then cart with updated amount
+		//cartProductFromDb=cartProductRepo.findByUserUserIdAndProductProductId(userModel.getUserId, cartProduct.getProduct.getProductId)
+		//if not null then oly delete otherwise return cartProdct not ib cart
+		//cartFromDb=cartRepo.findByUserUserId(userModel.getUserId), if null return cart not present for user
+		//if not null then delete.. but frist calucalte amount to reduce
+		//amount=cartFromDb.getTotalAMount-(cartProduct.getProduct.getPrice*cartProduct.getQuantity)
+		//cartFromDb.setTotalAmount(amlunt) then cartFromDb=cartRepo.save(cartFromDb)
+		// Now delete.. cartProductRepo.deleteByUserUserIdAndProductProductId(userId, productId)
 		try {
 			UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
@@ -216,10 +282,7 @@ public class ConsumerService {
 //				return ResponseEntity.ok(cartProductFromDb);
 				//return ResponseEntity.ok(cartFromDb); returning cart produsct as well even after eager fetch
 				
-				//My biggest mistake here was that i was trying to write common code instead of writting codes in 
-				//if and else blocks separately.. 
-				//but first write codes in if and else block then if possible make coomon code	
-				//redability also decreses if write common code if write separately then easily read code
+
 				
 				//Sringboot returns null for relational(FK) entity after saving
 				//in ManyToOne missed cascadeType.Persist
@@ -234,8 +297,6 @@ public class ConsumerService {
 				//cascadePersist means when petrsisting an entity, persistthe entitoies held in its fields
 				//But with cascadePersist as well not returning result immediatley.. when get separately then gives result of cart products
 
-				
-				
 				//CartProduct cartProductFromDb = cartProductRepo.findByCartCartIdAndCartUserUserId(cartFromDb.getCartId(), userModel.getUserId());
 				//CartProduct findByCartCartIdAndCartUserUserId(int cartId, int userId);
 				//if getting by cartid and cart user id, will return any product from cart, will not consider product id
