@@ -28,6 +28,27 @@ public class ConsumerService {
 	@Autowired
 	CartProductRepo cartProductRepo;
 
+	//403 Forbidden.. update and delete api if seller is not the one who added the product..
+	//in Art project, requirement is that delete api should be accesed by Owner and only creator of art can delete api otherwise
+	//403 Forbidden.. so getArtById then check if user id in artFromDb has is same as user id from security context..
+	//if yes then deleteById otherwise return 403 Forbidden
+
+	//here it can be like delete api should be accesed by seller and onlyu seller who added the product should be able to delete
+	//Product has seller.. so find producyBy id then check if userId in prodcutFromDb == userId from securitycontext
+	//if yes then delete by Id and if not return 403 forbidden..
+	//but we are doing deleteBySellerUserIdAndProductId..no actually in seller api we are simply doing deleteById
+
+	//here in requirement nothing says.. it only says that if customer tries to access seller api.. give 403
+	//it does not say that if seller did not add the product then return 403.. but it should be like this only..
+
+	//this wa requirement in art that while updating or deleting if not found then return not found
+
+	////This is written for get api.. findByCartUserUserIdAndProductProductId
+	//same way if required, can give forbidden for consumer api when updating or deleting from cart
+	//but currently given deleteByUserUserIdAndProductProductId.. so use this..
+	//actually in json passing product here but product is added by seller in db not by consumer..
+	//consumer only adds in cart.. so here with product id can not serach that belongs to which consumer
+
 	public ResponseEntity<Object> getConsumerCart(){
 		//it will automatically give 403 if Seller tries to access this as in security filter chain have givrn 
 		//request matcher so from securirty Filter chain returns 403 we need not to set anything in 
@@ -340,9 +361,13 @@ public class ConsumerService {
 	public ResponseEntity<Object> deleteProductFromConsumerCart(Product product){
 		UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		try {
+			//	`CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(userModel.getUserId(), product.getProductId());
+			//This is written for get api.. findByCartUserUserIdAndProductProductId
 			CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(userModel.getUserId(), product.getProductId());
+
 			if(cartProductFromDb==null) {
-				return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Product Not Present in cart");
+				//return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Product Not Present in cart");
+				return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("Product Not Present in cart");
 			}
 			
 			Cart cartFromDb = cartRepo.findByUserUserId(userModel.getUserId()).orElse(null);
