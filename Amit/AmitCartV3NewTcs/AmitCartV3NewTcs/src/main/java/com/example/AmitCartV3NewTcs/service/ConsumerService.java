@@ -88,6 +88,10 @@ public class ConsumerService {
 
 		//saving cartProduct with cart will be complicated as cart has list of cartProducts so we need to pass list
 		//but cartProduct has single cartId so while saving cartProduct , pass single cartId, now FK relation created in db
+		//in cartModel we have @OneToMany(mappedBy=cart) above Set<CartProduct> cartProducts, so FK will not be created in db in cart
+		//so we can not pass cartProduct in cart..
+		//in CartProductModel, we have @ManyToOne(), @JoinCoulmn(name="cart_id", referenceColumnName="cartId:), CartModel cart;
+		//so FK cartId will be created here in CartProduct in db, so we will save cartId in cartProduct
 
 		try{
 			Product productFromDb = productRepo.findById(product.getProductId()).orElse(null);
@@ -167,6 +171,10 @@ public class ConsumerService {
 
 		//saving cartProduct with cart will be complicated as cart has list of cartProducts so we need to pass list
 		//but cartProduct has single cartId so while saving cartProduct , pass single cartId, now FK relation created in db
+		//in cartModel we have @OneToMany(mappedBy=cart) above Set<CartProduct> cartProducts, so FK will not be created in db in cart
+		//so we can not pass cartProduct in cart..
+		//in CartProductModel, we have @ManyToOne(), @JoinCoulmn(name="cart_id", referenceColumnName="cartId:), CartModel cart;
+		//so FK cartId will be created here in CartProduct in db, so we will save cartId in cartProduct
 
 		//update if cartProduct is not null..
 		//productFromDb = findById, if null return out of stck
