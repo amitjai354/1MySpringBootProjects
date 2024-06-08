@@ -114,6 +114,12 @@ public class ConsumerService {
 		//in CartProductModel, we have @ManyToOne(), @JoinCoulmn(name="cart_id", referenceColumnName="cartId:), CartModel cart;
 		//so FK cartId will be created here in CartProduct in db, so we will save cartId in cartProduct
 
+		//ManytoMany.. as in user and role in data loader.. create Set of role first then add element in it then save
+		//Set<RoleModel> roleCustomer = new hAshset<>();
+		//roleCustomer.add(RolModel.CONSUMER0) //enum
+		//userRepo.save(new UserModel("jack", passwordEncoder.encode("pass_word"), roleCustomer));
+		//here need to pass set of role when saving user as 1 user can have many roles and vice versa
+
 		try{
 			Product productFromDb = productRepo.findById(product.getProductId()).orElse(null);
 			if(productFromDb==null) {

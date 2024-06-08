@@ -48,6 +48,7 @@ public class ArtService {
             //this is completely correct, ibn Lecture dopsing same way, typecasting first then using
             //not taking username directly
             UserModel userModel=userService.getUserByEmail(email);
+            artModel.setUserModel(userModel);
             artModel.setOwnerId(userModel.getId());
             //in model class if we make it as User ownerId then need to set: artModel.setOwner(userModel);
             // Cart cartFromDb = cartRepo.findCartByUserUsername(username).orElse(null);

@@ -1,5 +1,7 @@
 package com.example.demoTcsArtWorkNov23Innovator.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +16,7 @@ public class ArtModel {
     private String artist;
     private String medium;
     private double price;
-    private boolean isAvailable=true;
+    private boolean isAvailable = true;
     private String dimensions;
     private String imageLink;
 
@@ -26,7 +28,25 @@ public class ArtModel {
     //@JoinColumn(foreignKey = @ForeignKey(UserModel))
     //@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "FK_ART_USER"))//Fk not creating
     //@Column()//FK not creating
+
+
+    @ManyToOne
+    @JoinColumn(name = "Owner_Id_Fk", referencedColumnName = "Id")//be default name is user_Model_id
+    //@JsonIgnoreProperties({"email", "username", "isAvailable"})
+    @JsonIgnore
+    private UserModel userModel;
+    //in constructor no need to add userModel as we are saving userModel with userRepo
+    //just setter getter we need
+    //now fk owner_id_fk is added in the Art Model and output we will return in ownerId
+    //we need to add ownerId attribute as well because, if return usermodel.. then Art response is:
+    //UserModel{
+    //    "ID":1
+    //}
+    ///but we need ; ownerId:1
+
     private int ownerId;
+
+
     //private UserModel Ownner;//can not write this 2we hav egetter setter for owner id
     //unable to start tomcat if write join column at int,
     //also if do not write then in db FK constraint not showing
@@ -83,6 +103,14 @@ public class ArtModel {
     }
 
     //getter and setter
+
+    public UserModel getUserModel() {
+        return userModel;
+    }
+
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
 
     public int getId() {
         return id;
