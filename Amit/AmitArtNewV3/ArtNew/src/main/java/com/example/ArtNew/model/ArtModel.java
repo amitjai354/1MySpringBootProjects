@@ -26,6 +26,15 @@ public class ArtModel {
     @JoinColumn(name = "owner_id_fk", referencedColumnName = "id")
     @JsonIgnore
     private UserModel userModel;
+	
+	//this is not setIsAvailable so in the jso this is coming as available instead of isAvailable
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+	
+	public boolean isAvailable() {
+        return isAvailable;
+    }
 
 
     public ArtModel() {
@@ -97,14 +106,6 @@ public class ArtModel {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        isAvailable = available;
     }
 
     public String getDimension() {
