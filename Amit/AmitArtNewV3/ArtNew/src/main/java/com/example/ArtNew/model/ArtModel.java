@@ -28,6 +28,7 @@ public class ArtModel {
     private UserModel userModel;
 	
 	//this is not setIsAvailable so in the jso this is coming as available instead of isAvailable
+	//in json response for get and save api, available only is there so take from response instead of class ArtModel
     public void setAvailable(boolean available) {
         isAvailable = available;
     }

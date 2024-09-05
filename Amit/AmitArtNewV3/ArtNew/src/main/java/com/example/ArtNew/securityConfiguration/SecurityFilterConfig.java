@@ -5,10 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,6 +69,34 @@ public class SecurityFilterConfig {
     LoginService loginService;
 
     @Bean
+    UserDetailsService userDetailsService(){
+        //no error because of this.. still working
+        //can comment this or can leave as it is.. no problem
+        return loginService;
+    }
+
+    @Bean
+    AuthenticationProvider authenticationProvider(){
+        //this was given in exam.. Authentication Provider is parent so can return any type of provider in this
+        //we need Database authentication here so we will create object of DaoAuthentication provider and return
+
+        //AuthenticationProvider authenticationProvider = new AuthenticationProvider() {
+        //this will not work, need to implement some methods here if create this object
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(loginService);
+        provider.setPasswordEncoder(this.passwordEncoder());
+        return provider;
+    }
+
+//    @Bean
+//    DaoAuthenticationProvider daoAuthenticationProvider(){
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setUserDetailsService(loginService);
+//        provider.setPasswordEncoder(this.passwordEncoder());
+//        return provider;
+//    }
+
+    @Bean
     WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring().requestMatchers("/h2-console/**")
                 .requestMatchers("/login");
@@ -85,13 +117,7 @@ public class SecurityFilterConfig {
         return http.build();
     }
 
-    @Bean
-    DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(loginService);
-        provider.setPasswordEncoder(this.passwordEncoder());
-        return provider;
-    }
+
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
@@ -100,7 +126,7 @@ public class SecurityFilterConfig {
 
     @Bean
     PasswordEncoder passwordEncoder(){
-        //return  new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+        return  new BCryptPasswordEncoder();
+        //return NoOpPasswordEncoder.getInstance();
     }
 }

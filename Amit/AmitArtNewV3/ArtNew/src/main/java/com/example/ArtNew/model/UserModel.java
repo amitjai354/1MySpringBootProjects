@@ -10,6 +10,115 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
+//public class UserModel {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    int id;
+//    String username;
+//    String password;
+//
+//    @Column(unique = true)
+//    String email;
+//
+//    @ManyToOne()
+//    @JoinColumn(name = "role", referencedColumnName = "id")
+//    RoleModel role;
+//
+////    @Override
+////    public Collection<? extends GrantedAuthority> getAuthorities() {
+////        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRoleName());
+////        //return Collections.singletonList(grantedAuthority);
+////        return List.of(grantedAuthority);
+////    }
+//
+//    public UserModel() {
+//    }
+//
+//    public UserModel(String username, String password, String email, RoleModel role) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.role = role;
+//    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//
+//
+////    @Override
+////    public boolean isAccountNonExpired() {
+////        return UserDetails.super.isAccountNonExpired();
+////    }
+////
+////    @Override
+////    public boolean isAccountNonLocked() {
+////        return UserDetails.super.isAccountNonLocked();
+////    }
+////
+////    @Override
+////    public boolean isCredentialsNonExpired() {
+////        return UserDetails.super.isCredentialsNonExpired();
+////    }
+////
+////    @Override
+////    public boolean isEnabled() {
+////        return UserDetails.super.isEnabled();
+////    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//
+//    public RoleModel getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(RoleModel role) {
+//        this.role = role;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "UserModel{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", email='" + email + '\'' +
+//                ", role=" + role +
+//                '}';
+//    }
+//}
+
+
+
 public class UserModel implements UserDetails {
 
     @Id

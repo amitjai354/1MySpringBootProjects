@@ -4,10 +4,13 @@ import com.example.ArtNew.model.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +22,7 @@ import java.util.function.Function;
 public class JwtUtill {
 
     final long JWT_TOKEN_VALIDITY = 5*60*60*1000;
-    final String mySecret = "randome123#";
+    final String mySecret = "randome123E576ghjlhkWRETFERV6846323rbhdclhsdhckdy34787843hd";
 
     public String getUsernameFromToken(String token){
         return this.getClaimFromToken(token, Claims::getSubject);
@@ -44,6 +47,11 @@ public class JwtUtill {
 //        return Keys.hmacShaKeyFor(keyBytes);
 //    }
 
+    public Key getSigningKey(){
+        byte[] keyBytes = Decoders.BASE64.decode(mySecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public String generateToken(UserDetails userDetails){
         Map<String, Object> claims= new HashMap<>();
         UserModel userModel = (UserModel) userDetails;
@@ -56,8 +64,8 @@ public class JwtUtill {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS256, mySecret)
-                //.signWith(getSigningKey())
+                //.signWith(SignatureAlgorithm.HS256, mySecret)
+                .signWith(getSigningKey())
                 .compact();
     }
 
