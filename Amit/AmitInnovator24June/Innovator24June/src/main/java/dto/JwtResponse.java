@@ -13,6 +13,11 @@ public class JwtResponse {
 	private String accessToken;
 	private int status;
 	
+	public JwtResponse(String accessToken, int status) {
+		super();
+		this.accessToken = accessToken;
+		this.status = status;
+	}
 	public String getAccessToken() {
 		return accessToken;
 	}

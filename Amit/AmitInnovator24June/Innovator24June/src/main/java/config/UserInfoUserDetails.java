@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import entity.UserInfo;
 
+
 public class UserInfoUserDetails implements UserDetails{
 	
 	private String name;
