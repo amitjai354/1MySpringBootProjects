@@ -55,6 +55,10 @@ class Innovator24JuneApplicationTests {
 	public static final String ID_TICKET_1 = "id_ticket_1";
 	public static final String ID_TICKET_2 = "id_ticket_2";
 	
+	//on running these test cases one log for bad credentials always even if all test cases passed.. 
+	//as we have some failed test cases also where it should throw error.. so this is throwing error..
+	//so this bad credentials is correct as we are pring e.print stack trace in case some error occurs
+	
 	@Autowired
 	WebApplicationContext context;
 	

@@ -24,6 +24,13 @@ public class UserInfoUserDetailsService implements UserDetailsService{
 		UserInfo userInfo = repository.findByName(username).orElseThrow(()->new UsernameNotFoundException("invalid username"));
 		return new UserInfoUserDetails(userInfo);
 		//return userInfo;
+		//we have to return userdetails here and now userInfo is not implementing user details 
+		//so cannot return that.. instead UserInfoUserDetails is implementing user details and has a constructor for
+		//converting user info to UserInfoUserDetails.. 
+		//this is why creating new object of UserInfoUserDetails with this constructor
+		
+		//if implementing user details in user info.. getting error on test cases that no constructor found for 
+		//simple granted authority..
 	}
 
 }

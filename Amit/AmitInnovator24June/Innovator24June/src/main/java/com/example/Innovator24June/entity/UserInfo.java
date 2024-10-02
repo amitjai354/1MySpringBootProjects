@@ -28,6 +28,11 @@ import lombok.NoArgsConstructor;
 //public class UserInfo implements UserDetails {
 public class UserInfo{
 	
+	//if implementing user details in user info.. getting error on test cases that no constructor found for 
+	//simple granted authority..
+	//here roles is string.. but in other exams we had separate class for Roles
+	//here need to roles.split for role = "CLIENT,ADMIN" this returns array of string
+	
 	/**
 	 * 
 	 */
@@ -67,6 +72,26 @@ public class UserInfo{
 //		// TODO Auto-generated method stub
 //		return this.name;
 //	}
+//	
+//	@Override
+//  public boolean isAccountNonExpired() {
+//      return true;
+//  }
+//
+//  @Override
+//  public boolean isAccountNonLocked() {
+//      return true;
+//  }
+//
+//  @Override
+//  public boolean isCredentialsNonExpired() {
+//      return true;
+//  }
+//
+//  @Override
+//  public boolean isEnabled() {
+//      return true;
+//  }
 	
 	public String getPassword() {
 		return password;
@@ -107,25 +132,5 @@ public class UserInfo{
 	public void setRoles(String roles) {
 		this.roles = roles;
 	}
-	
-//	@Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
 
 }
