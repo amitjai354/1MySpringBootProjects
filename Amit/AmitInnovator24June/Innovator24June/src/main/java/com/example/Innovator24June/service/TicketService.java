@@ -37,10 +37,10 @@ public class TicketService {
 	public ResponseEntity<Object> postTicket(TicketModel ticketModel){
 		//UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		//earlier UserModel used to implement userDetails so this was working..
-		//UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserInfoUserDetails userInfoUserDetails = (UserInfoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		//UserInfoUserDetails userInfoUserDetails = (UserInfoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		//in exam autowired userInfooRepository.. for this purpose
-		UserInfo userInfo = userInfoRepository.findByName(userInfoUserDetails.getUsername()).orElseThrow(()-> new BadCredentialsException("invalid username"));
+		UserInfo userInfo = userInfoRepository.findByName(userDetails.getUsername()).orElseThrow(()-> new BadCredentialsException("invalid username"));
 		
 		//ticketModel.setCreatedAt(new Date().toString());//new Date(System.currentTimeMillis())
 		//Date is in DD/MM/YYYY format
@@ -48,7 +48,7 @@ public class TicketService {
 		SimpleDateFormat dtFormatter = new SimpleDateFormat("dd/MM/yyyy");
 		ticketModel.setCreatedAt(dtFormatter.format(dt));
 		
-		String username = userInfoUserDetails.getUsername();
+		String username = userDetails.getUsername();
 		ticketModel.setClientId(userInfo.getId());
 		try{
 			ticketModel=ticketRepository.save(ticketModel);
@@ -104,10 +104,10 @@ public class TicketService {
 		try {
 			//UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			//earlier UserModel used to implement userDetails so this was working..
-			//UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserInfoUserDetails userInfoUserDetails = (UserInfoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			//UserInfoUserDetails userInfoUserDetails = (UserInfoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			//in exam autowired userInfooRepository.. for this purpose
-			UserInfo userInfo = userInfoRepository.findByName(userInfoUserDetails.getUsername()).orElseThrow(()-> new BadCredentialsException("invalid username"));
+			UserInfo userInfo = userInfoRepository.findByName(userDetails.getUsername()).orElseThrow(()-> new BadCredentialsException("invalid username"));
 			
 			TicketModel ticketModel = ticketRepository.findById(id).orElse(null);
 			if(ticketModel == null) {

@@ -20,10 +20,10 @@ public class UserInfoUserDetailsService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
 		UserInfo userInfo = repository.findByName(username).orElseThrow(()->new UsernameNotFoundException("invalid username"));
-		return new UserInfoUserDetails(userInfo);
 		//return userInfo;
+		
+		return new UserInfoUserDetails(userInfo);
 		//we have to return userdetails here and now userInfo is not implementing user details 
 		//so cannot return that.. instead UserInfoUserDetails is implementing user details and has a constructor for
 		//converting user info to UserInfoUserDetails.. 

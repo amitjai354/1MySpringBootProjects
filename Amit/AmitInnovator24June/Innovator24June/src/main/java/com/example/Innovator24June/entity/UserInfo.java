@@ -2,6 +2,8 @@ package com.example.Innovator24June.entity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +34,9 @@ public class UserInfo{
 	//simple granted authority..
 	//here roles is string.. but in other exams we had separate class for Roles
 	//here need to roles.split for role = "CLIENT,ADMIN" this returns array of string
+	//even if doing roles split here but still same error that no constructor for granted authority in test case
+	//but will run successfully if running manually in postman.. semms in test case some constructor needed..
+	//for test case we have to create separate user details class
 	
 	/**
 	 * 
@@ -63,8 +68,12 @@ public class UserInfo{
 	
 //	@Override
 //	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(roles);
-//		return List.of(grantedAuthority);
+////		SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(roles);
+////		return List.of(grantedAuthority);
+//		
+//		String[] rolesArray = this.roles.split(",");
+//		return Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
+//		//this is Array of string not list.. so can not do roles.stream() directly..so doing Stream.of() for array
 //	}
 //
 //	@Override
@@ -74,24 +83,24 @@ public class UserInfo{
 //	}
 //	
 //	@Override
-//  public boolean isAccountNonExpired() {
-//      return true;
-//  }
+//	public boolean isAccountNonExpired() {
+//		return true;
+//	}
 //
-//  @Override
-//  public boolean isAccountNonLocked() {
-//      return true;
-//  }
+//	@Override
+//	public boolean isAccountNonLocked() {
+//		return true;
+//	}
 //
-//  @Override
-//  public boolean isCredentialsNonExpired() {
-//      return true;
-//  }
-//
-//  @Override
-//  public boolean isEnabled() {
-//      return true;
-//  }
+//	@Override
+//	public boolean isCredentialsNonExpired() {
+//		return true;
+//	}
+//	
+//	@Override
+//	public boolean isEnabled() {
+//		return true;
+//	}
 	
 	public String getPassword() {
 		return password;
