@@ -45,9 +45,6 @@ import java.util.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class Innovator24JuneApplicationTests {
-//	@Test
-//	void contextLoads() {  //given by defualt in this class , but no need can delete
-//	}
 	private MockMvc mockMvc;
 	public static final String TOKEN_ADMIN_1 = "token_admin_1";
 	public static final String TOKEN_CLIENT_1 = "token_client_1";
@@ -212,8 +209,7 @@ class Innovator24JuneApplicationTests {
 		mockMvc.perform(get("/ticket/list?category=Hardware").contentType(MediaType.APPLICATION_JSON_VALUE)
 				.header("Authorization","Bearer "+getDataFromFileSystem(TOKEN_ADMIN_1)))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		//.andExpect(jsonPath("$.[0].id", Matchers.is(2), null))
-		.andExpect(jsonPath("$.[0].id", Matchers.is(2)))
+		.andExpect(jsonPath("$.[0].id", Matchers.is(2))) 
 		.andExpect(jsonPath("$.[0].ticketId", Matchers.is(176346)))
 		.andExpect(jsonPath("$.[0].issue", containsStringIgnoringCase("My computer wont start up. It shows a blue screen error.")))
 		.andExpect(jsonPath("$.[0].category", containsStringIgnoringCase("Hardware")))
