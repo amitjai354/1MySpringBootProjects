@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "cart"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "cart_id", "product_id"}))
 @Entity
 public class CartProduct {
 

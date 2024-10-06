@@ -12,6 +12,8 @@ public enum Role {
 
 class RoleGrantedAuthority implements GrantedAuthority{
 	
+	private static final long serialVersionUID = 7147208211838127997L;
+	
 	String role;
 
 	public RoleGrantedAuthority(String role) {

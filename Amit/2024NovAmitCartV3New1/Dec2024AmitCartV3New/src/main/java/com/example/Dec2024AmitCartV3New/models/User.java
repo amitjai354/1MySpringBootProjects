@@ -21,6 +21,8 @@ import jakarta.persistence.JoinColumn;
 @Entity
 public class User implements UserDetails {
 	
+	private static final long serialVersionUID = -6817162083992336179L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
@@ -114,7 +116,5 @@ public class User implements UserDetails {
 		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", roles=" + roles
 				+ "]";
 	}
-	
-	
 
 }
