@@ -44,6 +44,14 @@ public class Cart {
 		this.user = user;
 		this.cartProducts = cartProducts;
 	}
+	
+	//below one I have created to use in DataLoader as in this exam did not use DataLoader so not given other
+	//constructors, but in exam where using DataLoader, they have given multiple constructors.. without PK as well
+	public Cart(Double totalAmount, User user) {
+		super();
+		this.totalAmount = totalAmount;
+		this.user = user;
+	}
 
 	public Integer getCartId() {
 		return cartId;

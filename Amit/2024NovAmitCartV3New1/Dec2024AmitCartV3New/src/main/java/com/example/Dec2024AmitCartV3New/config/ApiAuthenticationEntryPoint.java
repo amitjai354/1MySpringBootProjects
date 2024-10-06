@@ -17,8 +17,8 @@ public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.getWriter().println("You dont have permission "+authException.getMessage());
 	}
 
 }
