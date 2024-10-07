@@ -22,12 +22,19 @@ public class Product {
 	@ManyToOne()
 	@JoinColumn(name="seller_id", referencedColumnName = "userId", updatable = false)
 	//can not update User from this class
-	@JsonIgnore
+	@JsonIgnore//do not want to shpw seller details while showing product details in flipkart
 	private User seller;
+	//this is uni directional relationship as in user class no attribute created for this
 	
 	@ManyToOne
 	@JoinColumn(name = "category_id", referencedColumnName = "categoryId")
 	private Category category;
+	//could have written OneToMany in Category class to maintain bidirectional relationship
+	//mappedBy= category so this way Fk not created in Category table.. where use mapped by inside OneToMany
+	//but maintaining uni directional relationship here
+	//if writting mappedBy then no need of JoinColumn
+	//mappedBy tells that we are maintaing bidirectional relationship with CartProduct class 
+	//but FK will not be present in this table, mapped by mean birectional relationship
 
 	public Product() {
 		super();

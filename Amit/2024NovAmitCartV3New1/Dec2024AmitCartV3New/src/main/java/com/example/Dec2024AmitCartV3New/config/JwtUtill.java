@@ -9,9 +9,11 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.example.Dec2024AmitCartV3New.models.User;
+import com.example.Dec2024AmitCartV3New.repo.UserRepo;
 import com.example.Dec2024AmitCartV3New.service.UserAuthService;
 
 import io.jsonwebtoken.Claims;
@@ -25,6 +27,9 @@ public class JwtUtill {
 	@Autowired
 	private UserAuthService userAuthService;
 	
+	@Autowired
+	private UserRepo userRepo;
+	
 	//try to get these values from application.properties configuration
 	final long JWT_TOKEN_VALIDITY = 5*60*60*1000;
 	final String SECRET = "12345566769dsfhfjhdgtsfasdfasensljkdshQ453546548697874632";
@@ -32,6 +37,7 @@ public class JwtUtill {
 	public User getUser(final String token) {
 		String username = this.getUsernameFromToken(token);
 		User myUser = (User) userAuthService.loadUserByUsername(username);
+		//User myUser = userRepo.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("username not found"));
 		return myUser;
 	}
 	

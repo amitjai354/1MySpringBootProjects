@@ -25,9 +25,26 @@ public class Cart {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JsonIgnore
 	private User user;
+	//if we do not give Join Column and mapped By then by default join column is created with column name as 
+	//we user _ for camel case eg userId = user_id
+	//if we have only one column as PK so no neeed to give join column as by default FK will refer to this PK only
+	//this is uni directional relationship as in user class no attribute created for this
+	//cascade Remove given in exam.. whatever remove here remove from this mentioned class as well
+	//mean if removing anything from cart then remove the user from User who added this here.. delete user
+	//where this is written, that is parent.. means delete operation will cascade from Parent to child entity
+	
+	//Generally this is written in User class.. so that when delete any customer.. dlete its cart also
+	//but here we are maintaining uni directional relationship.. so may be that is why writting here..
+	//but if bidirectional relation then if write Cascade Remove in user class then it means user class is parent
+	//and this class is child class.. so if delete customer then delete its cart as well
+	
+	//only this cascade is written in complete exam..
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cart")
 	private List<CartProduct> cartProducts;//cart is inside this cartProduct
+	//if writting mappedBy then no need of JoinColumn
+	//mappedBy tells that we are maintaing bidirectional relationship with CartProduct class 
+	//but FK will not be present in this table, mapped by mean birectional relationship
 	
 	public void updateTotalAmount(Double price) {
 		this.totalAmount += price;

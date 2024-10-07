@@ -49,6 +49,9 @@ public class DataLoader implements ApplicationRunner{
 		Role consumerRole = Role.CONSUMER;
 		Role sellerRole = Role.SELLER;
 		
+//		Role consumerRole = roleRepo.save(new Role(1, "CONSUMER"));
+//		Role sellerRole = roleRepo.save(new Role(1, "SELLER"));
+		
 		//first save those models which does have any foreign key attribute in them
 		//otherwise constraint exception while saving that save that first then save this
 		//Category category1 = categoryRepo.save(new Category("Fashion")); 
