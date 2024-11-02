@@ -35,11 +35,14 @@ public class PublicController {
 	@Autowired
 	private JwtUtill jwtUtill;
 
+	//Example: /api/public/product/search?keyword="tablet"
 	@GetMapping("/product/search")
 	public List<Product> getProducts(){
 		return null;
 	}
 	
+	
+	//request body - {"username": "bob","password": "pass_word"}
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody JwtRequest jwtRequest){
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

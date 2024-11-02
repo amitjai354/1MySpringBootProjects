@@ -3,6 +3,7 @@ package com.example.Innovator24June.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -69,7 +70,7 @@ public class SecurityConfig {
 //	    if do not write this.. gives forbidden for any post api weather api correct or not
 		//http.headers(h->h.frameOptions(f->f.disable()));
 		http.csrf(c->c.disable())
-		.authorizeHttpRequests(a->a.requestMatchers("/ticket/add/**").hasAuthority("CLIENT")
+		.authorizeHttpRequests(a->a.requestMatchers(HttpMethod.POST, "/ticket/add/**").hasAuthority("CLIENT")
 				.requestMatchers("/ticket/list/**").hasAnyAuthority("CLIENT", "ADMIN")
 				//i had written customer, seller so test case was giving 403 instead of 200
 				.requestMatchers("/ticket/update/**").hasAuthority("ADMIN")

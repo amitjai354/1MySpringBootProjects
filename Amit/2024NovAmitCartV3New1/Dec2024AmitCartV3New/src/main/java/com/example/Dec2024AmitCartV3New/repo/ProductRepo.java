@@ -16,4 +16,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer>{
 	List<Product> findBySellerUserId(Integer sellerId);
 	
 	Optional<Product> findBySellerUserIdAndProductId(Integer sellerId, Integer productId);
+	
+	//created by me but not needed as we are doing find by sller id and product id so if not present giving 404
+	void deleteBySellerUserIdAndProductId(Integer sellerId, Integer productId);
 }

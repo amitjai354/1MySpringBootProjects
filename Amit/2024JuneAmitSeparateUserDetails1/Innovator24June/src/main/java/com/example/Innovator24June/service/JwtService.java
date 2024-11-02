@@ -1,11 +1,13 @@
 package com.example.Innovator24June.service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,16 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService { //Jwt Utill class
 	
+	@Value("${jwt.secret}")
+	private String JWT_SECRET;
+	
 	public  static final String SECRET="5367566B59783373367639792F423F23F4528482B4D625165546";
 	//had written $ in Secret here.. was giving error in decoding password.. even if no $ in password
 	final long JWT_TOKEN_VALIDITY=5*60*60*1000;
 	
 	private Key getSigningKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+		//byte[] keyBytes = this.SECRET.getBytes(StandardCharsets.UTF_8);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 	
