@@ -28,7 +28,9 @@ public class UserInfoUserDetails implements UserDetails{
 		this.authorities = Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
 	}
 	
-	//to avoid mistakes..
+	//=================================
+	//steps to avoid mistakes..
+	
 	//best is when writting any class.. please stay 1 more minute.. but check all annotations..
 	//all lines all codes once again.. then move to other class
 	//please very carefully check..
@@ -40,7 +42,15 @@ public class UserInfoUserDetails implements UserDetails{
 	//now check all the code.. line by line.. have you written all code in correct block.. or all blocksclosing orpoerly..
 	//written filter chain ijside if block but it should have been outsside if block
 	
+	//=============================================
 	//mistakes i did..
+	
+	//@Configuration > @Component .. if using @Bean in a class, must be @Configuration not @Component, otherwise error that autowiring repository is giving null at DAoAuthenticationProvider
+	
+	//missed wrtting signWith in Jwts.. error that Jwts parse error..
+	
+	//missed returning ResponseEntity.. so code executed till last line.. different status got..
+	
 	////i was saving ticketModel instead of ticketModelFromDb in update api so test case was failing that assertion failed
 	//priority and status were not matching..
 	
