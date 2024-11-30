@@ -8,12 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
+@Service
 public class UserService {
     //public class UserService implements UserDetailsService {
     //this is done in login service
 
-
+	@Autowired
     UserRepository userRepository;
 
     //given in exam
@@ -24,7 +24,7 @@ public class UserService {
         //when returning username not found exception after making it optional, getting Bad credentials excptio
         //now everyehere can directly use this method, no need to check null, as we user user service not user repo
         //at any plave we need this method
-    	return null;
+    	return userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("invalid username password"));
     }
 
     //Spring Security hides the username does not exist exception by wrapping it so that when developing,

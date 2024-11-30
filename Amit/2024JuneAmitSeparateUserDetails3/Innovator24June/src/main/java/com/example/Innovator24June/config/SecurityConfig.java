@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -52,16 +51,14 @@ public class SecurityConfig {
 	
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
-				.requestMatchers("/signUp/**").requestMatchers("/login/**");//working with code commented as well because i had written h.framewoptions
+		return (web) -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
+				//.requestMatchers("/signUp/**").requestMatchers("/login/**");//working with code commented as well
 		//as i am doing anyrequest permit all
-		
-		//i missed .anyRequest.permitAll so other apis were not running like signup and login.. better define in webcustomizer
 	}
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		//http.headers(h->h.frameOptions(f->f.disable()));//working with this commented and uncommented both because above code i had wriiten web customizer
+		http.headers(h->h.frameOptions(f->f.disable()));//working with this commented and uncommented both
 		http.csrf(c->c.disable())
 		.authorizeHttpRequests(a->a.requestMatchers(HttpMethod.POST, "/ticket/add/**").hasAuthority("CLIENT")
 				.requestMatchers("/ticket/list/**").hasAnyAuthority("CLIENT", "ADMIN")

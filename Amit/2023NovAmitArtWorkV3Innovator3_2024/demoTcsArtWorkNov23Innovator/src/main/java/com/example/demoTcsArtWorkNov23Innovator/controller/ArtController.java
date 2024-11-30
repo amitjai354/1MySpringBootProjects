@@ -12,6 +12,7 @@ import java.util.List;
 @RequestMapping("/artWork")
 public class ArtController {
     
+	@Autowired
     ArtService artService;
 
 //    {
@@ -25,25 +26,25 @@ public class ArtController {
 //    }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> postArtWork( ArtModel artModel){
-        return null;
+    public ResponseEntity<Object> postArtWork(@RequestBody ArtModel artModel){
+        return artService.postArtWork(artModel);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Object> getArtModelList(String medium){
-        return null;
+    public ResponseEntity<Object> getArtModelList(@RequestParam("medium") String medium){
+        return artService.getArtWork(medium);
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Object> updateArtWork( int id, ArtModel artModel){
+    public ResponseEntity<Object> updateArtWork(@PathVariable("id") int id, @RequestBody ArtModel artModel){
         //for update Patch is used,also Put is used but in Patch send only those fild which we need to modify
         //in put we send complete object and if object not in db saves this as new object
         //but in patch object must be existinbg in th db
-        return null;
+        return artService.updateArtWork(id, artModel);
     }
 
     @DeleteMapping("/delete/id")
-    public ResponseEntity<Object> deleteArtWork( int id){
-        return null;
+    public ResponseEntity<Object> deleteArtWork(@PathVariable("id") int id){
+        return artService.deleteArtWork(id);
     }
 }

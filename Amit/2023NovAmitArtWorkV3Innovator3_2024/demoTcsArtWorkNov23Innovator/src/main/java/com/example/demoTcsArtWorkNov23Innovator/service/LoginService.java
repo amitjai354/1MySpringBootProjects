@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Service
 public class LoginService implements UserDetailsService {
 
-
+	@Autowired
     UserService userService;
 
     //org.springframework.security.authentication.InternalAuthenticationServiceException:
@@ -23,7 +23,7 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    	return null;
+    	return userService.getUserByEmail(email);
     }
 
     //below methods are private then how will we call them in other classes, we need getter setter

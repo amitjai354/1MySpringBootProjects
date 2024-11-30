@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ArtRepository extends JpaRepository<ArtModel, Integer> {
     //add required annotation to make the art repository
+	List<ArtModel> findByMedium(String medium);
 }

@@ -27,7 +27,28 @@ public class UserInfoUserDetails implements UserDetails{
 		String[] rolesArray = userInfo.getRoles().split(", ");
 		this.authorities = Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
 	}
+	
+	//to avoid mistakes..
+	//best is when writting any class.. please stay 1 more minute.. but check all annotations..
+	//all lines all codes once again.. then move to other class
+	//please very carefully check..
+	
+	//if any mistake, error.. first check all the annotations are there or not..
+	//it may also happen that you have written annotation where not required as well
+	
+	//error if even after checking above code..
+	//now check all the code.. line by line.. have you written all code in correct block.. or all blocksclosing orpoerly..
+	//written filter chain ijside if block but it should have been outsside if block
+	
 	//mistakes i did..
+	////i was saving ticketModel instead of ticketModelFromDb in update api so test case was failing that assertion failed
+	//priority and status were not matching..
+	
+	//filter chain i had written inside .. niot outside all if blocks.. so without filterchain , all the apis were giving 200
+	//even the wrong url ones were giving 200 instead of not found
+	
+	//i missed .anyRequest.permitAll so other apis were not running like signup and login.. better define in webcustomizer
+	
 	//did not write restcontroller annoation on login controller
 	//wrote configuration annotation on this class but this class is not bean so not needed
 	//i9n signup returned 201 instead of 200 so no user added in db so all the yest cases returning no data found
@@ -38,6 +59,7 @@ public class UserInfoUserDetails implements UserDetails{
 	//lombok annotations are not working so add your code from source.. getter setter and 2 comnstructors
 	////if do not write 1000, token is expiring immediately
 	//STandardCharset.UTF_8 supports $ as well in the string secret but Base64 does not support
+	
 	//in test case red cross means error in the test case.. could not execute test case completely
 	//blue croos mean test case failed after completely executing..
 	//if pass then will not show in test caese screen log

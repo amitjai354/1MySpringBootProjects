@@ -26,8 +26,15 @@ public class UserModel implements UserDetails {
 
     @Column(name = "email", unique = true)
     private String email;
-
+    
+   
+    @ManyToOne()
+    @JoinColumn(name="role", referencedColumnName = "id")
     private RoleModel role;
+    //private int role; 
+    //in paper they have given datatype as Integer for role but in code they themself have given
+    //RoleModel role
+    //but in artWork, they have give ownerid as int in both paper and java code as well
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -39,7 +46,8 @@ public class UserModel implements UserDetails {
         //but if manyToMany then this will be list of roles
         //return role.stream.map(r-> new SimpleGrantedAuthority(r.getName()).collect(Collectors.toList());
     	
-    	return null;
+    	GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRolename());
+    	return List.of(grantedAuthority);
     }
 
     //constructor
@@ -85,9 +93,15 @@ public class UserModel implements UserDetails {
         this.id = id;
     }
 
+    public void setRole(RoleModel role) {
+		this.role = role;
+	}
+    
+    public RoleModel getRole() {
+        return role;
+    }
 
-
-    @Override
+	@Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -125,13 +139,8 @@ public class UserModel implements UserDetails {
         this.email = email;
     }
 
-    public RoleModel getRole() {
-        return role;
-    }
 
-    public void setRole(RoleModel role) {
-        this.role = role;
-    }
+
 
     //to string
     @Override

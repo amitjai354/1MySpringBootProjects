@@ -7,9 +7,10 @@ import com.example.demoTcsArtWorkNov23Innovator.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-
+@Component
 public class DataLoader implements ApplicationRunner {
     //run vs main method, main is static method so can not use autowire here
     //this is better than data.sql.. many problems there, name should be same, need to create new file
@@ -22,11 +23,14 @@ public class DataLoader implements ApplicationRunner {
     //Springbootapllication.run completes
     //only difference is that command line run take string as argument
 
-
+	@Autowired
     RoleRepository roleRepository;
 
-
+	@Autowired
     UserRepository userRepository;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -43,5 +47,14 @@ public class DataLoader implements ApplicationRunner {
         //	many to many means one user has many roles and one role has many users
         //Many to one means many user can have one role/one role can have many users
         //but one user can not have many roles, he can not be both owner and customer
+    	
+    	RoleModel roleOwner = roleRepository.save(new RoleModel("OWNER"));
+    	RoleModel roleCustomer = roleRepository.save(new RoleModel("CUSTOMER"));
+    	
+    	UserModel userOwner1 = userRepository.save(new UserModel("owner1", passwordEncoder.encode("owner123$"), "owneremail@gmail.com", roleOwner ));
+    	UserModel userOwner2 = userRepository.save(new UserModel("owner2", passwordEncoder.encode("owner789$"), "owneremail2@gmail.com", roleOwner));
+    	UserModel userCustomer = userRepository.save(new UserModel("customer", passwordEncoder.encode("customer123$"), "customeremail@gmail.com", roleCustomer));
+
+
     }
 }

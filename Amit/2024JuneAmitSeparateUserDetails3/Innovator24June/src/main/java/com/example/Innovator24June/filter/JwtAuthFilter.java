@@ -3,7 +3,6 @@ package com.example.Innovator24June.filter;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,14 +12,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.Innovator24June.config.UserInfoUserDetailsService;
 import com.example.Innovator24June.service.JwtService;
+import com.example.Innovator24June.service.LoginService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Configuration
+@Component
 public class JwtAuthFilter extends OncePerRequestFilter{
+
 
 	//I have written Authentication in header as we always used to do
 	//but in exam they are passing "Authorization" in header..
@@ -47,36 +48,32 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String tokenHeader = request.getHeader("Authorization");
-		String username=null;
-		String token = null;
-		if(tokenHeader!=null && tokenHeader.startsWith("Bearer ")) {
-			token = tokenHeader.substring(7);
-			username = jwtService.getUsernameFromToken(token);
-			if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
-				UserDetails userDetails = userInfoUserDetailsService.loadUserByUsername(username);
-				Boolean validateToken = jwtService.validateToken(token, userDetails);
-				if(validateToken) {
-					UsernamePasswordAuthenticationToken authToken = new 
-							UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-					SecurityContextHolder.getContext().setAuthentication(authToken);
+			String tokenHeader = request.getHeader("Authorization");
+			String token = null;
+			String username = null;
+			if(tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
+				token = tokenHeader.substring(7);
+				username = jwtService.getUsernameFromToken(token);
+				if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
+					UserDetails userDetails = userInfoUserDetailsService.loadUserByUsername(username);
+					Boolean validateToken = jwtService.validateToken(token, userDetails);
+					if(validateToken) {
+						UsernamePasswordAuthenticationToken authToken = new 
+								UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+						authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+						SecurityContextHolder.getContext().setAuthentication(authToken);
+					}
+					else {
+						System.out.println("Invalid token");
+					}
 				}
 				else {
-						System.out.println("Invalid token");
-					}
+					System.out.println("Invalid token");
+				}
 			}
 			else {
-						System.out.println("Invalid token");
-					}
-		}
-		else {
-						System.out.println("Invalid token");
-		}
-		//must write these else.. i missed and wrote filterchain in above bracket.. inside one if block..
-		//so without filter chain , all the apis started giving 200, 
-		//even the wrong urls were not giuving not found 404, instead they all were giving 200
-		//as all the apis were acting without any filter
-		filterChain.doFilter(request, response);
+				System.out.println("Invalid token");
+			}
+			filterChain.doFilter(request, response);
 	}
 }
