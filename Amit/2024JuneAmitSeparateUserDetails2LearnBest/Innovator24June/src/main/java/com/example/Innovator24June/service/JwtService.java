@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -42,8 +43,9 @@ public class JwtService { //Jwt Utill class
 	}
 	
 	private SecretKey getSignKey() {
-		//byte[] keyBytes = Decoders.BASE64.decode(SECRET);
-		byte[] keyBytes = this.JWT_SECRET.getBytes(StandardCharsets.UTF_8);//this one supports $ as well in SECRET
+		byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET);//this one was given in the exam.. 
+		//String should be Base64 decode
+		//byte[] keyBytes = this.JWT_SECRET.getBytes(StandardCharsets.UTF_8);//this one supports $ as well in SECRET
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 	
@@ -68,7 +70,12 @@ public class JwtService { //Jwt Utill class
 				.setSubject(username)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-				.signWith(getSignKey())
+				.signWith(getSignKey(), SignatureAlgorithm.HS256)//all test cases passing with this
+				//.signWith(SignatureAlgorithm.HS256, getSignKey())//deprecated
+				//this was given in this exam..  i missed only this line.. was getting unable to parse Jwt token
+				//error in sign with.. bas ye kar deta ho jata..
+				//they had not given signUp in controller, so 404 not found.. 
+				//had to create by mysel in LoginControler,, but was given addUser() in LoginService
 				.compact();
 	}
 	

@@ -49,6 +49,8 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
+	//they had not given signUp in controller, so 404 not found.. 
+	//had to create by mysel in LoginControler,, but was given addUser() in LoginService
 	@PostMapping("/signUp")
 	public ResponseEntity addNewUser(@RequestBody UserInfo userInfo) {
 		return loginService.addUser(userInfo);

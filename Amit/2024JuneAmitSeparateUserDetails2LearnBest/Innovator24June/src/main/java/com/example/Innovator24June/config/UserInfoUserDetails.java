@@ -5,12 +5,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.Innovator24June.entity.UserInfo;
+
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 
 //@Configuration  if writing this here.. giving error.. as it need userInfo of bean type now 
@@ -43,7 +49,46 @@ public class UserInfoUserDetails implements UserDetails{
 	//written filter chain ijside if block but it should have been outsside if block
 	
 	//=============================================
+	//exams mistake
+	
+	//.signWith(getSignKey(), SignatureAlgorithm.HS256)//all test cases passing with this
+	//.signWith(SignatureAlgorithm.HS256, getSignKey())//deprecated
+	//this was given in this exam..  i missed only this line.. was getting unable to parse Jwt token
+	//error in sign with.. bas ye kar deta ho jata..
+	
+	//they had not given signUp in controller, so 404 not found..  means this api url does not exist..
+	//so either Restcontroller not added or RestController added but did not create api itself
+	//had to create by mysel in LoginControler,, but was given addUser() in LoginService
+	
+//	private SecretKey getSignKey() {
+//		byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET);//this one was given in the exam.. 
+//		//String should be Base64 decode
+//		//byte[] keyBytes = this.JWT_SECRET.getBytes(StandardCharsets.UTF_8);//this one supports $ as well in SECRET
+//		return Keys.hmacShaKeyFor(keyBytes);
+//	}
+	
+	//mera sara ho gya tha.. 2 hr 9 min mile the..
+	//ek api hard thi wo chor diya tha maine.. uske chakkr me kuch na hota..
+	//data loader bhi likh diya tha iss bar  .. yhi ek extra tha bas.. 15 min alag se lge..
+	//baki get ki 3 api thi,, maine 2 kari thi.. hard wali chhor di thi..
+	//signUp nhi tha LoginController me.. wo bhi kar diya
+	//bas wahi signWith in jwt service me erro aa gya sara..
+	//, SignatureAlgorthm.HS256 likhna tha.. starting me yaad tha.. last tak bhool gya.. actually 1 min tha bas..
+	//5 se 10 min hota to pakka soch kar kar leta.. last 1 min me mind kaam hi nbhi krta..
+	//only changed Key to SecretKey but same issue..
+	
+	//main is that first create and test add ticket api only.. ek api authenticate ho gyi to baki sari ho jayengi..
+	//delte update get ki 2 api ki jagah add wali test krta to pakk ho jata issue resolve.. phir sara kr leta..
+	//koi matlab nhihai jab add ticket ho nhi chali to... so first test add wali api.. 
+	//if that add runs then write other apis code
+	
+	//same add user me bhi signUp nhi chalegi to baki kuch nhi chalega.. so first test sign up and login..
+	//bina user ke koi api nhi chalegi..
+	
+	
+	//=========================
 	//mistakes i did..
+	
 	
 	//@Configuration > @Component .. if using @Bean in a class, must be @Configuration not @Component, otherwise error that autowiring repository is giving null at DAoAuthenticationProvider
 	
