@@ -57,7 +57,7 @@ public class SecurityConfig {
 	}
 	
 	AuthenticationProvider authenticationProvider() {
-		//Stack pver flow error if not write dao authentication provider
+		//Stack over flow error if not write dao authentication provider
 		//provider.setUserDetailsService(this.userDetailsService());//working with this code as well
 		//provider.setUserDetailsService(myUserDetailsService);
 		return null;

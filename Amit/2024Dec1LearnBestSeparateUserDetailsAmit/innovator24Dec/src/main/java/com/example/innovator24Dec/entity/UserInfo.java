@@ -1,12 +1,28 @@
 package com.example.innovator24Dec.entity;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
 
 //lombok not given this time in exam only @Entity given dec 2024
@@ -26,7 +42,21 @@ public class UserInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)//can read get() but can not write set()
+	//this is working perfectly as it ignores setter only not getter
+	//if need getter then provide READ_ONLY
+	//if need setter then provide WRITE_ONLY
+
+	//@JsonIgnore
+	//.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1))) this is failing if use 
+	//@JsonIgnore as it will ignore both getter and setter, so can not find path error as it uses getter to get path
 	private int id;
+	//if keeping it as int then can not set id as null, which is must in new hibernate
+	//here given Auto means overall increment at all tables level
+	//identity increments at one table level
+	//but thing is primary id can not be null,, yeah pk will be updated by hibernate..
+	//we just need null in json
 	
 	@Column(unique = true)
 	private String name;
@@ -46,10 +76,58 @@ public class UserInfo {
     //@JsonProperty(access = Access.WRITE_ONLY)
     //private String password;
 
-	@JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)//can set only not get
 	private String password;
 	
 	private String roles;
+	
+	
+	/*
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name="role_id", referencedColumnName = "roleId")
+	@JsonIgnore
+	@JsonIgnoreProperties({"roleId", "roleName"})
+	RoleModel role;
+	
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name="user_role_table", joinColumns = @JoinColumn(name="user_id", referencedColumnName = "userId"),
+	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
+	@JsonIgnore //ignore roleSet in input and output whenever showing in result output
+	Set<RoleModel> roleSet;
+	
+	
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = RoleModel.class)
+	@CollectionTable(name="user_role", joinColumns = @JoinColumn(name="user_id", referencedColumnName = "userId"))
+	@Enumerated(EnumType.STRING)
+	Set<RoleModel> roleEnumSet;
+	//here we do not have roleId as enum not class so no need to write inverseJoinColumns
+	
+	
+	public enum RoleModel{
+		DESIGNER, // "" is not used here
+		USER
+	}
+	
+	
+	//---------- authorities() ------------
+	for @ManyToMany
+	Set<RoleModel> roles;
+	
+	return roles.stream().map(r-> new SimpleGrantedAuthority(r.name)).collect(Collectors.toList());//enum 
+	//enum does not have roleName, so use r.name()
+	return roles.stream().map(r-> new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());//class
+	
+	
+	for @ManyToOne()
+	RoleModel role;
+	
+	Grantedauthority grantedAuthority = new SimpleGrantedAuthority(role.getRoleName());
+	Grantedauthority grantedAuthority = new SimpleGrantedAuthority(role.name());// we can directly get roleName by
+	//role.name as object can directly access attributes instead of role.getName()
+	return List.of(grantedAuthority);
+	*/
+	
 
 	public UserInfo() {
 		super();
@@ -58,6 +136,14 @@ public class UserInfo {
 	public UserInfo(int id, String name, String email, String password, String roles) {
 		super();
 		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
+	
+	public UserInfo(String name, String email, String password, String roles) {
+		super();
 		this.name = name;
 		this.email = email;
 		this.password = password;
