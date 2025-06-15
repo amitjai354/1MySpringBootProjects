@@ -1,0 +1,11 @@
+git status
+
+
+Steps:
+
+
+step1:  git add .
+
+step2:  git commit -m "added 2024 dec exam empty paper"
+
+step3:  git push
