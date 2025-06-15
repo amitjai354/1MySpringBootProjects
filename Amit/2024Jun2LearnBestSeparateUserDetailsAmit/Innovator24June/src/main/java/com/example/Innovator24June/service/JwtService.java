@@ -21,7 +21,7 @@ import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-//nest time in exam, if not working with Tcs code, delte all tcs coide if required delete class also
+//next time in exam, if not working with Tcs code, delte all tcs coide if required delete class also
 //write your own code.. you have question and you just have to run that
 
 @Service
@@ -31,7 +31,7 @@ public class JwtService { //Jwt Utill class
 	private String JWT_SECRET;
 	
 	//public static final String SECRET="5367566B59783373367639792F423F$23F4528482B4D625165546";
-	public final long JWT_TOKEN_VALIDITY = 5*60*60*1000;
+	public final long JWT_TOKEN_VALIDITY = 5*60*60*1000; //in exam given 500*60*60 that is around 30 min
 	//if do not write 1000, token is expiring immediately
 	
 	public String getUsernameFromToken(String token) {

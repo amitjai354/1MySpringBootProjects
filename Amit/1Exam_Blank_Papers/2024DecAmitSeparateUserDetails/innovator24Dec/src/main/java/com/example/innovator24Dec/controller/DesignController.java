@@ -11,7 +11,9 @@ import com.example.innovator24Dec.entity.Design;
 import com.example.innovator24Dec.repository.DesignRepository;
 import com.example.innovator24Dec.service.DesignService;
 
+//i missed @RestController so all apis failing as api not found error
 @RequestMapping("/design")
+
 public class DesignController {
 
 	private DesignService designService;

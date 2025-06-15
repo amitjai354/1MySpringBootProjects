@@ -1,5 +1,13 @@
 package com.example.innovator24Dec.dto;
 
+//lombok not given this time in exam only @Entity given dec 2024
+//@Data //bundles getter, setter, toString , @RequiredArgsConstructor, @EqualsAndHashcode annotations..
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
+//all test cases passed with these codes uncommented because i have added required source code in the code below
+//otherwise failing test cases
+//if uncomment above codes.. and comment codes below.. error test cases failing.. lombok not working
 public class JwtResponse {
 
 	private String accessToken;

@@ -7,5 +7,5 @@ import com.example.innovator24Dec.entity.UserInfo;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Integer>{
-
+	//no method given here, add your method
 }

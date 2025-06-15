@@ -34,10 +34,21 @@ public class SecurityConfig {
 	
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/h2-console/**"); //given in exam
+		return (web) -> web.ignoring().requestMatchers("/h2-console/**"); //given in exam this only
+		//working without adding /login api as well because i had written h.frameOptions
+		//as i am doing any request permit all	
+		//i missed .anyRequest.permitAll so other apis were not running like signup and login.. better define in webcustomizer
+		//as we had not writeen them in security filter chain so other apis were not running
+		///h2-console was running because we had define here in web customizer
 	}
 	
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		//http.headers(h->h.frameOptions(f->f.disable()));//working with this commented 
+		//and uncommented both because above code i had written web customizer
+		
+		//try skipping authenthication entry point here and check if test cases are passing
+		//as this class was not given in exam
+		
 		return null;
 	}
 	
@@ -46,6 +57,9 @@ public class SecurityConfig {
 	}
 	
 	AuthenticationProvider authenticationProvider() {
+		//Stack pver flow error if not write dao authentication provider
+		//provider.setUserDetailsService(this.userDetailsService());//working with this code as well
+		//provider.setUserDetailsService(myUserDetailsService);
 		return null;
 	}
 	

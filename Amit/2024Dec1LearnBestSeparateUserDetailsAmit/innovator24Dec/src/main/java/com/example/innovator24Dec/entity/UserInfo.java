@@ -8,6 +8,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
+//lombok not given this time in exam only @Entity given dec 2024
+//@Entity
+//@Data//all test cases passed with this annotation as well, but in project 
+//some issue with this annotation in test case run
+//getter, setter others worked fine expect data annotation.. but here no issue working fine
+//may be because i have added all the codes from source only so no use of this annotation
+//as soon as i commented below no arg constructor that i added using source.. started getting error
+//must add all these source code by yourself.. do not use lombok.. otherwise unexpected errors
+
+//@NoArgsConstructor //error is at this NoArgConstructor.. no error with Data
+//must all source code.. both constructors and all getters and setters
+
 @Entity
 public class UserInfo {
 

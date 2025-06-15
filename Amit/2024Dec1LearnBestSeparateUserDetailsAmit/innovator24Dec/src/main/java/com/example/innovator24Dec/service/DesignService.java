@@ -16,6 +16,27 @@ public class DesignService {
 	//201 - created
 	//400 - Bad Request
 	public ResponseEntity<Object> postDesign(Design design){
+		//Date myDate = new Date();
+		//SimpleDateFormat dtformat = new SimpleDateFormat("dd/MM/yyyy");
+		//dtformat.format(myDate);//return type of this is formatted date
+		//but myDate will still be same
+		//ticketModel.setCreatedAt(dtformat.format(myDate));
+		
+		
+		/*
+		//to get the current date this test case given in exam last time
+		//here using Calender to get date but i am using Date to get cutrrent date
+		public String gettime() {
+			String x = String.valueOf(System.currentTimeMillis());
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");//we tell how we want to format date
+			long milliseconds = Long.parseLong(x);
+			Calendar calendar= Calendar.getInstance();
+			calendar.setTimeInMillis(milliseconds);
+			return formatter.format(calendar.getTime());
+		}
+		*/
+		
+		
 		return null;
 	}
 	

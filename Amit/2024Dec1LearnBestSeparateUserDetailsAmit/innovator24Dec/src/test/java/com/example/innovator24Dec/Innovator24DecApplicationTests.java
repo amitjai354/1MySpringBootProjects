@@ -163,7 +163,7 @@ class Innovator24DecApplicationTests {
 	
 	@Test
 	public void a_getDesignLoadData() throws Exception{
-		
+		//below input are given question paper for post ticket add api.. can verify from there if anything missing
 		mockMvc.perform(get("/design/list")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
@@ -191,7 +191,7 @@ class Innovator24DecApplicationTests {
 	
 	@Test
 	void b_userAddTest() throws Exception{
-		
+		//below input are given question paper for post ticket add api.. can verify from there if anything missing
 		UserInfo user1 = new UserInfo(4, "designerOne", "designer1@gmail.com", "designer123$", "DESIGNER");
 		String userJson1 = "{ \"id\": 4, \"name\": \"designerOne\", \"email\": \"designer1@gmail.com\", \"password\": \"designer123$\", \"roles\": \"DESIGNER\" }";   
 		System.out.println("Serialized JSON: " + userJson1);
