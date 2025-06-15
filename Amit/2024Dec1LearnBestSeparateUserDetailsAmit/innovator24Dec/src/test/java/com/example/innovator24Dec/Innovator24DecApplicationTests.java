@@ -499,7 +499,7 @@ class Innovator24DecApplicationTests {
 			StringBuilder builder = new StringBuilder();
 			try {
 				//java.io used here or other also present
-				File myObj = new File("temp.txt");
+				File myObj = new File("temp.txt"); //this file is created in project structure
 				Scanner myReader = new Scanner(myObj);
 				while(myReader.hasNextLine()) {
 					builder.append(myReader.nextLine());

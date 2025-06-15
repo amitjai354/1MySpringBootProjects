@@ -2,6 +2,7 @@ package com.example.innovator24Dec;
 
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -72,64 +73,6 @@ class Innovator24DecApplicationTests {
 	void setMockMvc() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 	}
-	
-	private byte[] toJson(Object r) throws Exception{
-		ObjectMapper map = new ObjectMapper();
-		return map.writeValueAsString(r).getBytes();
-	}
-	
-	private void print(String s) {
-		System.out.println(s); //here in exam out.println(s) given but her out is giving error. need to import System
-	}
-	
-	private void saveDataToFileSystem(Object key, Object value) throws Exception{
-		try {
-			//org.json used here or also present org.h2.util.json or net.minidev.json
-			JSONObject jsonObject = new JSONObject();
-			StringBuilder builder = new StringBuilder();
-			try {
-				//java.io used here or other also present
-				File myObj = new File("temp.txt");
-				Scanner myReader = new Scanner(myObj);
-				while(myReader.hasNextLine()) {
-					builder.append(myReader.nextLine());
-				}
-				myReader.close();
-				if(!builder.toString().isEmpty()) {
-					jsonObject = new JSONObject(builder.toString());
-				}
-			}
-			catch (FileNotFoundException | JSONException e) {
-				e.printStackTrace();
-			}
-			
-			BufferedWriter writer = new BufferedWriter(new FileWriter("temp.txt"));
-			jsonObject.put((String) key, value);
-			writer.write(jsonObject.toString());
-			writer.close();
-		}
-		catch(JSONException | IOException e) {
-			throw new Exception("Data not saved.");
-		}
-	}
-	
-	private Object getDataFromFileSystem(String key) throws Exception {
-		try {
-			File myObj = new File("temp.txt");
-			Scanner myReader = new Scanner(myObj);
-			StringBuilder builder = new StringBuilder();
-			while(myReader.hasNextLine()) {
-				builder.append(myReader.nextLine());
-			}
-			myReader.close();
-			JSONObject jsonObject = new JSONObject(builder.toString());
-			return jsonObject.get(key);
-		}
-		catch (FileNotFoundException | JSONException e) {
-			throw new Exception("Data not found. Check authentication and ID generations to make sure data is being produced.");
-		}
-	}
-	
 	
 	
 	@Test
@@ -241,7 +184,7 @@ class Innovator24DecApplicationTests {
 		MvcResult result = mockMvc.perform(post("/login")
 				.content(toJson(loginData)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 		JSONObject obj = new JSONObject(result.getResponse().getContentAsString());
-		assert obj.has("access_token");
+		assert obj.has("accessToken");
 		assert obj.getInt("status") == 200;
 		saveDataToFileSystem(TOKEN_DESIGNER_1, obj.getString("accessToken"));
 		
@@ -249,7 +192,7 @@ class Innovator24DecApplicationTests {
 		MvcResult result1 = mockMvc.perform(post("/login")
 				.content(toJson(loginData1)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 		JSONObject obj1 = new JSONObject(result1.getResponse().getContentAsString());
-		assert obj1.has("access_token");
+		assert obj1.has("accessToken");
 		assert obj1.getInt("status") == 200;
 		saveDataToFileSystem(TOKEN_DESIGNER_2, obj1.getString("accessToken"));
 		
@@ -264,7 +207,7 @@ class Innovator24DecApplicationTests {
 		MvcResult result = mockMvc.perform(post("/login")
 				.content(toJson(loginData)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 		JSONObject jsonUser1Response = new JSONObject(result.getResponse().getContentAsString());
-		assert jsonUser1Response.has("access_token");
+		assert jsonUser1Response.has("accessToken");
 		assert jsonUser1Response.getInt("status") == 200;
 		saveDataToFileSystem(TOKEN_USER_1, jsonUser1Response.getString("accessToken"));
 	}
@@ -277,7 +220,7 @@ class Innovator24DecApplicationTests {
 		//String designName, String description, String color, int price, String availabilityStatus, String imageURL, String availableSize
 		//"Floral Print Dress", "A beautiful floral print dress, perfect for summer outings and parties.", "Red", 2100, "In Stock", "http://example.com/images/dress", "One Size"  
 		
-		Design design = new Design(3, "Floral Print Dress", "A beautiful floral print dress, perfect for summer outings and parties.", "Red", 2100, "In Stock", "http://example.com/images/floral_dress.jpg", "S, M, L", 1);
+		Design design = new Design(3, "Floral Print Dress", "A beautiful floral print dress, perfect for summer outings and parties.", "Red", 2100, "In Stock", "http://example.com/images/floral_dress.jpg", "S,M,L", 1);
 		MvcResult result = mockMvc.perform(post("/design/add")
 				.content(toJson(design))
 				.header("Authorization", "Bearer " +getDataFromFileSystem(TOKEN_DESIGNER_1))
@@ -385,14 +328,14 @@ class Innovator24DecApplicationTests {
 	void k_deleteDeviceWithNoAccess() throws Exception{
 		
 		//only the designer who created can delete that particular design //wrong designer //forbidden
-		mockMvc.perform(put("/design/delete/" + getDataFromFileSystem(ID_DESIGN_1))
+		mockMvc.perform(delete("/design/delete/" + getDataFromFileSystem(ID_DESIGN_1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + getDataFromFileSystem(TOKEN_DESIGNER_2)))
 		.andExpect(status().is(403))
 		.andReturn();
 		
 		//invalid design id //bad request
-		mockMvc.perform(put("/design/delete/79")
+		mockMvc.perform(delete("/design/delete/79")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + getDataFromFileSystem(TOKEN_DESIGNER_1)))
 		.andExpect(status().is(400))
@@ -403,7 +346,7 @@ class Innovator24DecApplicationTests {
 	@Test
 	void l_deleteDesignWithAccess() throws Exception{
 		//only the designer who created can delete that particular design //correct designer //no content
-		mockMvc.perform(put("/design/delete/" + getDataFromFileSystem(ID_DESIGN_2))
+		mockMvc.perform(delete("/design/delete/" + getDataFromFileSystem(ID_DESIGN_2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + getDataFromFileSystem(TOKEN_DESIGNER_2)))
 		.andExpect(status().is(204))
@@ -415,28 +358,28 @@ class Innovator24DecApplicationTests {
 	public void get_BadRequest_WithoutAccess() throws Exception{
 		
 		//wrong condition
-		mockMvc.perform(put("/design/get/" + getDataFromFileSystem(ID_DESIGN_2))
+		mockMvc.perform(get("/design/get/" + getDataFromFileSystem(ID_DESIGN_2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + getDataFromFileSystem(TOKEN_USER_1)))
 		.andExpect(status().is(400))
 		.andReturn();
 		
 		
-		mockMvc.perform(put("/design/get/2")
+		mockMvc.perform(get("/design/get/2")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + getDataFromFileSystem(TOKEN_DESIGNER_1)))
 		.andExpect(status().is(400))
 		.andReturn();
 		
 		//invalid design Id
-		mockMvc.perform(put("/design/get/79")
+		mockMvc.perform(get("/design/get/79")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + getDataFromFileSystem(TOKEN_DESIGNER_1)))
 		.andExpect(status().is(400))
 		.andReturn();
 		
 		//unauthorised access //if Token not passed at all.. MyauthenticationentryPoint is used to send unauthorised
-		mockMvc.perform(put("/design/get/1")
+		mockMvc.perform(get("/design/get/1")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized()).andReturn();
 	}
 	
@@ -469,11 +412,11 @@ class Innovator24DecApplicationTests {
 	public void get_BadRequest_DesignDetailsUsingPrice() throws Exception{
 		
 		//invalid or wrong price value
-		mockMvc.perform(put("/design/filter").param("price", String.valueOf(4000)))
+		mockMvc.perform(get("/design/filter").param("price", String.valueOf(4000)))
 		.andExpect(status().isBadRequest())
 		.andReturn();
 		
-		mockMvc.perform(put("/design/filter").param("price", String.valueOf(1234)))
+		mockMvc.perform(get("/design/filter").param("price", String.valueOf(1234)))
 		.andExpect(status().isBadRequest())
 		.andReturn();
 	}
@@ -499,7 +442,7 @@ class Innovator24DecApplicationTests {
 	
 	@Test
 	public void getDesignData() throws Exception{
-		mockMvc.perform(get("design/list")
+		mockMvc.perform(get("/design/list")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
 		
@@ -536,5 +479,66 @@ class Innovator24DecApplicationTests {
 		.andExpect(MockMvcResultMatchers.jsonPath("$[3].availableSize", containsStringIgnoringCase("8,9,10")));
 		
 	}
+	
+	
+	
+	
+	private byte[] toJson(Object r) throws Exception{
+		ObjectMapper map = new ObjectMapper();
+		return map.writeValueAsString(r).getBytes();
+	}
+	
+	private void print(String s) {
+		System.out.println(s); //here in exam out.println(s) given but her out is giving error. need to import System
+	}
+	
+	private void saveDataToFileSystem(Object key, Object value) throws Exception{
+		try {
+			//org.json used here or also present org.h2.util.json or net.minidev.json
+			JSONObject jsonObject = new JSONObject();
+			StringBuilder builder = new StringBuilder();
+			try {
+				//java.io used here or other also present
+				File myObj = new File("temp.txt"); //this file is created in project structure
+				Scanner myReader = new Scanner(myObj);
+				while(myReader.hasNextLine()) {
+					builder.append(myReader.nextLine());
+				}
+				myReader.close();
+				if(!builder.toString().isEmpty()) {
+					jsonObject = new JSONObject(builder.toString());
+				}
+			}
+			catch (FileNotFoundException | JSONException e) {
+				e.printStackTrace();
+			}
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter("temp.txt"));
+			jsonObject.put((String) key, value);
+			writer.write(jsonObject.toString());
+			writer.close();
+		}
+		catch(JSONException | IOException e) {
+			throw new Exception("Data not saved.");
+		}
+	}
+	
+	private Object getDataFromFileSystem(String key) throws Exception {
+		try {
+			File myObj = new File("temp.txt");
+			Scanner myReader = new Scanner(myObj);
+			StringBuilder builder = new StringBuilder();
+			while(myReader.hasNextLine()) {
+				builder.append(myReader.nextLine());
+			}
+			myReader.close();
+			JSONObject jsonObject = new JSONObject(builder.toString());
+			return jsonObject.get(key);
+		}
+		catch (FileNotFoundException | JSONException e) {
+			throw new Exception("Data not found. Check authentication and ID generations to make sure data is being produced.");
+		}
+	}
+	
 	
 }
