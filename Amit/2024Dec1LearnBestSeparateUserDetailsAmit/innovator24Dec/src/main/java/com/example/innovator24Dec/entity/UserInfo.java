@@ -39,6 +39,15 @@ import jakarta.persistence.ManyToMany;
 
 @Entity
 public class UserInfo {
+	
+	/*
+	GenerationType : IDENTITY, AUTO, SEQUENCE, TABLE, UUID added now
+	IDENTITY: incremented by DB for each table
+	SEQUENCE: maintains a sequence and updates id at overall all the tables
+	TABLE: maintains a separate table for sequence
+	UUID: creates uuid as pk
+	AUTO: Based on db and type of pk, automatically selects either identity, or sequence or uuid
+	*/
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,8 +62,6 @@ public class UserInfo {
 	//@JsonIgnore as it will ignore both getter and setter, so can not find path error as it uses getter to get path
 	private int id;
 	//if keeping it as int then can not set id as null, which is must in new hibernate
-	//here given Auto means overall increment at all tables level
-	//identity increments at one table level
 	//but thing is primary id can not be null,, yeah pk will be updated by hibernate..
 	//we just need null in json
 	

@@ -51,11 +51,14 @@ public class SecurityConfig {
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring().requestMatchers("/h2-console/**") //given in exam this only /h2-console
-				.requestMatchers("/signUp/**").requestMatchers("/login/**");//if not adding /signUp here, then giving unauthorized 401
+				.requestMatchers("/signUp/**")
+				.requestMatchers("/login/**");
+		//if not adding /signUp here, then giving unauthorized 401
 		//not working with h.frameOption.disabled now in latest version
 		
 		//working without adding /login api as well because i had written h.frameOptions
 		//as i am doing any request permit all	
+		
 		//i missed .anyRequest.permitAll so other apis were not running like signup and login.. better define in webcustomizer
 		//as we had not writeen them in security filter chain so other apis were not running
 		///h2-console was running because we had define here in web customizer
@@ -75,7 +78,7 @@ public class SecurityConfig {
 		//try skipping authentication entry point here and check if test cases are passing
 		//as this class was not given in exam
 		
-		http.csrf(c->c.disable())
+		http.csrf(c->c.disable()) //if do not write this, all post apis failing so all apis failing
 		//.authorizeHttpRequests(a->a.requestMatchers(HttpMethod.GET, "/design/get/**").hasAnyAuthority("DESIGNER", "USER")
 		.authorizeHttpRequests(a->a.requestMatchers("/design/get/**").hasAnyAuthority("DESIGNER", "USER")
 				.requestMatchers("/design/add/**").hasAuthority("DESIGNER")

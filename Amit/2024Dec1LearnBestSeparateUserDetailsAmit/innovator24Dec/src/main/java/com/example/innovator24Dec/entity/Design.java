@@ -18,6 +18,16 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Design {
+	
+	
+	/*
+	GenerationType : IDENTITY, AUTO, SEQUENCE, TABLE, UUID added now
+	IDENTITY: incremented by DB for each table
+	SEQUENCE: maintains a sequence and updates id at overall all the tables
+	TABLE: maintains a separate table for sequence
+	UUID: creates uuid as pk
+	AUTO: Based on db and type of pk, automatically selects either identity, or sequence or uuid
+	*/
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,8 +42,6 @@ public class Design {
 	//@JsonIgnore as it will ignore both getter and setter, so can not find path error as it uses getter to get path
 	private int designId; 
 	//if keeping it as int then can not set id as null, which is must in new hibernate
-	//here given Auto means overall increment at all tables level
-	//identity increments at one table level
 	//but thing is primary id can not be null,, yeah pk will be updated by hibernate..
 	//we just need null in json
 	
@@ -51,9 +59,13 @@ public class Design {
 	//when i refactored them manually then it started working as json path internally uses getter and setter
 	
 	
-	private String availableSize; //S, M, L or One Size
-	private int designerId; // this we will set in api, we will get user details from securoty and then set user id
+	private String availableSize; //S, M, L or One Size, if space mismatch then test cases fail
+	private int designerId; // this we will set in api, we will get user details from security and then set user id
 	//this way creating fk here
+	
+	
+	//in above case in api code, set userId as DesignerId
+	//but in below case, need to set complete userInfo as designer, that we get from security then fk created
 	
 	
 	//Many designs by one designer
