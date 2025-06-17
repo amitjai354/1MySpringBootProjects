@@ -18,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-@Component //required here as we will autowire this class in other classes
+@Component
 public class JwtService {
 	
 	//next time in exam, if not working with Tcs code, delete all tcs code if required delete class also
@@ -29,7 +29,7 @@ public class JwtService {
 	//private String JWT_SECRET;
 	
 	//write secret given in exam
-	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+	public static final String SECRET = "5367566B5970337336762F423F4528482B4D6251655468576D5A71347437";
 	
 	public static final long JWT_TOKEN_VALIDITY = 500*60*60; //given in exam.. 1800000ms = 1800s = 30 min
 	//if writing 5*60*60 then expiring immediately so write 5*60*60*1000 but above we have 500
@@ -58,28 +58,17 @@ public class JwtService {
 		//i always read 1st line only but if i would have read log in detail, they had given issue was 
 		//immutable parser parseClaimJwt in extractAllClaims()
 		//they had given method name as well where error was in log
-		
-		
-		//return Jwts.parserBuilder().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();
-		//return Jwts.parser().verifyWith(this.getSignKey()).build().parseSignedClaims(token).getPayload(); //in 0.12.6 must need SecretKey not Key
-		//return Jwts.parser().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();//in 0.12.6 setSigningKey, parseClaimsJws, getBody are deprecated
-		//return Jwts.parser().setSigningKey(this.getSignKey()).build().parseSignedClaims(token).getPayload();//in 0.12.6 getSigningKey is deprecated here
-		//return Jwts.parser().setSigningKey(this.getSignKey()).parseClaimsJws(token).getBody();//in 0.11.5 parser, setsigningKey deprecated
-		
-		return Jwts.parserBuilder().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();
-		//in 0.11.5 we do not have verify with, get Payload, nothing deprecated here, 
-		//works with Key, Secret key both
+		return Jwts.parser().verifyWith(getSignKey()).build().parseSignedClaims(token).getPayload();
 	}
 	
 	private Boolean isTokenExpired(String token) {
 		Date expiration = this.extractExpiration(token);
-		return expiration.before(new Date());
+		return expiration.before(expiration);
 	}
 	
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		String username = this.extractUsername(token);
-		//return (username.equals(userDetails.getUsername()) && (!this.isTokenExpired(token)));
-		return username.equals(userDetails.getUsername()) && (!this.isTokenExpired(token));
+		return username.equals(userDetails.getUsername()) && (!(this.isTokenExpired(token)));
 	}
 	
 	public String generateToken(String username) {
@@ -92,23 +81,21 @@ public class JwtService {
 		//.signWith(SignatureAlgorithm.HS256, getSignKey())//deprecated
 		//this was given in this exam..  
 		
-		
 		return Jwts.builder()
-				.setClaims(claims)
-				.setSubject(username)
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-				.signWith(getSignKey(), SignatureAlgorithm.HS256) //works in 0.11.5
+				.claims(claims)
+				.subject(username)
+				.issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
 				//.signWith(getSignKey(), SignatureAlgorithm.HS256) //deprecated in jwt 0.12.6
 				//.signWith(SignatureAlgorithm.HS256, getSignKey()) //0.12.6
 				//.signWith(getSignKey()) //not deprecated
-				//.signWith(getSignKey(), Jwts.SIG.HS256) //this one is not deprecated in 0.12.6 jwt
+				.signWith(getSignKey(), Jwts.SIG.HS256) //this one is not deprecated in 0.12.6 jwt
 				.compact();
 	}
 	
 	//java.awt.RenderingHints.Key or java.security.Key;
 	//in previous papers:java.security.Key; and io.jsonwebtoken.security.Keys; 
-	private Key getSignKey() {
+	private SecretKey getSignKey() {
 		//it was given in the exam that String should be Base64 decode HS256 encrpted
 		//ensure that claims in key should be as follows
 		//HEADER{ "alg":"HS256", "typ":"JWT" }
@@ -122,7 +109,7 @@ public class JwtService {
 		//so we already are doing everything
 		
 		//byte[] keyBytes = this.JWT_SECRET.getBytes(StandardCharsets.UTF_8);//this one supports $ as well in SECRET
-		//Be carefull we have Decoders and Decode both in io.json.webtoken
+		
 		byte[] keyBytes = Decoders.BASE64.decode(SECRET);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
