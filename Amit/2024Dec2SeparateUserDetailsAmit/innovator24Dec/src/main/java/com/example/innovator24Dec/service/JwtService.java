@@ -26,7 +26,7 @@ public class JwtService {
 	
 	
 	//@Value("${jwt.secret}")
-	//private String JWT_SECRET;
+	//private String JWT_SECRET; //can not use final here error that JWT_SECRET might not be initalised, must initialise here
 	
 	//write secret given in exam
 	public static final String SECRET = "5367566B5970337336762F423F4528482B4D6251655468576D5A71347437";
@@ -74,6 +74,34 @@ public class JwtService {
 	public String generateToken(String username) {
 		Map<String, Object> claims = new HashMap<>();
 		return this.createToken(claims, username);
+		
+		//in 2023 exam, gave email everwhere, instead of username
+		//issue is jwtRequest has email not username, loaduserbyusername has email not username 
+		//and userModel has both username and email and both are unique
+		
+		//UserModel userModel = (UserModel) userDetails; earlier used to this as userModel implements UserDetails
+		//but now separate class for userDetails so can not do this. use userRepo now
+		//can not use loadUserByUsername(String email) as userDetails does not have email and 
+		//this returns userDetails but we already have userDetails
+		//so use findByUsername or findByEmail as per need
+		
+		//UserModel userModel = userRepo.findByUsername(JWT_SECRET).orElseThrow(()->new UsernameNotFoundException("Username not found in jwtService"));
+		
+		
+		//return this.doGenerateToken(claims, userDetails.getUsername());
+		
+		//return this.doGenerateToken(claims, userModel.getEmail()); earlier we were doing this but no need
+		//as in login api, jwtRequest has email, that we pass in authToken to authenticate
+		//then we call loadUserByusename to get userdetails that we can do with email here
+		//then we call genarateToken(userDetails), no problem here
+				
+		//in jwtFilter code, we get token form token header then getUsernameFromToken()
+		//now we need email to call loadUserByusername to get userdetails as validateToken(token, userDetails)
+		//so now here , we can user repo to call findUserByUsername, this userModel will have email
+		//earlier in jwtfilter, we were directly doing getUsernamefromtoken and then directly getting email
+		
+		//Basically we have to get email when we call getUsernameFromToken, that we can do by calling
+		//findByUsername once we get username from getUsernameFromToken
 	}
 	
 	private String createToken(Map<String, Object> claims, String username) {
@@ -86,8 +114,8 @@ public class JwtService {
 				.subject(username)
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-				//.signWith(getSignKey(), SignatureAlgorithm.HS256) //deprecated in jwt 0.12.6
-				//.signWith(SignatureAlgorithm.HS256, getSignKey()) //0.12.6
+				//.signWith(getSignKey(), SignatureAlgorithm.HS256) //deprecated in jwt 0.12.6, 0.12.5 as well
+				//.signWith(SignatureAlgorithm.HS256, getSignKey()) //0.12.6, 0.12.5 as well
 				//.signWith(getSignKey()) //not deprecated
 				.signWith(getSignKey(), Jwts.SIG.HS256) //this one is not deprecated in 0.12.6 jwt
 				.compact();

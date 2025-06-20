@@ -50,8 +50,9 @@ public class SecurityConfig {
 	
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/h2-console/**") //given in exam this only /h2-console
-				.requestMatchers("/signUp/**")
+		//given in exam this only /h2-console
+		return (web) -> web.ignoring().requestMatchers("/h2-console/**") //this causes to run smoothly otherwise h2-cosole ran but everthing blank, need to disbal framoptions
+				.requestMatchers("/signUp/**") //this make these apis unauthenticated
 				.requestMatchers("/login/**");
 		//if not adding /signUp here, then giving unauthorized 401
 		//not working with h.frameOption.disabled now in latest version
@@ -68,7 +69,9 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
-		//http.headers(h->h.frameOptions(f-> f.disable()));
+		//http.headers(h->h.frameOptions(f-> f.disable()));//h2 console site ran but nothing visible, everything blank 
+		//as with csrf disble, only ran api but nothing visible
+		//but with mentioning in web customizer, evrything visible
 		
 		///if do not write any post api like signup in webcustomizer and uncomment this.. not working
 		//giving unauthorized 401 even when .anyRequest().permitAll()
@@ -78,10 +81,14 @@ public class SecurityConfig {
 		//try skipping authentication entry point here and check if test cases are passing
 		//as this class was not given in exam
 		
+		
+		//add these api urls from controller directly then in paper check what is authority
+		//write one request matcher and copy pastee 4 times then just update url and authority save time
+		
 		http.csrf(c->c.disable()) //if do not write this, all post apis failing so all apis failing
 		//.authorizeHttpRequests(a->a.requestMatchers(HttpMethod.GET, "/design/get/**").hasAnyAuthority("DESIGNER", "USER")
 		.authorizeHttpRequests(a->a.requestMatchers("/design/get/**").hasAnyAuthority("DESIGNER", "USER")
-				.requestMatchers("/design/add/**").hasAuthority("DESIGNER")
+				.requestMatchers("/design/add/**").hasAuthority("DESIGNER") 
 				.requestMatchers("/design/update/**").hasAuthority("DESIGNER")
 				.requestMatchers("/design/delete/**").hasAuthority("DESIGNER")
 				//.requestMatchers("/signUp/**").permitAll() //even this is not working ..only works when define in

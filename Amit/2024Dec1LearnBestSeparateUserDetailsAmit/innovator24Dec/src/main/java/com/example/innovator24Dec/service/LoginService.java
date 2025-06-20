@@ -48,9 +48,15 @@ public class LoginService {
 			//return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in sign up");
 			//error can not convert from ResponseEntity<String> to  ResponseEntity<UserInfo>
 			
+			//can return blank new user
+			//return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(new UserInfo());
+			
 			throw new BadCredentialsException("error in sign up " + e.getMessage());
 			//if doing throw Exception then ask to add throws in method signature as Exception has both runtime and
 			//compile time exceptions
+			
+			//BadCredential causes confusion may be coming from jwt filter as usually comes from there
+			//give other exception
 		}
 		
 	}

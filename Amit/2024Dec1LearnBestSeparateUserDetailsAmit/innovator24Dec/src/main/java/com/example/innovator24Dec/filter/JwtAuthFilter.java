@@ -59,6 +59,12 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 			token = tokenHeader.substring(7);
 			username = jwtService.extractUsername(token);
 			if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
+				
+				//UserModel userModel = userService.getUserByUsername(username);
+				//this was done in 2023 project as there was email and username both but everwhere needed email
+    			//there earlier we were directly getting email from getUsernameFromToken 
+    			//but now we need are getting username so need to call getByUsername
+				
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				Boolean validateToken = jwtService.validateToken(token, userDetails);
 				if(validateToken) {
