@@ -83,9 +83,12 @@ public class LoginController {
 			authenticationManager.authenticate(authToken);
 		}
 		catch (BadCredentialsException e) {
-			e.printStackTrace();
+			e.printStackTrace(); //with this very long read message written on log screen even when test case pass for login failed test case
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials!");
 		}
+		//catch (BadCredentialsException e) {
+		//	return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in login" + e.getMessage());
+		//}
 		catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials!");

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,6 +24,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 
 //lombok not given this time in exam only @Entity given dec 2024
@@ -88,6 +91,28 @@ public class UserInfo {
 	
 	private String roles;
 	
+//	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinColumn(name = "roleId_fk", referencedColumnName = "roleId")
+//	RoleModel role;
+//	
+//	in ROle class
+//	@OneToMany(mappedBy = "role")
+//	List<UserInfo> userList;
+	
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId")
+//			, inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
+//	Set<RoleModel> roless;
+	
+//	@ElementCollection(fetch = FetchType.EAGER, targetClass = RoleModel.class)
+//	@CollectionTable(name="user_role", joinColumns = @JoinColumn(name="user_id", referencedColumnName = "userId"))
+//	@Enumerated(EnumType.STRING)
+//	Set<RoleModel> roless;
+	
+//	SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role);
+//	return List.of(grantedAuthority);
+	
+//	roless.stream().map(r->new SimpleGrantedAuthority(r.Name)).collect(Collectors.toList());
 	
 	/*
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

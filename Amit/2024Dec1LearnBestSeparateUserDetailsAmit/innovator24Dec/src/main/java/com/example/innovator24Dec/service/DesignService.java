@@ -80,6 +80,12 @@ public class DesignService {
 		//even after Refactor here, getter and setter names were not changed
 		//when i refactored them manually then it started working as json path internally uses getter and setter
 		try {
+			
+			//UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			//if writting above line in the code, giving 400 as get/list api is public so no authentication provided there
+			//so this line gives some exception so bad request is returned
+			//all public apis giving this error if write this line there
+			
 			List<Design> designListFromDb = designRepository.findAll();
 			if(designListFromDb.isEmpty()) {
 				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("design list is empty");

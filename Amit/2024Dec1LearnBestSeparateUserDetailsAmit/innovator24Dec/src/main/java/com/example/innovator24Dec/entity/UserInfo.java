@@ -52,6 +52,7 @@ public class UserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
+	//@JsonProperty(value = "id", access = Access.READ_ONLY)//this is correct, actually importing JsonProperty.Access
 	@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)//can read get() but can not write set()
 	//this is working perfectly as it ignores setter only not getter
 	//if need getter then provide READ_ONLY

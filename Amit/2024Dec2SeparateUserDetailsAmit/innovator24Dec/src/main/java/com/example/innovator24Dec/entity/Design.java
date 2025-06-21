@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -32,7 +33,8 @@ public class Design {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	
-	@JsonProperty(value = "designId", access = JsonProperty.Access.READ_ONLY)//can read get() but can not write set()
+	@JsonProperty(value = "designId", access = Access.READ_ONLY)
+	//@JsonProperty(value = "designId", access = JsonProperty.Access.READ_ONLY)//can read get() but can not write set()
 	//this is working perfectly as it ignores setter only not getter
 	//if need getter then provide READ_ONLY
 	//if need setter then provide WRITE_ONLY
@@ -67,6 +69,15 @@ public class Design {
 	//in above case in api code, set userId as DesignerId
 	//but in below case, need to set complete userInfo as designer, that we get from security then fk created
 	
+	
+//	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinColumn(name="desinerId_fk", referencedColumnName = "userId")
+//	UserInfo designer;
+//	
+//	//in userinfo class
+//	@OneToMany(fetch = FetchType.EAGER, mappedBy = "designer")
+//	@JsonIgnoreProperties({"designId", "designName"})
+//	List<Design> designList;
 	
 	//Many designs by one designer
 	//@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

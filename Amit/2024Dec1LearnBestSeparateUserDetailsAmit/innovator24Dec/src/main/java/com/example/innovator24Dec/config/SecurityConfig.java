@@ -93,7 +93,11 @@ public class SecurityConfig {
 				.requestMatchers("/design/delete/**").hasAuthority("DESIGNER")
 				//.requestMatchers("/signUp/**").permitAll() //even this is not working ..only works when define in
 				//webcustomizer
-				.anyRequest().permitAll())
+				.anyRequest().permitAll())//if do not write this, public apis like getLust, getFilter are giving 401 unauthorized
+			//UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			//if writting above line in the get/list api, giving 400 as get/list api is public so no authentication provided there
+			//so this line gives some exception so bad request is returned
+			//all public apis giving this error if write this line there
 		.exceptionHandling(e->e.authenticationEntryPoint(entryPoint));
 		//if comment this line, 2 test cases failing as getting 403 forbidden instead of 401 unauthorized
 		//but in test case need , unauthorised
