@@ -60,13 +60,58 @@ public class User implements UserDetails {
 //	@JoinColumn(name="role_id", referencedColumnName = "roleId")
 //	private Role role;
 
+
+
+	//--------------------ManyToOne with Enum-------------------
+	@Enumerated(EnumType.STRING) //only this line is written
+	Role role;  //user Table: username, password, role
+	//here role is not separate entity table, it is just an attribute of User class
+	//so whenever needed we will just directly pass the enum value, like when in data loader, we 
+	//will do: Role role1 = Role.CUSTOMER, no need to save by roleRepo, 
+	//now pass this in user object whne saving user
+	
+	//only above 2 line needed in this case
+	//if search ManyToOne with Enum in spring boot
+	//2 cases, Role enum is not a table , just a enum class then do like below
+	//we will not use ElementCollection or Collection table, 
+	//@ManyToOne()//can not use with enum
+	//@JoinColumn(name="role_id_fk", referencedColumnName = ) there is no id in enum
+	
+	//@Enumerated(EnumType.STRING) //only this line is written
+	//Role role;  //user Table: username, password, role
+	
+	//each object of user will have its own role
+	//while creating object of role, we can provide enum directly instead of providing role id
+	
+	//case 2: we will create a separate table for Role.. that is same as we do with ManyToOne
+	//as here we will have roleId and roleName in the class.. we need to create class
+	//new User("aj", "Aj123", "CONSUMER") 
+	//Role role1= Role.CONSUMER;
+	//new User("aj", "Aj123", role1) 
+	
+	
+	/*
+	Choosing the right approach:
+	Direct enum mapping (@Enumerated):
+	Simpler to implement, suitable when enum values are static and don't require additional attributes 
+	or frequent changes.
+	Separate entity mapping (@ManyToOne):
+	Provides more flexibility, suitable when enum-like values are dynamic, have additional properties, 
+	or need to be managed as distinct entities in the database.
+	 */
+	//--------------------------------ManyToOne with Enum ends here-------------------
+	
+	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles.stream().map(r->new RoleGrantedAuthority(r.name())).collect(Collectors.toList());
-		//return roles.stream().map(r->new RoleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());
+		return roles.stream().map(r->new RoleGrantedAuthority(r.name())).collect(Collectors.toList());//for Enum
+		//return roles.stream().map(r->new RoleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());//for class
 		//r.getRoleName() if Role class instead of Role Enum
 		
-//		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());
+		
+		//if ManyToOne with enum role
+//		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());//for Enum: role.name(), for class: role.getRoleName()
 //		return List.of(grantedAuthority);
 	}
 

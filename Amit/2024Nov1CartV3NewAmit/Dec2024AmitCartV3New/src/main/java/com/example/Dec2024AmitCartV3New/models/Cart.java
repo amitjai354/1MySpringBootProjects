@@ -40,6 +40,9 @@ public class Cart {
 	
 	//only this cascade is written in complete exam..
 	
+	
+	//if try to create fk here then fk will be list cartProduct ids, so better create fk in cartProduct
+	//as there fk is single unique cart id no list there
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cart")
 	private List<CartProduct> cartProducts;//cart is inside this cartProduct
 	//if writting mappedBy then no need of JoinColumn

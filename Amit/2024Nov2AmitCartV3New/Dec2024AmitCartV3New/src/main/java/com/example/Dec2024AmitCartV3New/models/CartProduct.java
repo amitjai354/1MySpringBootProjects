@@ -30,7 +30,8 @@ public class CartProduct {
 	
 	//in exam paper data loader given, productId inside cartProduct but not given cartProduct in Product
 	//so adding fk here in cartProduct
-	@ManyToOne()//one product can be added to many cart products, as many user may buy same product
+	//one product can be added to many cart products, as many user may buy same product
+	@ManyToOne()
 	@JoinColumn(name = "product_id", referencedColumnName = "productId")
 	private Product product;
 	

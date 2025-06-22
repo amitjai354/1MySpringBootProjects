@@ -71,12 +71,12 @@ public class User implements UserDetails {
 	
 	/*
 	Choosing the right approach:
-Direct enum mapping (@Enumerated):
-Simpler to implement, suitable when enum values are static and don't require additional attributes 
-or frequent changes.
-Separate entity mapping (@ManyToOne):
-Provides more flexibility, suitable when enum-like values are dynamic, have additional properties, 
-or need to be managed as distinct entities in the database.
+	Direct enum mapping (@Enumerated):
+	Simpler to implement, suitable when enum values are static and don't require additional attributes 
+	or frequent changes.
+	Separate entity mapping (@ManyToOne):
+	Provides more flexibility, suitable when enum-like values are dynamic, have additional properties, 
+	or need to be managed as distinct entities in the database.
 	 */
 	
 	

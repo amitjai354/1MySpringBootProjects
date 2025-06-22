@@ -43,7 +43,7 @@ public class SellerController {
 	private UserRepo userRepo;
 	
 	
-	//status 201
+	//status 201 :  takes a product json in request body and saves it to database.
 	//redirect url (created URI)-	http://localhost/api/auth/seller/product/3
 	@PostMapping("/product")
 	public ResponseEntity<Object> postProduct(@RequestBody Product product){
@@ -57,7 +57,8 @@ public class SellerController {
 		try {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication();
 			User user = userRepo.findByUsername(userDetails.getUsername()).orElse(null);//user will never be null
-			//as in security filter chain we will handle everything..
+			//if api is authenticated then user will never be null, as in security filter chain we will handle everything..
+			//but if api is public, this SecurityContextHolder line will give error then
 			
 			
 			//this will save same product again and again with different product id.. something should be unique
@@ -95,7 +96,7 @@ public class SellerController {
 		}
 	}
 
-	//status 200
+	//status 200 : return all the products owned by seller.
 	@GetMapping("/product")
 	public ResponseEntity<Object> getAllProducts(){
 		//return all product owned by seller, not other sellers
@@ -118,7 +119,7 @@ public class SellerController {
 		}
 	}
 	
-	//status 200
+	//status 200 :  return the product identified by the supplied path parameter productId.
 	//Example: /api/auth/seller/product/1
 	@GetMapping("/product/{productId}")
 	public ResponseEntity<Object> getProduct(@PathVariable("productId") int productId){
@@ -142,7 +143,7 @@ public class SellerController {
 		}
 	}
 
-	//status 200
+	//status 200: takes a product json in request body with mandatory product id and updates the product in the database.
 	@PutMapping("/product")
 	public ResponseEntity<Object> putProduct(@RequestBody Product product){
 		//takes a product json in request body with mandatory product id and updates the product in the database.
@@ -165,9 +166,17 @@ public class SellerController {
 				//this wa requirement in art that while updating or deleting if not found then return not found
 			}
 			
-			if (product.getSeller().getUserId() != user.getUserId()){
+			//if product from db is null then no data found, if present then it must have user details in db as well
+			//here use productFromDb as it has seler details in db, product that we get in request that does not have user detials, 
+			//can not pass user details in request
+			if (productFromDb.getSeller().getUserId() != user.getUserId()){
 				return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("You don't have permission!!");
 			}
+			
+			//productFromdb we will use to get db details only
+			//in update, may be we need to update category, price, all details except user details as user who added only he can update
+			//so we will not use productFrom db, instead we will use product in request to save
+			//but first we will check if this new category exist or not, if not then save
 			
 			//Category categoryFromDb = categoryRepo.findByCategoryName(product.getCategory().getCategoryName())
 			//		.orElse(categoryRepo.save(new Category(product.getCategory().getCategoryName())));
@@ -201,7 +210,9 @@ public class SellerController {
 			if(product == null) {
 				return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("product not found");
 			}
-			productRepo.deleteById(productId);
+			productRepo.deleteById(productId);//as we already checked above for findBySellerUserIdAndProductId
+			//and we found the product from db that has logged in user details and product id passed in request//
+			//so now we can just do delete by Id directly
 			return ResponseEntity.status(HttpServletResponse.SC_OK).body("deleted successfully");
 		}
 		catch (Exception e) {

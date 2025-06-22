@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 
 @Repository
 public interface CartProductRepo extends JpaRepository<CartProduct, Integer>{
+	
 	Optional<CartProduct> findByCartUserUserIdAndProductProductId(Integer userId, Integer productId);
 	
 	@Transactional

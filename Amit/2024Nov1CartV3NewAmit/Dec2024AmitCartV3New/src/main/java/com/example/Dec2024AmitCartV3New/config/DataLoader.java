@@ -83,6 +83,10 @@ public class DataLoader implements ApplicationRunner{
 		User user4 = userRepo.save(new User("glaxo", passwordEncoder.encode("pass_word"), sellerRoleSet));
 		User user5 = userRepo.save(new User("amit", passwordEncoder.encode("pass_word"), consumerSellerRoleSet));
 		
+		//we have created category and user so now can create product and cart
+		//once we create product and cart then only we can create cartProduct as it has both ids
+		
+		
 		//now we can create product as we have both seller and category
 		Product product1 = productRepo.save(new Product(1, "Apple iPad 10.2 8th Gen WiFi iOS Tablet", 29190.0, user3, category2));
 		Product product2 = productRepo.save(new Product(2, "'Crocin pain relief tablet", 10.0, user4, category5));

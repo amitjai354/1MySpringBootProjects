@@ -19,11 +19,20 @@ public class CartProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cpId;
 	
+	
+	//in paper, cart given in cartProdct and cartProduct given in cart , 
+	//so where to create fk and where to write mapped by..
+	//here cart to cartProduct is 1 to Many so if create fk in cart, fk will be list of cartProducts ids
+	//that is not good but if create fk here in cartProduct then, fk is single cartProduct Id
 	@ManyToOne()
 	@JoinColumn(name = "cart_id", referencedColumnName = "cartId")
 	@JsonIgnore
 	private Cart cart;//cartId is inside this Cart class
 	
+	
+	//in exam paper data loader given, productId inside cartProduct but not given cartProduct in Product
+	//so adding fk here in cartProduct
+	//one product can be added to many cart products, as many user may buy same product
 	@ManyToOne()
 	@JoinColumn(name = "product_id", referencedColumnName = "productId")
 	private Product product;

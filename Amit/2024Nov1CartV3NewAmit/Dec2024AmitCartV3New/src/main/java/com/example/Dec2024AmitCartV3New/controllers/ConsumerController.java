@@ -40,7 +40,7 @@ public class ConsumerController {
 	@Autowired
 	private UserRepo userRepo;
 
-	//status 200
+	//status 200 // returns the consumer’s cart: logged in consumer cart only not all carts
 	@GetMapping("/cart")
 	public ResponseEntity<Object> getCart(){
 		//return the consumers cart..
@@ -48,10 +48,20 @@ public class ConsumerController {
 		//in cart Repo findByUserUserId
 		//but we will get username from userdetail so .. 
 		//findByUserUsername
-		return null;
+		try {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			Cart cartFromDb = cartRepo.findByUserUsername(userDetails.getUsername()).orElse(null);
+			//each consumer will have 1 cart id.. in api response also not given list[] but single cart{}
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(cartFromDb);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in get customer cart");
+		}
 	}
 	
 	//status 200, 409 if already in cart
+	//takes a Product json in request body and adds it to the consumer’s cart
 	@PostMapping("/cart")
 	public ResponseEntity<Object> postCart(@RequestBody Product product){
 		//take product and add to cart.. product has catrgoty id, user id, in input json we get category id
@@ -124,7 +134,8 @@ public class ConsumerController {
 		}
 	}
 	
-	//status 200 update quantity of product in cart
+	//status 200 takes a CartProduct json in request body and updates the quantity of the product in cart. 
+	//means update quantity of cartProduct in cart
 	//if product not in cart, save product in cart with supplied quantity
 	//if quantity is 0 then delete product from cart
 	@PutMapping("/cart")
@@ -160,9 +171,14 @@ public class ConsumerController {
 			double oldcartAmount = cartFromDb.getTotalAmount();
 			double newCartAmount = 0.0;
 			
+			
+			//if cart product in db , then it must have user details as well so do not look at request as
+			//we are fetching from db, from request we will take product id only, userid we will take from
+			//logged in user not cart product in request
 			CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(user.getUserId(), 
 							cartProduct.getProduct().getProductId()).orElse(null);
 			
+			//if cart product in cart and supplied quantity = 0 then delete from cart
 			if(cartProductFromDb!=null &&  cartProduct.getQuantity()==0) {
 				//delete product from cart, if product not in cart then also no error
 				//afer deleting reduce amount and update cart again
@@ -193,9 +209,14 @@ public class ConsumerController {
 				//cartFromDb.setTotalAmount(newCartAmount);
 			}
 			//else update product in cart with supplied quantity
-			newCartAmount = oldcartAmount + (cartProduct.getProduct().getPrice()*cartProduct.getQuantity())
+			else{
+				//if do not write else here, then in case cartProductFromDb is null then after if condition below code will run
+				//it will give null pointer exception when do cartProductFromDb.getQuantity as it is null
+				newCartAmount = oldcartAmount + (cartProduct.getProduct().getPrice()*cartProduct.getQuantity())
 					-(cartProductFromDb.getQuantity()*cartProductFromDb.getProduct().getPrice());
-			//if cart already in cart, reduce old amount of product from cart after adding new updated price of product
+			//if cart product already in cart, reduce old amount of product from cart after adding new updated price of product
+			}
+			
 			cartFromDb.setTotalAmount(newCartAmount);
 			
 			cartProductFromDb.setProduct(productFromDb);
@@ -211,6 +232,7 @@ public class ConsumerController {
 	}
 	
 	//status 200
+	//we have product in request, remove it from cart
 	@DeleteMapping("/cart")
 	public ResponseEntity<Object> deleteCart(){
 		//takes product json in input and remove product from cart
@@ -231,6 +253,44 @@ public class ConsumerController {
 		//Request body -
 		//{"productId":3,"category":
 		//{"categoryName":"Electronics","categoryId":"2"},"price":"98000.0","productName":"iPhone 12"}
-		return null;
+		
+		
+		try {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userRepo.findByUsername(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("username not found"));   
+
+			//we have product in request, remove it from cart
+			//we have product id and user id, find cartProduct by user id and product id if cartProduct not in db
+			//then return product not present else delete
+			//when delete, reduce amount from cart, delete from cartProduct as product id in cartProduct
+			
+			CartProduct cartProductFromDb = cartProductRepo.findByCartUserUserIdAndProductProductId(
+					user.getUserId(), product.getProductId()).orElse(null);
+			if(cartProductFromDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("product not in cart");
+			}
+			
+			Cart cartFromDb = cartRepo.findByUserUsername(user.getUsername()).orElse(null);
+			//this is not possible that cartproduct is in cart but there is no cart
+			//so no need to check null case here, but still lets put the check, np
+			if(cartFromDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("No cart present for logged in user");
+			}
+			
+			double oldCartAmount = cartFromDb.getTotalAmount();
+			double newCartAmount = oldCartAmount-(cartProductFromDb.getQuantity()*cartProductFromDb.getProduct().getPrice());
+			
+			cartFromDb.setTotalAmount(newCartAmount);
+			cartFromDb = cartRepo.save(cartFromDb);
+			
+			cartProductRepo.deleteByCartUserUserIdAndProductProductId(user.getUserId(), product.getProductId());
+			
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body("deleted successfully");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in get customer cart");
+		}
+		
 	}
 }

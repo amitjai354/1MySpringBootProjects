@@ -9,5 +9,6 @@ import com.example.Dec2024AmitCartV3New.models.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer>{
+	
 	Optional<User> findByUsername(String username);
 }

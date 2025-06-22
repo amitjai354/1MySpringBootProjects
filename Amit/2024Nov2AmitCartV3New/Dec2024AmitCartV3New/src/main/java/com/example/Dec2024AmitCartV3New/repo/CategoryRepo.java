@@ -9,5 +9,6 @@ import com.example.Dec2024AmitCartV3New.models.Category;
 
 @Repository
 public interface CategoryRepo extends JpaRepository<Category, Integer> {
+	
 	Optional<Category> findByCategoryName(String category);
 }
