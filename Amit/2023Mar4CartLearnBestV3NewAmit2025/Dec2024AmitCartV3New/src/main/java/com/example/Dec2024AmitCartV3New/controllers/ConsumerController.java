@@ -234,7 +234,7 @@ public class ConsumerController {
 	//status 200
 	//we have product in request, remove it from cart
 	@DeleteMapping("/cart")
-	public ResponseEntity<Object> deleteCart(){
+	public ResponseEntity<Object> deleteCart(@RequestBody Product product){
 		//takes product json in input and remove product from cart
 		//product has category id in input and user id we will add from security cointext holder
 		//cart product has product id and cart id.. we will calculate the price of this product in cart product
