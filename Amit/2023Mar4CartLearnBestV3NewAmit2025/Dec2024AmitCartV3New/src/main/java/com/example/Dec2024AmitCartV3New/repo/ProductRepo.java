@@ -10,6 +10,11 @@ import com.example.Dec2024AmitCartV3New.models.Product;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer>{
+	
+	//@Query(nativeQuery = true, value = "select p.category_id, p.price, p.product_id, p.seller_id, p.product_name from Product p, Category C where p.category_id = c.category_id and upper(p.product_name) like upper('%' || ?1 '%') or upper(c.category_name) like upper('%' || ?2 || '%') ")
+	//List<Product> findByProductNameContainingIgnoreCaseOrCategoryCategoryNameIgnoreCaseContaining(String productName, String categoryName);
+	
+	
 	List<Product> findByProductNameContainingIgnoreCaseOrCategoryCategoryNameContainingIgnoreCase(String productName,
 			String categoryName);
 	
@@ -22,4 +27,9 @@ public interface ProductRepo extends JpaRepository<Product, Integer>{
 	
 	//created by me but not needed as we are doing find by sller id and product id so if not present giving 404
 	void deleteBySellerUserIdAndProductId(Integer sellerId, Integer productId);
+	
+	
+	//in exam, if you will select workspace inside prject, then when you will try to open project from eclipse, it will not open
+	//always make workspace as DEsktop or leave whatever is there as default.
+	//when opening project, then select project folder only
 }

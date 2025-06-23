@@ -32,7 +32,7 @@ public class DesignService {
 	//400 - Bad Request
 	public ResponseEntity<Object> postDesign(Design design){
 		//Date myDate = new Date();
-		//SimpleDateFormat dtformat = new SimpleDateFormat("dd/MM/yyyy");
+		//SimpleDateFormat dtformat = new SimpleDateFormat("dd/MM/yyyy"); //if write dd/mm/yyyy, it will not run, it must be MM
 		//dtformat.format(myDate);//return type of this is formatted date
 		//but myDate will still be same
 		//ticketModel.setCreatedAt(dtformat.format(myDate));
