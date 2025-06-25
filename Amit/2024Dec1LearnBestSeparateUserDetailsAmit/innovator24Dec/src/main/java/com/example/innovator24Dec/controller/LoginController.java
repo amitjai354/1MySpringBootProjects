@@ -51,7 +51,7 @@ public class LoginController {
 	
 	//they had not given signUp in controller, so 404 not found.. 
 	//had to create by myself in LoginController,, but was given addUser() in LoginService
-	@PostMapping("/signUp")
+	@PostMapping("/signUp")  //localhost:8080/signUp
 	public ResponseEntity addUser(@RequestBody UserInfo userInfo){
 		//public ResponseEntity<Object> addUser(@RequestBody UserInfo userInfo){
 		//if writting this giving error as in loginService given ResponseEntity<UserInfo> in exam
@@ -68,6 +68,9 @@ public class LoginController {
 	//so this bad credentials is correct as we are pring e.print stack trace in case some error occurs
 	
 	
+	
+	
+	//localhost:8080/login
 	//200
 	//400 Invalid credentials!
 	@PostMapping("/login")
@@ -76,23 +79,34 @@ public class LoginController {
 		//in test case expecting 400.. i had written throw new.. so test case was failing
 		//return type is response entity so return response entity only
 		
+		//if do not write @RequestBody, authRequest is null, so on debug sach me BadCredentials Exception dega.
+		//in this case ya to Request Body nhi lagaya ya UserDetails me return nhi kiya username and password
+		
+		//if write only one catch block : Exception e, on hover on e in debug, will give BadCredentials
+		
 		UsernamePasswordAuthenticationToken authToken = new 
 				UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
 		
 		try {
 			authenticationManager.authenticate(authToken);
 		}
-		catch (BadCredentialsException e) {
-			e.printStackTrace(); //with this very long read message written on log screen even when test case pass for login failed test case
-			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials!");
-		}
-		//catch (BadCredentialsException e) {
-		//	return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in login" + e.getMessage());
-		//}
+//		catch (BadCredentialsException e) {
+//			e.printStackTrace(); //with this very long read message written on log screen even when test case pass for login failed test case
+//			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials!"+ e.getMessage());
+//		}
 		catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Invalid credentials!");
 		}
+		/*
+		Most imp: Always write e.printStackTrace in all the catch Block, best for debug just hover on e
+		also do not write multiple catch block, just write one Excpetion e, it will itself tell like BadCredential when you hover on e
+		
+		Most imp thing is: when after error, control goes to catch Block, hover mouse over e.printStacktrace mainly e
+		it will give the error just in the debug screen..
+		earlier after control went to catch block.. i used to look the whole log, not the test case one but the main one..
+		as when we run test, one main overall log generates and one log for each test case
+		 */
 		
 		String token = jwtService.generateToken(authRequest.getUsername());
 		JwtResponse jwtResponse = new JwtResponse(token, 200);

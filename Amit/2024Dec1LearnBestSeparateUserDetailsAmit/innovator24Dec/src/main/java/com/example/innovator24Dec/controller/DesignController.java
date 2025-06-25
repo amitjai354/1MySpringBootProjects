@@ -27,6 +27,8 @@ public class DesignController {
 	@Autowired
 	private DesignRepository designRepository;
 	
+	
+	// localhost:8080/design/add
 	@PostMapping("/add")
 	public ResponseEntity<Object> postDevice(@RequestBody Design design){
 		//i was using RequestParam instead of RequestBody here so error was occuring
@@ -43,11 +45,15 @@ public class DesignController {
 		return designService.getDesign();
 	}
 	
+	// localhost:8080/design/get/1
 	@GetMapping("/get/{designId}")
 	public ResponseEntity<Object> getDesignDataWithId(@PathVariable int designId){
 		return designService.getDesignDataWithId(designId);
 	}
 	
+	
+	//localhost:8080/artWork/list?medium=Oil on panel    //for String no "" is used
+	//  localhost:8080/design/filter?price=2000
 	@GetMapping("/filter")
 	public ResponseEntity<Object> getFilter(@RequestParam int price){
 		//here we need to use @RequestParam if nothing given in api url but taking input something

@@ -44,8 +44,16 @@ public class SecurityConfig {
 	@Autowired
 	MyAuthenticationEntryPoint entryPoint;
 	
+//	UserDetailsService userDetailsService() {
+//		return myUserDetailsService;
+//	}
+	
+	@Bean
 	UserDetailsService userDetailsService() {
-		return myUserDetailsService;
+		return new UserInfoUserDetailsService();
+		//return myUserDetailsService;
+		
+		//all these are working with @Bean, without @Bean, even new object is also working
 	}
 	
 	@Bean
@@ -130,7 +138,8 @@ public class SecurityConfig {
 		//provider.setUserDetailsPasswordService(null); //something new added
 		
 		//works in spring 3.5.0
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(myUserDetailsService); 
+		//DaoAuthenticationProvider provider = new DaoAuthenticationProvider(myUserDetailsService); 
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(this.userDetailsService()); 
 		provider.setPasswordEncoder(this.passwordEncoder());
 		return provider;
 	}

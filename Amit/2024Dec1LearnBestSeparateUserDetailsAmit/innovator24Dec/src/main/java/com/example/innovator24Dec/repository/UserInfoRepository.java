@@ -11,6 +11,10 @@ import com.example.innovator24Dec.entity.UserInfo;
 public interface UserInfoRepository extends JpaRepository<UserInfo, Integer>{
 	//no method given here, add your method
 	
+	//save function that we call, need default constructor in UserInfo class, otherwise error
+	//we had parametrised constructor, so no default constructor created automatically if we do not createit
+	//save() call default constructor of userInfo, so must..
+	//error got on debug or in main log overall, in test case log only gave expected 200 but found 502
 	Optional<UserInfo> findByName(String name);
 	
 	//better write one service class: UserInfoService and here write userRepo.findByName(username).orElseThrow(()->new UsernameNotFoundException("username not found"));

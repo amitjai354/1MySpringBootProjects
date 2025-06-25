@@ -140,8 +140,8 @@ public class UserInfo {
 	
 	
 	//--------------------ManyToOne with Enum-------------------
-	@Enumerated(EnumType.STRING) //only this line is written
-	Role role;  //user Table: username, password, role
+	//@Enumerated(EnumType.STRING) //only this line is written
+	//Role role;  //user Table: username, password, role
 	//here role is not separate entity table, it is just an attribute of User class
 	//so whenever needed we will just directly pass the enum value, like when in data loader, we 
 	//will do: Role role1 = Role.CUSTOMER, no need to save by roleRepo, 

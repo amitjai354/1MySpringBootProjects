@@ -69,6 +69,18 @@ public class JwtService {
 		return Jwts.parserBuilder().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();
 		//in 0.11.5 we do not have verify with, get Payload, nothing deprecated here, 
 		//works with Key, Secret key both
+		
+		//parseClaimsJwt karne par UnSigned JWT not supportedException : login api me error nhi aaya.. error aaya when we run main apis, 
+		//as we are using SecurityContextHolder there, 
+		//debug karne par code main controller ya service me nhi gya.. directly gave Unchecked Exception means runtime excpetion
+		//waha ek attribute tha t, uss par hover kiya to exception bata diya
+		//waise test case log me bhi bata diya tha ye directly, no need to debug, as it was runtime exception
+		
+		//yaha to security code ke baad, login , signUp run kar rha tha, issue api ke code baad aaya..
+		//but jab api code dekha to waha aisa kuch tha nhi jo unsupported Jwt error de.. 
+		//JWT exception means, jwtservice me kahi issue hai.. 
+		//so please check all code once, any misTyping issue or package not imported properly
+		
 	}
 	
 	private Boolean isTokenExpired(String token) {

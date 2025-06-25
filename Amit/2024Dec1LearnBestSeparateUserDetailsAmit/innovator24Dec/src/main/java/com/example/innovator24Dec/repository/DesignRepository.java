@@ -58,6 +58,28 @@ public interface DesignRepository extends JpaRepository<Design, Integer> {
 	
 }
 
+
+
+//----====================================================================================================
+
+//====================VERY Important POINTS--====================================================
+
+//Most imp.. waht approach to solve in exam.. 
+//First write all security code along with sign up, login, data loader in 1 hr.. except api code and controller code for api..
+//if hav not autowired this main api controller and service then will not give any error
+//if have autowired somewhere then must write all annotations in controller and service for api class
+//then ek baar normal run krke dekh lo ki start ho rha ki nhi.. then run test cases.. around 5 test cases will pass
+//if any issue comes.. to time rahega dekhane ka.. debug kr lo.. logs dekh lo.. na samajh aaye kuch to sara code ek baar ache se dekh lo mistype to nhi hua..
+//likhte time hi bhot dhyan se likhna.. kya import kr rhe wo dikhta nhi.. to import ke baad check jaroor krna
+//last time mai jaldi jaldi import krta chala gya and cross check bhi nhi kiya..
+//waha ke eclipse me dikhta bhi nhi.. kya import ho tha.. try krna if theme change ho jaye to,,
+
+//intellij is not good.. code complete  nhi krta wo, eclipse jyada ache se krta hai.. like if you have map attribute 
+//then eclipse will fill it if you are calling any method where map is needed but intellij me sara kuch hame hi input dena hota hai
+
+
+
+//--==============================================================================================================
 //------------------what to do if not working anything in exam and no idea where is the error coming from------------
 //first check in test case logs go to end first and scroll right most end, there you will get the error why failing
 
@@ -87,7 +109,7 @@ public interface DesignRepository extends JpaRepository<Design, Integer> {
 
 
 
-
+//-===============================================================================
 /*
 -------how to debug test cases----
 put debug point at start of test case in test case java file..
@@ -97,9 +119,43 @@ then put debug in the service class where code for api is written..
 now run debug but not the normal debug but test case one debug..
 
 control will go to test case.. now same as normally we debug..
+
+Most imp thing is: when after error, control goes to catch Block, hover mouse over e.printStacktrace mainly e
+it will give the error just in the debug screen..
+earlier after control went to catch block.. i used to look the whole log, not the test case one but the main one..
+as when we run test, one main overall log generates and one log for each test case
+
+this is best now, easily can debug the issue
+
+also do not write multiple catch block, just write one Excpetion e, it will itself tell like BadCredential when you hover on e
 */
 
+//--======================================================
+/*
+ * -----------------how to find all debug points at one place-----------
+ * in debug screen in right most corner on top.. one double arrow sign to expand.. here can find all breakpoint
+ * select all and delete in once
+ */
 
+//--=======================================================
+//----------no error in qny java file but still error mark on main project name
+//first resolve dependency by force maven update on Project dropdown, 
+//but still error, on running asks error exists do you want to run, yes run, it showed:
+//compiled by latest java version error..
+//actually in pom.xml, java version was 21, but I have java 17 on my system so issue occurred
+
+//in tcs prject, we installed java 17, so same error, worked with java 11 only
+
+
+//--============================================
+//in exam error in pom.xml, needed to download dependecy separately.. there force maven project does not wprk
+//or run install.sh, it installs all the dependency required if any dependecy error
+
+//also i set working directpry inside project folder, so when trying to open, it was not opening the roject in ec;ipse
+//so either, right click on project folder and open as eclipse project
+//or set working directory as desktop only or whatever it gvives as default folder
+
+//--=====================================================================
 /*
 GenerationType : IDENTITY, AUTO, SEQUENCE, TABLE, UUID added now
 IDENTITY: incremented by DB for each table
@@ -108,3 +164,5 @@ TABLE: maintains a separate table for sequence
 UUID: creates uuid as pk
 AUTO: Based on db and type of pk, automatically selects either identity, or sequence or uuid
 */
+
+//--================================================================================================

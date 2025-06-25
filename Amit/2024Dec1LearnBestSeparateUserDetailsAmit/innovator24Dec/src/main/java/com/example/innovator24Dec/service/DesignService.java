@@ -33,10 +33,13 @@ public class DesignService {
 	public ResponseEntity<Object> postDesign(Design design){
 		//Date myDate = new Date();
 		//SimpleDateFormat dtformat = new SimpleDateFormat("dd/MM/yyyy"); //if write dd/mm/yyyy, it will not run, it must be MM
-		//dtformat.format(myDate);//return type of this is formatted date
+		//dtformat.format(myDate);//return type of this is formatted date as String
 		//but myDate will still be same
 		//ticketModel.setCreatedAt(dtformat.format(myDate));
 		
+		//dtformat.format(myDate);//returns Formatted date as String
+		//dd/MM/yyyy HH:mm:ss   only MM and HH are capital case and space between year and hour
+		//dd/MM/yyyy hh:mm:ss  also worked in google output
 		
 		/*
 		//to get the current date this test case given in exam last time
@@ -64,6 +67,7 @@ public class DesignService {
 			
 		}
 		catch (Exception e) {
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in post design api");
 		}
 	}
@@ -93,6 +97,7 @@ public class DesignService {
 			return ResponseEntity.status(HttpServletResponse.SC_OK).body(designListFromDb);
 		}
 		catch (Exception e) {
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in get design list api");
 		}
 	}
@@ -138,6 +143,7 @@ public class DesignService {
 			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in get design with id api");
 		}
 	}
@@ -157,6 +163,7 @@ public class DesignService {
 			return  ResponseEntity.status(HttpServletResponse.SC_OK).body(designListFromDb);
 		}
 		catch (Exception e) {
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in get design by price filter api");
 		}
 	}
@@ -178,6 +185,9 @@ public class DesignService {
 			}
 			if(designFromDb.getDesignerId() != userInfo.getId()) {
 				return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("you don't have permission");
+				//this Forbidden is not always required in update as in Ticket, Client adds the ticket but only ADMIN updates
+				//the ticket so if do this check, clientId != user.getId then always Forbidden
+				//if not given in exam then do not write
 			}
 			
 			designFromDb.setAvailabilityStatus(design.getAvailabilityStatus());
@@ -187,6 +197,7 @@ public class DesignService {
 			return ResponseEntity.status(HttpServletResponse.SC_OK).body(designFromDb);
 		}
 		catch (Exception e) {
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in update design api");
 		}
 	}
@@ -214,6 +225,7 @@ public class DesignService {
 			return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("deleted successfully");
 		}
 		catch (Exception e) {
+			e.printStackTrace();//best for debug just hover on e and do not write multiple catch blocks
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in delete design api");
 		}
 	}
