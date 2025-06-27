@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
+//@Table(name = "Users")//by default name is user_model for class UserModel
 public class Design {
 	
 	//Date myDate = new Date();

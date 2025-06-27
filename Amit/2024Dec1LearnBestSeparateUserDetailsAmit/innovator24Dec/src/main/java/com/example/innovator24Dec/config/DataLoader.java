@@ -90,6 +90,11 @@ public class DataLoader implements ApplicationRunner {
 		//	@JsonProperty(value = "designId", access = JsonProperty.Access.READ_ONLY)//can read get() but can not write set()
 		//with this all test cases passed in latest spring 3.5.0
 		
+		
+		//if role is enum
+		//RoleInfo roleInfoC = RoleInfo.CLIENT;
+		//RoleInfo roleInfoA = RoleInfo.ADMIN;
+		
 		UserInfo userInfo1 = userRepo.save(new UserInfo("Dev", "dev@gmail.com", passwordEncoder.encode("pass1"), "DESIGNER"));
 		UserInfo userInfo2 = userRepo.save(new UserInfo("John", "john@gmail.com", passwordEncoder.encode("pass2"), "DESIGNER"));
 		UserInfo userInfo3 = userRepo.save(new UserInfo("Sam", "sam@gmail.com", passwordEncoder.encode("pass3"), "USER"));

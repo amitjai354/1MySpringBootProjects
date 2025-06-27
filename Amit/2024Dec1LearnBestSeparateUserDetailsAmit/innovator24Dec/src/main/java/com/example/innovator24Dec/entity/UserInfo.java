@@ -38,6 +38,7 @@ import jakarta.persistence.ManyToMany;
 //must all source code.. both constructors and all getters and setters
 
 @Entity
+//@Table(name = "Users")//by default name is user_model for class UserModel
 public class UserInfo {
 	
 	/*
@@ -90,6 +91,18 @@ public class UserInfo {
 	private String roles;
 	
 	
+	//if instead of String role, we have class RoleModel roles in the UserInfo class
+	//in userInfo class must write @ManyToOne and @JoinColumn over RoleModel roles
+	//@ManyToOne()
+	//@JoinColumn(name="role_id", referencedColumnName = "roleId")
+	//RoleModel role;
+	
+	//if instead of String role, we have Enum RoleModel roles in the UserInfo class
+	//@Enumerated(EnumType.STRING)
+	//RoleInfo roles;
+	
+	
+	//---------------------
 	/*
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="role_id", referencedColumnName = "roleId")
@@ -142,6 +155,7 @@ public class UserInfo {
 	//--------------------ManyToOne with Enum-------------------
 	//@Enumerated(EnumType.STRING) //only this line is written
 	//Role role;  //user Table: username, password, role
+	
 	//here role is not separate entity table, it is just an attribute of User class
 	//so whenever needed we will just directly pass the enum value, like when in data loader, we 
 	//will do: Role role1 = Role.CUSTOMER, no need to save by roleRepo, 

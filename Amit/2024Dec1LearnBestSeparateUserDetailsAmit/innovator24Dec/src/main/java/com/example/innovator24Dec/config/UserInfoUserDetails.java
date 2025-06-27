@@ -132,6 +132,17 @@ public class UserInfoUserDetails implements UserDetails{
 		
 		//this.authorities = Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
 		this.authorities = Arrays.stream(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
+		
+		
+		//if instead of String role, we have RoleModel roles in the UserInfo class
+		//in userInfo class must write @ManyToOne and @JoinColumn over RoleModel roles
+		
+		//when role is class
+		//GrantedAuthority authority= new SimpleGrantedAuthority(userInfo.getRoles().getRoleName());
+		
+		//when role is enum
+		//GrantedAuthority authority= new SimpleGrantedAuthority(userInfo.getRoles().name());
+		//this.authorities=List.of(authority);
 	}
 
 	@Override
