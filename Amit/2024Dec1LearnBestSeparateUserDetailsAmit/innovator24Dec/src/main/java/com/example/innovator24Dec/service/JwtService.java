@@ -200,6 +200,7 @@ Jwts.builder()
 				
 				.compact();
 				
+				
 /*
 
 //it was given in the exam that String should be Base64 decode HS256 encrpted: below is exam requirement:
@@ -252,6 +253,20 @@ Example Signature: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 The signWith() method takes the SecretKey instance as a parameter to append a unique signature to the token.
 */
 	}
+	
+	
+	
+	/* version 0.12.6 
+	
+	.header().type("JWT").and()
+	.claims(claims)
+	.subject(username)
+	.issuedAt(new Date(System.currentTimeMillis()))
+	.expiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
+	.signWith(getSignKey(), Jwts.SIG.HS256)
+	.compact();
+	
+	*/
 	
 	
 
