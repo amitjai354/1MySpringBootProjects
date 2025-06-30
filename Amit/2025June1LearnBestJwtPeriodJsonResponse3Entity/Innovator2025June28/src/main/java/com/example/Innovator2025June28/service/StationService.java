@@ -50,7 +50,7 @@ public class StationService {
 			
 			station = stationRepo.save(station);
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(station);
+			return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(station);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

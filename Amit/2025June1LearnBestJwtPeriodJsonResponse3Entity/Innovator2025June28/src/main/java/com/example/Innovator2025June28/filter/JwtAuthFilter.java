@@ -31,9 +31,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String tokenHeader = request.getHeader("Authorization");
+		//ab finally station add par ye error aa rhi : Cannot invoke "String.startsWith(String)" because "token" is null
+		//actually i had written here : token.startWith("Bearer ") instead of tokenHeader , so it was null
+		//yad rjhna ye error bhi
 		String token = null;
 		String username = null;
-		if(tokenHeader!=null && token.startsWith("Bearer ")) {
+		if(tokenHeader!=null && tokenHeader.startsWith("Bearer ")) {
 			token=tokenHeader.substring(7);
 			username=jwtService.extractUsername(token);
 			if(username != null && SecurityContextHolder.getContext().getAuthentication()==null) {

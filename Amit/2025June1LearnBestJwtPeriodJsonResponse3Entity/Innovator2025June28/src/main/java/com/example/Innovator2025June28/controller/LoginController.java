@@ -113,12 +113,29 @@ public class LoginController {
 	//ab finally station add par ye error aa rhi : Cannot invoke "String.startsWith(String)" because "token" is null
 	//ye red mark hai kyunki abhi koi code nhi likha iska service class me
 	//even after writting try catch basic code but no db call, same error but it should be 400 if any issue in try
+	//there after code, i was getting error JwtSignature does not match locally computed jwt signature
 	
+	//yha phle error aa rhi thi ki temp.txt could not be created while ran test case.. abh shayad read nhi kr pa rha..
+	//may be some issue in save data and get data from file code in test case, nope, checked with last year code, it is correct
+	
+	//actually i had written here : token.startWith("Bearer ") instead of tokenHeader , so it was null
+	//yad rjhna ye error bhi
+	
+	//now getting : io.jsonwebtoken.UnsupportedJwtException: Unsigned Claims JWTs are not supported. for stationAdd test case
+	//even i have written parseClaimJws this time
+	//i missed to write signWith, so this error came, sam eerror if write parseClaimsJwt along with signWith
+	
+	//so finally issue resolved
 	
 	//token is saved in temp.txt file: so if any token error, check here once
 	//{"token_admin_2":"eyJhbGciOiJub25lIn0.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEyOTg2MzMsImV4cCI6MTc1MTMwMDQzM30.",
 	//"token_admin_1":"eyJhbGciOiJub25lIn0.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEyOTg2MzMsImV4cCI6MTc1MTMwMDQzM30.",
 	//"token_user_1":"eyJhbGciOiJub25lIn0.eyJzdWIiOiJTYW0iLCJpYXQiOjE3NTEyOTg2MzMsImV4cCI6MTc1MTMwMDQzM30."}
+	
+	//new token:
+	//{"token_admin_2":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEzMDA2NDEsImV4cCI6MTc1MTMwMjQ0MX0.aQZUYm7qG-S1NvKR8KVORnZ0DBGD4xAnMDNS0pnFd1qjy8SEKTJIXKdRzji9L7yq",
+	//"token_admin_1":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEzMDA2NDEsImV4cCI6MTc1MTMwMjQ0MX0.aQZUYm7qG-S1NvKR8KVORnZ0DBGD4xAnMDNS0pnFd1qjy8SEKTJIXKdRzji9L7yq",
+	//"token_user_1":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJTYW0iLCJpYXQiOjE3NTEzMDA2NDEsImV4cCI6MTc1MTMwMjQ0MX0.oqPkseDixx_8UMBEQSlCQYVgrHaDRv0-33T1jGZWiovSK7U06LrWKrJzXeUiy9e4"}
 
 	
 	 

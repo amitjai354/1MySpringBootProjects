@@ -21,6 +21,7 @@ public class JwtService {
 	//this file is present pom.xml in project
 	//in test case they have written code to create this file and save token then get token from here
 	
+	//token before after signWith and tokenHeader.startWith("Bearer ") issue resolved
 	//{"token_admin_2":"eyJhbGciOiJub25lIn0.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEyOTg2MzMsImV4cCI6MTc1MTMwMDQzM30.",
 	//"token_admin_1":"eyJhbGciOiJub25lIn0.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEyOTg2MzMsImV4cCI6MTc1MTMwMDQzM30.",
 	//"token_user_1":"eyJhbGciOiJub25lIn0.eyJzdWIiOiJTYW0iLCJpYXQiOjE3NTEyOTg2MzMsImV4cCI6MTc1MTMwMDQzM30."}
@@ -28,9 +29,17 @@ public class JwtService {
 	//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTExMDA0NzIsImV4cCI6MTc1MTEwMjI3Mn0.Z-lvYMTUG0LWgPzAxgAiv438zDAIb9ae1OR0uPYSowk
 	//this token is generated in my previous papers manually in postman
 	//above there should be something after . at the end
+	
+	//new token: after signWith and tokenHeader.startWith("Bearer ") issue resolved
+	//{"token_admin_2":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEzMDA2NDEsImV4cCI6MTc1MTMwMjQ0MX0.aQZUYm7qG-S1NvKR8KVORnZ0DBGD4xAnMDNS0pnFd1qjy8SEKTJIXKdRzji9L7yq",
+	//"token_admin_1":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJEZXYiLCJpYXQiOjE3NTEzMDA2NDEsImV4cCI6MTc1MTMwMjQ0MX0.aQZUYm7qG-S1NvKR8KVORnZ0DBGD4xAnMDNS0pnFd1qjy8SEKTJIXKdRzji9L7yq",
+	//"token_user_1":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJTYW0iLCJpYXQiOjE3NTEzMDA2NDEsImV4cCI6MTc1MTMwMjQ0MX0.oqPkseDixx_8UMBEQSlCQYVgrHaDRv0-33T1jGZWiovSK7U06LrWKrJzXeUiy9e4"}
+
 
 	//use the SECRET key which is provided in problem statement
 	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A74579987";
+//	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437"; //from last year exam
+
 	
 	private static final long JWT_TOKEN_VALIDITY = 500*60*60; 
 	//in exam given token valid for 30 min mean 500*60*60 = 1800,000ms ==1800s = 30min
@@ -74,7 +83,12 @@ public class JwtService {
 				.setSubject(username)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
+				.signWith(this.getSignKey())
 				.compact();
+
+		//now getting : io.jsonwebtoken.UnsupportedJwtException: Unsigned Claims JWTs are not supported. for stationAdd test case
+		//even i have written parseClaimJws this time
+		//i missed to write signWith, so this error came, sam eerror if write parseClaimsJwt along with signWith
 	}
 	
 	private Key getSignKey() {

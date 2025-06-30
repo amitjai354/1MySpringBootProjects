@@ -37,7 +37,7 @@ public class ShowService {
 	public ResponseEntity<Object> postShowData(Show show){
 		try {
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+			return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(null);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
