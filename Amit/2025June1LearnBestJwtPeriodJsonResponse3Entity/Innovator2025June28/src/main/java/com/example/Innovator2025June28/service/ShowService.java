@@ -2,12 +2,14 @@ package com.example.Innovator2025June28.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.Innovator2025June28.entity.Show;
+import com.example.Innovator2025June28.repository.ShowRepo;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -32,12 +34,16 @@ public class ShowService {
 // /station/update : authenticated user have role ADMIN and is creator of id object, 200, Forbidden if not the creator, 400 if no data found
 // /show/add : 201 400 is any validation issue like missing required fields or invalid station id
 
+	@Autowired
+	ShowRepo showRepo;
 
 
+	//station Id is id of the station to which show is associated
+	//already passed in the show request body so need to separately add
 	public ResponseEntity<Object> postShowData(Show show){
 		try {
-			
-			return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(null);
+			show = showRepo.save(show);
+			return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(show);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -48,8 +54,12 @@ public class ShowService {
 
 	public ResponseEntity<Object> getShowData(){
 		try {
+			List<Show> showList = showRepo.findAll();
+			if(showList.isEmpty()) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("no data found");
+			}
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(showList);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -60,8 +70,12 @@ public class ShowService {
 
 	public ResponseEntity<Object> getShowsByTiming(String showTime){
 		try {
+			List<Show> showList = showRepo.findByShowTime(showTime);
+			if(showList.isEmpty()) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("no data found");
+			}
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(showList);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -69,10 +83,16 @@ public class ShowService {
 		}
 	}
 	
+	
+	//in test case returning show with 5 star rating
 	public ResponseEntity<List<Show>> getPopularShow(){
 		try {
+			List<Show> showList = showRepo.findByPopularityRating(5);
+			if(showList.isEmpty()) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(null);
+			}
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(showList);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

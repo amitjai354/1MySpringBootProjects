@@ -1,5 +1,7 @@
 package com.example.Innovator2025June28.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,8 +62,12 @@ public class StationService {
 	
 	public ResponseEntity<Object> getData(){
 		try {
+			List<Station> stationList = stationRepo.findAll();
+			if(stationList.isEmpty()) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("data not found");
+			}
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(stationList);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -71,8 +77,24 @@ public class StationService {
 	
 	public ResponseEntity<Object> updateData(int station_id, Station station){
 		try {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserInfo userInfo = userRepository.findByName(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("amit username not found"));
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+			Station stationDb = stationRepo.findById(station_id).orElse(null);
+			if(stationDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("no data found");
+			}
+			
+			if(stationDb.getOperatorId() != userInfo.getId()) {
+				return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).body("you do not have permission");
+			}
+			
+			stationDb.setFrequency(station.getFrequency());
+			stationDb.setCountry(station.getCountry());
+			
+			stationDb = stationRepo.save(stationDb);
+			
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(stationDb);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

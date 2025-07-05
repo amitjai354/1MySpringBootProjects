@@ -111,34 +111,65 @@ class Innovator2025June28ApplicationTests {
 	}
 	
 	
+//	@Test
+//	void a_AddingUserInfo() throws Exception{
+//		
+//		//takes normal password in input and in signUp api, it encodes the password first then saves user
+//		UserInfo user1 = new UserInfo("Dev", "dev@gmail.com", "pass1", "ADMIN");
+//		String userJson1 = "{ \"name\": \"Dev\", \"email\": \"dev@gmail.com\", \"password\": \"pass1\", \"roles\": \"ADMIN\" }";
+//		MvcResult result1 = mockMvc.perform(post("/signUp")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(userJson1))
+//				.andExpect(status().is(201))
+//				.andReturn();
+//		
+//		UserInfo user2 = new UserInfo("Justin", "justin@gmail.com", "pass2", "ADMIN");
+//		String userJson2 = "{ \"name\": \"Justin\", \"email\": \"justin@gmail.com\", \"password\": \"pass2\", \"roles\": \"ADMIN\" }";
+//		MvcResult result2 = mockMvc.perform(post("/signUp")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(userJson2))
+//				.andExpect(status().is(201))
+//				.andReturn();
+//		
+//		UserInfo user3 = new UserInfo("Sam", "sam@gmail.com", "pass3", "USER");
+//		String userJson3 = "{ \"name\": \"Sam\", \"email\": \"sam@gmail.com\", \"password\": \"pass3\", \"roles\": \"USER\" }";
+//		MvcResult result3 = mockMvc.perform(post("/signUp")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(userJson3))
+//				.andExpect(status().is(201))
+//				.andReturn();
+//	}
+	
+	
 	@Test
 	void a_AddingUserInfo() throws Exception{
 		
 		//takes normal password in input and in signUp api, it encodes the password first then saves user
-		UserInfo user1 = new UserInfo("Dev", "dev@gmail.com", "pass1", "ADMIN");
-		String userJson1 = "{ \"name\": \"Dev\", \"email\": \"dev@gmail.com\", \"password\": \"pass1\", \"roles\": \"ADMIN\" }";
+		UserInfo user1 = new UserInfo("Dev1", "dev1@gmail.com", "pass1", "ADMIN");
+		String userJson1 = "{ \"name\": \"Dev1\", \"email\": \"dev1@gmail.com\", \"password\": \"pass1\", \"roles\": \"ADMIN\" }";
 		MvcResult result1 = mockMvc.perform(post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(userJson1))
 				.andExpect(status().is(201))
 				.andReturn();
 		
-		UserInfo user2 = new UserInfo("Justin", "justin@gmail.com", "pass2", "ADMIN");
-		String userJson2 = "{ \"name\": \"Justin\", \"email\": \"justin@gmail.com\", \"password\": \"pass2\", \"roles\": \"ADMIN\" }";
+		UserInfo user2 = new UserInfo("Justin1", "justin1@gmail.com", "pass2", "ADMIN");
+		String userJson2 = "{ \"name\": \"Justin1\", \"email\": \"justin1@gmail.com\", \"password\": \"pass2\", \"roles\": \"ADMIN\" }";
 		MvcResult result2 = mockMvc.perform(post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(userJson2))
 				.andExpect(status().is(201))
 				.andReturn();
 		
-		UserInfo user3 = new UserInfo("Sam", "sam@gmail.com", "pass3", "USER");
-		String userJson3 = "{ \"name\": \"Sam\", \"email\": \"sam@gmail.com\", \"password\": \"pass3\", \"roles\": \"USER\" }";
+		UserInfo user3 = new UserInfo("Sam1", "sam1@gmail.com", "pass3", "USER");
+		String userJson3 = "{ \"name\": \"Sam1\", \"email\": \"sam1@gmail.com\", \"password\": \"pass3\", \"roles\": \"USER\" }";
 		MvcResult result3 = mockMvc.perform(post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(userJson3))
 				.andExpect(status().is(201))
 				.andReturn();
 	}
+	
 	
 	@Test
 	void b_testFailedLoginAttempt() throws Exception{
@@ -454,7 +485,7 @@ class Innovator2025June28ApplicationTests {
 	}
 	
 	@Test
-	public void get_OK_ShowDetailUsingShowTimw() throws Exception{
+	public void get_OK_ShowDetailUsingShowTime() throws Exception{
 		mockMvc.perform(get("/show/get/airing")
 				.param("showTime", "08:00 AM - 10:00 AM")
 		.header("Authorization", "Bearer " + getDataFromFileSyatem(TOKEN_USER_1)))

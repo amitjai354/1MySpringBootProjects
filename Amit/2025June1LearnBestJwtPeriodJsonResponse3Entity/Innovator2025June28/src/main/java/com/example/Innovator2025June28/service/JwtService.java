@@ -84,11 +84,12 @@ public class JwtService {
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
 				.signWith(this.getSignKey())
+				//if missed writing this signWith() here
+				//now getting : io.jsonwebtoken.UnsupportedJwtException: Unsigned Claims JWTs are not supported. for stationAdd test case
+				//even i have written parseClaimJws this time
+				//i missed to write signWith, so this error came, same error if write parseClaimsJwt along with signWith
 				.compact();
-
-		//now getting : io.jsonwebtoken.UnsupportedJwtException: Unsigned Claims JWTs are not supported. for stationAdd test case
-		//even i have written parseClaimJws this time
-		//i missed to write signWith, so this error came, sam eerror if write parseClaimsJwt along with signWith
+		
 	}
 	
 	private Key getSignKey() {

@@ -159,7 +159,51 @@ public class LoginController {
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("amit login error");
 		}
 		
+		//2025 June mistake.. I did mistake here.. I called extractUsername() here instead of generateToken here
+		//JWT strings must contain exactly 2 period characters. Found: 0 
+		//getting same mistake for login api, agar ye na hota to mera ho jata kyunki mai baki sari api kar leta..
+		//signup unki mistake hai.. but issi signup ki wajah se hoi to confusion ho ki kaha se aa rhi error..
+		//ekdam strange error.. to laga ki usi signup ki wajah se ye mistake ho rhi.. user sahi nhi hai shayad..
+		//jab login api me error aa rha tha to wahi dekhna tha ek baar, neeche line number 163 bhi diya hai jaha mistake huyi hai
+		//ye mistake na krta mai to mera sara ho jayta waise..authRequest baki sari apis mai kar leta..
+		/*
+		Caused by: io.jsonwebtoken.MalformedJwtException: JWT strings must contain exactly 2 period characters. Found: 0
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:275)
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:529)
+	at io.jsonwebtoken.impl.DefaultJwtParser.parseClaimsJws(DefaultJwtParser.java:589)
+	at io.jsonwebtoken.impl.ImmutableJwtParser.parseClaimsJws(ImmutableJwtParser.java:173)
+	at com.example.Innovator2025June28.service.JwtService.exctractAllClaims(JwtService.java:61)
+	at com.example.Innovator2025June28.service.JwtService.extractClaim(JwtService.java:56)
+	at com.example.Innovator2025June28.service.JwtService.extractUsername(JwtService.java:48)
+	at com.example.Innovator2025June28.controller.LoginController.authenticateAndGetToken(LoginController.java:163)
+	yaha wo line number bhi bata rha tha but mai itna nervous ho gya tha ki kuch samajh hi nhi aa rha tha..
+	
+	Login api me bhi to ham token generate krte hain na.. to ek baar yaha dekhna tha..
+	mai bas jwtService dekh rha tha and jwtFilter dekh rha tha.. kyunki waha ham token generATE KRTE Hain from tokenHeader,
+	jo authentication header me pass hota hai and filter is APPLIED before running any api..
+		 */
+		
+		//log dekh leta dhyan se.. login api me error to phle loginController:163 line dikha rha tha waha jata to pata chal jata
+		//jis api me error aa rhi.. log me sabse phle wo class khojo..
+		//ek baar debug kr leta login api kyunki error issi me aa rhi thi.. but maine wo bhi nhi kiya.. 
+		//errors iotni dekhane ke baad kuch samajh hi nhi aa rha tha.. mere paas 1 hour tha waise..
+		//nut lag yhi rha tha ki signUp ya jwt token ki wajah se kuch issue hai..
+		//jis api me error aa rhi hai wahi api sabse phle debug karo.. wo khud hi le jayega uss error par
+		
+		//be very carefull.. token 3 jagah generate hota hai.. jwtSevice me generation ka code
+		//authFilter me token nikalte hain from tokenHeader
+		//login api me token generate krte hain using jwtService method generate token
+		//String token = jwtService.extractUsername(authRequest.getUsername());
+		
 		String token = jwtService.generateToken(authRequest.getUsername());
+		
+		//now add station is giving below error:
+		//io.jsonwebtoken.ExpiredJwtException: JWT expired at 2025-06-30T16:54:01Z. Current time:
+		//2025-07-05T04:32:40Z, a difference of 387519318 milliseconds.  
+		//Allowed clock skew: 0 milliseconds.
+		//ye error aati hai jab token sahi se pass nhi hota.. matlab header me na paas kiya ho..
+		//ya login me generate kiya ho but wo hi galat generate hua ho..
+		//means if token is not correct to if check expiration, it will give expired
 		JwtResponse jwtResponse = new JwtResponse(token, 200);
 		return ResponseEntity.status(HttpServletResponse.SC_OK).body(jwtResponse);
 	}
