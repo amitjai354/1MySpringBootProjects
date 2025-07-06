@@ -26,7 +26,16 @@ public class UserInfoUserDetails implements UserDetails {
 //		this.authorities = List.of(grantedAuthority);
 		
 		String[] rolesArray = userInfo.getRoles().split(", ");
-		Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
+		this.authorities = Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
+		
+		//Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
+
+		//yaha par mai this.authorities = lagana bhool gya.. to all authenticated apis giving 400
+		//debug se kuch nhi pata chla kyunki wo api tak aa hi nhi rha tha seedhe 403 de diya unchecked exception
+		//na ho dubug me kuch de rha tha
+		//maine khud se socha ki 403 kyu de rha.. means role nhi mil rha usko..
+		//Security filter chain me dekha sab sahi tha.. phir bhi 403 hi tha.
+		//authority ham yaha bhi assign krte hain so i checked here, and found the mistake
 	}
 	
 

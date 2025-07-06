@@ -11,7 +11,8 @@ public class Station {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int station_Id;
+	private int station_id;
+	//this was written as station_Id here but in test case it was station_id so error path not found
 	
 	private String name;
 	
@@ -52,12 +53,12 @@ public class Station {
 		this.operatorId = operatorId;
 	}
 
-	public int getStation_Id() {
-		return station_Id;
+	public int getStation_id() {
+		return station_id;
 	}
 
-	public void setStation_Id(int station_Id) {
-		this.station_Id = station_Id;
+	public void setStation_id(int station_Id) {
+		this.station_id = station_Id;
 	}
 
 	public String getName() {
@@ -142,7 +143,7 @@ public class Station {
 
 	@Override
 	public String toString() {
-		return "Station [station_Id=" + station_Id + ", name=" + name + ", frequency=" + frequency + ", genre=" + genre
+		return "Station [station_id=" + station_id + ", name=" + name + ", frequency=" + frequency + ", genre=" + genre
 				+ ", language=" + language + ", country=" + country + ", streamingURL=" + streamingURL + ", isLive="
 				+ isLive + ", startTime=" + startTime + ", endTime=" + endTime + ", operatorId=" + operatorId + "]";
 	}

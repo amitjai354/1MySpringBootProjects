@@ -66,29 +66,29 @@ class Innovator2025June28ApplicationTests {
 		mockMvc.perform(get("/station/list")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().is(200))
-		.andExpect(jsonPath("&[0].station_id", Matchers.is(1)))
-		.andExpect(jsonPath("&[0].name", Matchers.equalToIgnoringCase("RadioWave FM")))
-		.andExpect(jsonPath("&[0].frequency", Matchers.equalToIgnoringCase("101.2 FM")))
-		.andExpect(jsonPath("&[0].genre", Matchers.equalToIgnoringCase("Pop")))
-		.andExpect(jsonPath("&[0].language", Matchers.equalToIgnoringCase("English")))
-		.andExpect(jsonPath("&[0].country", Matchers.equalToIgnoringCase("USA")))
-		.andExpect(jsonPath("&[0].streamingURL", Matchers.equalToIgnoringCase("https://radiowavefm.com/stream")))
-		.andExpect(jsonPath("&[0].live", Matchers.is(true)))
-		.andExpect(jsonPath("&[0].startTime", Matchers.equalToIgnoringCase("06:00 AM")))
-		.andExpect(jsonPath("&[0].endTime", Matchers.equalToIgnoringCase("11:00 PM")))
-		.andExpect(jsonPath("&[0].operatorId", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].station_id", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].name", Matchers.equalToIgnoringCase("RadioWave FM")))
+		.andExpect(jsonPath("$[0].frequency", Matchers.equalToIgnoringCase("101.2 FM")))
+		.andExpect(jsonPath("$[0].genre", Matchers.equalToIgnoringCase("Pop")))
+		.andExpect(jsonPath("$[0].language", Matchers.equalToIgnoringCase("English")))
+		.andExpect(jsonPath("$[0].country", Matchers.equalToIgnoringCase("USA")))
+		.andExpect(jsonPath("$[0].streamingURL", Matchers.equalToIgnoringCase("https://radiowavefm.com/stream")))
+		.andExpect(jsonPath("$[0].live", Matchers.is(true)))
+		.andExpect(jsonPath("$[0].startTime", Matchers.equalToIgnoringCase("06:00 AM")))
+		.andExpect(jsonPath("$[0].endTime", Matchers.equalToIgnoringCase("11:00 PM")))
+		.andExpect(jsonPath("$[0].operatorId", Matchers.is(1)))
 		
-		.andExpect(jsonPath("&[1].station_id", Matchers.is(2)))
-		.andExpect(jsonPath("&[1].name", Matchers.equalToIgnoringCase("Global Beats")))
-		.andExpect(jsonPath("&[1].frequency", Matchers.equalToIgnoringCase("101.3 FM")))
-		.andExpect(jsonPath("&[1].genre", Matchers.equalToIgnoringCase("Western")))
-		.andExpect(jsonPath("&[1].language", Matchers.equalToIgnoringCase("French")))
-		.andExpect(jsonPath("&[1].country", Matchers.equalToIgnoringCase("France")))
-		.andExpect(jsonPath("&[1].streamingURL", Matchers.equalToIgnoringCase("https://globalbeates.fr/stream")))
-		.andExpect(jsonPath("&[1].live", Matchers.is(false)))
-		.andExpect(jsonPath("&[1].startTime", Matchers.equalToIgnoringCase("05:00 AM")))
-		.andExpect(jsonPath("&[1].endTime", Matchers.equalToIgnoringCase("10:00 PM")))
-		.andExpect(jsonPath("&[1].operatorId", Matchers.is(2)));
+		.andExpect(jsonPath("$[1].station_id", Matchers.is(2)))
+		.andExpect(jsonPath("$[1].name", Matchers.equalToIgnoringCase("Global Beats")))
+		.andExpect(jsonPath("$[1].frequency", Matchers.equalToIgnoringCase("101.3 FM")))
+		.andExpect(jsonPath("$[1].genre", Matchers.equalToIgnoringCase("Western")))
+		.andExpect(jsonPath("$[1].language", Matchers.equalToIgnoringCase("French")))
+		.andExpect(jsonPath("$[1].country", Matchers.equalToIgnoringCase("France")))
+		.andExpect(jsonPath("$[1].streamingURL", Matchers.equalToIgnoringCase("https://globalbeates.fr/stream")))
+		.andExpect(jsonPath("$[1].live", Matchers.is(false)))
+		.andExpect(jsonPath("$[1].startTime", Matchers.equalToIgnoringCase("05:00 AM")))
+		.andExpect(jsonPath("$[1].endTime", Matchers.equalToIgnoringCase("10:00 PM")))
+		.andExpect(jsonPath("$[1].operatorId", Matchers.is(2)));
 	}
 	
 	@Test
@@ -97,19 +97,47 @@ class Innovator2025June28ApplicationTests {
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().is(200))
 		
-		.andExpect(jsonPath("&[0].showId", Matchers.is(1)))
-		.andExpect(jsonPath("&[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
-		.andExpect(jsonPath("&[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
-		.andExpect(jsonPath("&[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
-		.andExpect(jsonPath("&[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
-		.andExpect(jsonPath("&[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
-		.andExpect(jsonPath("&[0].duration", Matchers.is(120)))
-		.andExpect(jsonPath("&[0].popularityRating", Matchers.is(5)))
-		.andExpect(jsonPath("&[0].station_id", Matchers.is(1)));
+		.andExpect(jsonPath("$[0].showId", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
+		.andExpect(jsonPath("$[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
+		.andExpect(jsonPath("$[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
+		.andExpect(jsonPath("$[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
+		.andExpect(jsonPath("$[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
+		.andExpect(jsonPath("$[0].duration", Matchers.is(120)))
+		.andExpect(jsonPath("$[0].popularityRating", Matchers.is(5)))
+		.andExpect(jsonPath("$[0].station_id", Matchers.is(1)));
 		
 		
 	}
 	
+//	@Test
+//	void a_AddingUserInfo() throws Exception{
+//		
+//		//takes normal password in input and in signUp api, it encodes the password first then saves user
+//		UserInfo user1 = new UserInfo("Dev1", "dev1@gmail.com", "pass1", "ADMIN");
+//		String userJson1 = "{ \"name\": \"Dev1\", \"email\": \"dev1@gmail.com\", \"password\": \"pass1\", \"roles\": \"ADMIN\" }";
+//		MvcResult result1 = mockMvc.perform(post("/signUp")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(userJson1))
+//				.andExpect(status().is(201))
+//				.andReturn();
+//		
+//		UserInfo user2 = new UserInfo("Justin1", "justin1@gmail.com", "pass2", "ADMIN");
+//		String userJson2 = "{ \"name\": \"Justin1\", \"email\": \"justin1@gmail.com\", \"password\": \"pass2\", \"roles\": \"ADMIN\" }";
+//		MvcResult result2 = mockMvc.perform(post("/signUp")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(userJson2))
+//				.andExpect(status().is(201))
+//				.andReturn();
+//		
+//		UserInfo user3 = new UserInfo("Sam1", "sam1@gmail.com", "pass3", "USER");
+//		String userJson3 = "{ \"name\": \"Sam1\", \"email\": \"sam1@gmail.com\", \"password\": \"pass3\", \"roles\": \"USER\" }";
+//		MvcResult result3 = mockMvc.perform(post("/signUp")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(userJson3))
+//				.andExpect(status().is(201))
+//				.andReturn();
+//	}
 	
 	@Test
 	void a_AddingUserInfo() throws Exception{
@@ -140,6 +168,8 @@ class Innovator2025June28ApplicationTests {
 				.andReturn();
 	}
 	
+
+	
 	@Test
 	void b_testFailedLoginAttempt() throws Exception{
 		
@@ -166,12 +196,38 @@ class Innovator2025June28ApplicationTests {
 		AuthRequest loginData1 = new AuthRequest("Justin", "pass2");
 		MvcResult result1 = mockMvc.perform(post("/login")
 				.content(toJson(loginData)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
-		JSONObject obj1 = new JSONObject(result.getResponse().getContentAsString());
+		JSONObject obj1 = new JSONObject(result1.getResponse().getContentAsString());
 		assert obj1.has("accessToken");//here got token from login api in response
 		assert obj1.getInt("status")==200;
 		saveDataToFileSystem(TOKEN_ADMIN_2, obj1.getString("accessToken"));
 		
 	}
+	
+	
+//	@Test
+//	void c_testSuccessLoginAttemptADMIN() throws Exception{
+//		
+//		//ADMIN success login attempt
+//		
+//		AuthRequest loginData = new AuthRequest("Dev1", "pass1");
+//		MvcResult result = mockMvc.perform(post("/login")
+//				.content(toJson(loginData)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+//		JSONObject obj = new JSONObject(result.getResponse().getContentAsString());
+//		assert obj.has("accessToken");//here got token from login api in response
+//		assert obj.getInt("status")==200;
+//		saveDataToFileSystem(TOKEN_ADMIN_1, obj.getString("accessToken"));
+//		//here saving token to temp.txt for ADMIN, here key is TOKEN_ADMIN_1 and value is accessToken that we got from login api
+//		
+//		AuthRequest loginData1 = new AuthRequest("Justin1", "pass2");
+//		MvcResult result1 = mockMvc.perform(post("/login")
+//				.content(toJson(loginData)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+//		JSONObject obj1 = new JSONObject(result1.getResponse().getContentAsString());
+//		assert obj1.has("accessToken");//here got token from login api in response
+//		assert obj1.getInt("status")==200;
+//		saveDataToFileSystem(TOKEN_ADMIN_2, obj1.getString("accessToken"));
+//		
+//	}
+	
 	
 	@Test
 	void d_checkSuccessLoginAttemptUSER() throws Exception{
@@ -208,7 +264,7 @@ class Innovator2025June28ApplicationTests {
 		assert response.has("station_id");
 		assert Objects.equals(response.getString("genre"), "Contemporary Hit Radio");
 		assert Objects.equals(response.getString("language"), "English");
-		assert Objects.equals(response.getString("operatorId"), 1);
+		assert Objects.equals(response.getInt("operatorId"), 1);
 		
 		saveDataToFileSystem(ID_STATION_1, response.getInt("station_id"));//saving station id to temp.txt
 		
@@ -233,7 +289,7 @@ class Innovator2025June28ApplicationTests {
 		assert response.has("station_id");
 		assert Objects.equals(response.getString("genre"), "News/Talk");
 		assert Objects.equals(response.getString("language"), "English");
-		assert Objects.equals(response.getString("operatorId"), 2);
+		assert Objects.equals(response.getInt("operatorId"), 2);
 		
 		saveDataToFileSystem(ID_STATION_2, response.getInt("station_id"));//saving station id to temp.txt
 		
@@ -302,54 +358,54 @@ class Innovator2025June28ApplicationTests {
 		mockMvc.perform(get("/station/list")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().is(200))
-				.andExpect(jsonPath("&[0].station_id", Matchers.is(1)))
-				.andExpect(jsonPath("&[0].name", Matchers.equalToIgnoringCase("RadioWave FM")))
-				.andExpect(jsonPath("&[0].frequency", Matchers.equalToIgnoringCase("101.2 FM")))
-				.andExpect(jsonPath("&[0].genre", Matchers.equalToIgnoringCase("Pop")))
-				.andExpect(jsonPath("&[0].language", Matchers.equalToIgnoringCase("English")))
-				.andExpect(jsonPath("&[0].country", Matchers.equalToIgnoringCase("USA")))
-				.andExpect(jsonPath("&[0].streamingURL", Matchers.equalToIgnoringCase("https://radiowavefm.com/stream")))
-				.andExpect(jsonPath("&[0].live", Matchers.is(true)))
-				.andExpect(jsonPath("&[0].startTime", Matchers.equalToIgnoringCase("06:00 AM")))
-				.andExpect(jsonPath("&[0].endTime", Matchers.equalToIgnoringCase("11:00 PM")))
-				.andExpect(jsonPath("&[0].operatorId", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].station_id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].name", Matchers.equalToIgnoringCase("RadioWave FM")))
+				.andExpect(jsonPath("$[0].frequency", Matchers.equalToIgnoringCase("101.2 FM")))
+				.andExpect(jsonPath("$[0].genre", Matchers.equalToIgnoringCase("Pop")))
+				.andExpect(jsonPath("$[0].language", Matchers.equalToIgnoringCase("English")))
+				.andExpect(jsonPath("$[0].country", Matchers.equalToIgnoringCase("USA")))
+				.andExpect(jsonPath("$[0].streamingURL", Matchers.equalToIgnoringCase("https://radiowavefm.com/stream")))
+				.andExpect(jsonPath("$[0].live", Matchers.is(true)))
+				.andExpect(jsonPath("$[0].startTime", Matchers.equalToIgnoringCase("06:00 AM")))
+				.andExpect(jsonPath("$[0].endTime", Matchers.equalToIgnoringCase("11:00 PM")))
+				.andExpect(jsonPath("$[0].operatorId", Matchers.is(1)))
 				
-				.andExpect(jsonPath("&[1].station_id", Matchers.is(2)))
-				.andExpect(jsonPath("&[1].name", Matchers.equalToIgnoringCase("Global Beats")))
-				.andExpect(jsonPath("&[1].frequency", Matchers.equalToIgnoringCase("101.3 FM")))
-				.andExpect(jsonPath("&[1].genre", Matchers.equalToIgnoringCase("Western")))
-				.andExpect(jsonPath("&[1].language", Matchers.equalToIgnoringCase("French")))
-				.andExpect(jsonPath("&[1].country", Matchers.equalToIgnoringCase("France")))
-				.andExpect(jsonPath("&[1].streamingURL", Matchers.equalToIgnoringCase("https://globalbeates.fr/stream")))
-				.andExpect(jsonPath("&[1].live", Matchers.is(false)))
-				.andExpect(jsonPath("&[1].startTime", Matchers.equalToIgnoringCase("05:00 AM")))
-				.andExpect(jsonPath("&[1].endTime", Matchers.equalToIgnoringCase("10:00 PM")))
-				.andExpect(jsonPath("&[1].operatorId", Matchers.is(2)))
+				.andExpect(jsonPath("$[1].station_id", Matchers.is(2)))
+				.andExpect(jsonPath("$[1].name", Matchers.equalToIgnoringCase("Global Beats")))
+				.andExpect(jsonPath("$[1].frequency", Matchers.equalToIgnoringCase("101.3 FM")))
+				.andExpect(jsonPath("$[1].genre", Matchers.equalToIgnoringCase("Western")))
+				.andExpect(jsonPath("$[1].language", Matchers.equalToIgnoringCase("French")))
+				.andExpect(jsonPath("$[1].country", Matchers.equalToIgnoringCase("France")))
+				.andExpect(jsonPath("$[1].streamingURL", Matchers.equalToIgnoringCase("https://globalbeates.fr/stream")))
+				.andExpect(jsonPath("$[1].live", Matchers.is(false)))
+				.andExpect(jsonPath("$[1].startTime", Matchers.equalToIgnoringCase("05:00 AM")))
+				.andExpect(jsonPath("$[1].endTime", Matchers.equalToIgnoringCase("10:00 PM")))
+				.andExpect(jsonPath("$[1].operatorId", Matchers.is(2)))
 				
-				.andExpect(jsonPath("&[2].station_id", Matchers.is(3)))
-				.andExpect(jsonPath("&[2].name", Matchers.equalToIgnoringCase("BBC Radio 1")))
-				.andExpect(jsonPath("&[2].frequency", Matchers.equalToIgnoringCase("97.99 FM")))
-				.andExpect(jsonPath("&[2].genre", Matchers.equalToIgnoringCase("Contemporary Hit Radio")))
-				.andExpect(jsonPath("&[2].language", Matchers.equalToIgnoringCase("English")))
-				.andExpect(jsonPath("&[2].country", Matchers.equalToIgnoringCase("United Kingdom")))
-				.andExpect(jsonPath("&[2].streamingURL", Matchers.equalToIgnoringCase("https://www.bbc.co.uk/sounds/play/live:bbc_radio_one")))
-				.andExpect(jsonPath("&[2].live", Matchers.is(true)))
-				.andExpect(jsonPath("&[2].startTime", Matchers.equalToIgnoringCase("00:00")))
-				.andExpect(jsonPath("&[2].endTime", Matchers.equalToIgnoringCase("23:59")))
-				.andExpect(jsonPath("&[2].operatorId", Matchers.is(1)))
+				.andExpect(jsonPath("$[2].station_id", Matchers.is(3)))
+				.andExpect(jsonPath("$[2].name", Matchers.equalToIgnoringCase("BBC Radio 1")))
+				.andExpect(jsonPath("$[2].frequency", Matchers.equalToIgnoringCase("97.99 FM")))
+				.andExpect(jsonPath("$[2].genre", Matchers.equalToIgnoringCase("Contemporary Hit Radio")))
+				.andExpect(jsonPath("$[2].language", Matchers.equalToIgnoringCase("English")))
+				.andExpect(jsonPath("$[2].country", Matchers.equalToIgnoringCase("United Kingdom")))
+				.andExpect(jsonPath("$[2].streamingURL", Matchers.equalToIgnoringCase("https://www.bbc.co.uk/sounds/play/live:bbc_radio_one")))
+				.andExpect(jsonPath("$[2].live", Matchers.is(true)))
+				.andExpect(jsonPath("$[2].startTime", Matchers.equalToIgnoringCase("00:00")))
+				.andExpect(jsonPath("$[2].endTime", Matchers.equalToIgnoringCase("23:59")))
+				.andExpect(jsonPath("$[2].operatorId", Matchers.is(1)))
 				
 				
-				.andExpect(jsonPath("&[3].station_id", Matchers.is(4)))
-				.andExpect(jsonPath("&[3].name", Matchers.equalToIgnoringCase("NPR News")))
-				.andExpect(jsonPath("&[3].frequency", Matchers.equalToIgnoringCase("89.1 FM")))
-				.andExpect(jsonPath("&[3].genre", Matchers.equalToIgnoringCase("News/Talk")))
-				.andExpect(jsonPath("&[3].language", Matchers.equalToIgnoringCase("English")))
-				.andExpect(jsonPath("&[3].country", Matchers.equalToIgnoringCase("United States")))
-				.andExpect(jsonPath("&[3].streamingURL", Matchers.equalToIgnoringCase("https://www.npr.org/live")))
-				.andExpect(jsonPath("&[3].live", Matchers.is(true)))
-				.andExpect(jsonPath("&[3].startTime", Matchers.equalToIgnoringCase("00:00")))
-				.andExpect(jsonPath("&[3].endTime", Matchers.equalToIgnoringCase("23:59")))
-				.andExpect(jsonPath("&[3].operatorId", Matchers.is(2)));
+				.andExpect(jsonPath("$[3].station_id", Matchers.is(4)))
+				.andExpect(jsonPath("$[3].name", Matchers.equalToIgnoringCase("NPR News")))
+				.andExpect(jsonPath("$[3].frequency", Matchers.equalToIgnoringCase("89.1 FM")))
+				.andExpect(jsonPath("$[3].genre", Matchers.equalToIgnoringCase("News/Talk")))
+				.andExpect(jsonPath("$[3].language", Matchers.equalToIgnoringCase("English")))
+				.andExpect(jsonPath("$[3].country", Matchers.equalToIgnoringCase("United States")))
+				.andExpect(jsonPath("$[3].streamingURL", Matchers.equalToIgnoringCase("https://www.npr.org/live")))
+				.andExpect(jsonPath("$[3].live", Matchers.is(true)))
+				.andExpect(jsonPath("$[3].startTime", Matchers.equalToIgnoringCase("00:00")))
+				.andExpect(jsonPath("$[3].endTime", Matchers.equalToIgnoringCase("23:59")))
+				.andExpect(jsonPath("$[3].operatorId", Matchers.is(2)));
 		
 	}
 	
@@ -359,25 +415,25 @@ class Innovator2025June28ApplicationTests {
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().is(200))
 				
-				.andExpect(jsonPath("&[0].showId", Matchers.is(1)))
-				.andExpect(jsonPath("&[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
-				.andExpect(jsonPath("&[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
-				.andExpect(jsonPath("&[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
-				.andExpect(jsonPath("&[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
-				.andExpect(jsonPath("&[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
-				.andExpect(jsonPath("&[0].duration", Matchers.is(120)))
-				.andExpect(jsonPath("&[0].popularityRating", Matchers.is(5)))
-				.andExpect(jsonPath("&[0].station_id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].showId", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
+				.andExpect(jsonPath("$[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
+				.andExpect(jsonPath("$[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
+				.andExpect(jsonPath("$[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
+				.andExpect(jsonPath("$[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
+				.andExpect(jsonPath("$[0].duration", Matchers.is(120)))
+				.andExpect(jsonPath("$[0].popularityRating", Matchers.is(5)))
+				.andExpect(jsonPath("$[0].station_id", Matchers.is(1)))
 		
-				.andExpect(jsonPath("&[1].showId", Matchers.is(2)))
-				.andExpect(jsonPath("&[1].title", Matchers.equalToIgnoringCase("Evening Chill out Session")))
-				.andExpect(jsonPath("&[1].description", Matchers.containsStringIgnoringCase("Unwind with soothing tunes and relaxing conversations to end your day.")))
-				.andExpect(jsonPath("&[1].showTime", Matchers.equalToIgnoringCase("08:00 PM - 10:00 PM")))
-				.andExpect(jsonPath("&[1].category", Matchers.equalToIgnoringCase("Music & Talk")))
-				.andExpect(jsonPath("&[1].host", Matchers.equalToIgnoringCase("Emily Davis")))
-				.andExpect(jsonPath("&[1].duration", Matchers.is(120)))
-				.andExpect(jsonPath("&[1].popularityRating", Matchers.is(4)))
-				.andExpect(jsonPath("&[1].station_id", Matchers.is(2)));
+				.andExpect(jsonPath("$[1].showId", Matchers.is(2)))
+				.andExpect(jsonPath("$[1].title", Matchers.equalToIgnoringCase("Evening Chill out Session")))
+				.andExpect(jsonPath("$[1].description", Matchers.containsStringIgnoringCase("Unwind with soothing tunes and relaxing conversations to end your day.")))
+				.andExpect(jsonPath("$[1].showTime", Matchers.equalToIgnoringCase("08:00 PM - 10:00 PM")))
+				.andExpect(jsonPath("$[1].category", Matchers.equalToIgnoringCase("Music & Talk")))
+				.andExpect(jsonPath("$[1].host", Matchers.equalToIgnoringCase("Emily Davis")))
+				.andExpect(jsonPath("$[1].duration", Matchers.is(120)))
+				.andExpect(jsonPath("$[1].popularityRating", Matchers.is(4)))
+				.andExpect(jsonPath("$[1].station_id", Matchers.is(2)));
 	}
 	
 	@Test
@@ -454,21 +510,21 @@ class Innovator2025June28ApplicationTests {
 	}
 	
 	@Test
-	public void get_OK_ShowDetailUsingShowTimw() throws Exception{
+	public void get_OK_ShowDetailUsingShowTime() throws Exception{
 		mockMvc.perform(get("/show/get/airing")
 				.param("showTime", "08:00 AM - 10:00 AM")
 		.header("Authorization", "Bearer " + getDataFromFileSyatem(TOKEN_USER_1)))
 		.andExpect(status().isOk())
 		
-		.andExpect(jsonPath("&[0].showId", Matchers.is(1)))
-		.andExpect(jsonPath("&[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
-		.andExpect(jsonPath("&[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
-		.andExpect(jsonPath("&[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
-		.andExpect(jsonPath("&[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
-		.andExpect(jsonPath("&[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
-		.andExpect(jsonPath("&[0].duration", Matchers.is(120)))
-		.andExpect(jsonPath("&[0].popularityRating", Matchers.is(5)))
-		.andExpect(jsonPath("&[0].station_id", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].showId", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
+		.andExpect(jsonPath("$[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
+		.andExpect(jsonPath("$[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
+		.andExpect(jsonPath("$[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
+		.andExpect(jsonPath("$[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
+		.andExpect(jsonPath("$[0].duration", Matchers.is(120)))
+		.andExpect(jsonPath("$[0].popularityRating", Matchers.is(5)))
+		.andExpect(jsonPath("$[0].station_id", Matchers.is(1)))
 		
 		.andReturn();
 	}
@@ -494,15 +550,15 @@ class Innovator2025June28ApplicationTests {
 				.header("Authorization", "Bearer " + getDataFromFileSyatem(TOKEN_USER_1)))
 		.andExpect(status().isOk())
 		
-		.andExpect(jsonPath("&[0].showId", Matchers.is(1)))
-		.andExpect(jsonPath("&[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
-		.andExpect(jsonPath("&[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
-		.andExpect(jsonPath("&[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
-		.andExpect(jsonPath("&[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
-		.andExpect(jsonPath("&[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
-		.andExpect(jsonPath("&[0].duration", Matchers.is(120)))
-		.andExpect(jsonPath("&[0].popularityRating", Matchers.is(5)))
-		.andExpect(jsonPath("&[0].station_id", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].showId", Matchers.is(1)))
+		.andExpect(jsonPath("$[0].title", Matchers.equalToIgnoringCase("Morning Vibes")))
+		.andExpect(jsonPath("$[0].description", Matchers.containsStringIgnoringCase("refreshing morning show with great music and positive talks")))
+		.andExpect(jsonPath("$[0].showTime", Matchers.equalToIgnoringCase("08:00 AM - 10:00 AM")))
+		.andExpect(jsonPath("$[0].category", Matchers.equalToIgnoringCase("Music & Talk")))
+		.andExpect(jsonPath("$[0].host", Matchers.equalToIgnoringCase("Emma Roberts")))
+		.andExpect(jsonPath("$[0].duration", Matchers.is(120)))
+		.andExpect(jsonPath("$[0].popularityRating", Matchers.is(5)))
+		.andExpect(jsonPath("$[0].station_id", Matchers.is(1)))
 		
 		.andReturn();
 	}

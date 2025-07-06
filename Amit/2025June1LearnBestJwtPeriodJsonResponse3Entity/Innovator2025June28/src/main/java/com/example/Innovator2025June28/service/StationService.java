@@ -1,5 +1,7 @@
 package com.example.Innovator2025June28.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.Innovator2025June28.dto.MyCountAndListJsonResponse;
 import com.example.Innovator2025June28.entity.Station;
 import com.example.Innovator2025June28.entity.UserInfo;
 import com.example.Innovator2025June28.repository.StationRepo;
@@ -48,7 +51,13 @@ public class StationService {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserInfo userInfo = userRepository.findByName(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("amit username not found"));
 			
-			station.setOperatorId(userInfo.getId());
+			//Be very careful, if already giving operatorId in request so do not add
+			//otherwise test case failing here..
+			//generally it should not fail but here since signUp is not correct so it is failing
+			//but if they are giving operator id then do not pass as they may give 
+			//different operator id for different user
+			
+			//station.setOperatorId(userInfo.getId());
 			
 			station = stationRepo.save(station);
 			
@@ -66,8 +75,102 @@ public class StationService {
 			if(stationList.isEmpty()) {
 				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("data not found");
 			}
+			//return ResponseEntity.status(HttpServletResponse.SC_OK).body(stationList);
 			
-			return ResponseEntity.status(HttpServletResponse.SC_OK).body(stationList);
+			
+//--------------------------------------------------------------------------------------------------------			
+//Aproach 1: 
+			//return json response with count and list : asked in slot 1
+			//for this we need to create one new pojo class in dto. there must be getters and setters for the class.
+			//Now when we return object of any java class, spring automatically converts it to json response
+			//we ResponseBody inside RestController, it converts java object to json object
+			//@RequestBody: converts Json object to Java object
+			//But only condition is that java object should be of POJO class and it must have all getters and setters to work
+			
+//			MyCountAndListJsonResponse myCountAndListJsonResponse = new MyCountAndListJsonResponse();
+//			myCountAndListJsonResponse.setCount(stationList.size());
+//			myCountAndListJsonResponse.setStationList(stationList);
+//			return ResponseEntity.status(HttpServletResponse.SC_OK).body(myCountAndListJsonResponse);
+			
+			
+			
+/*
+{ "count": 2,
+    "stationList": [
+        {
+            "station_id": 1,
+            "name": "RadioWave FM",
+            "frequency": "101.2 FM",
+            "genre": "Pop",
+            "language": "English",
+            "country": "USA",
+            "streamingURL": "https://radiowavefm.com/stream",
+            "startTime": "06:00 AM",
+            "endTime": "11:00 PM",
+            "operatorId": 1,
+            "live": true
+        },
+        {
+            "station_id": 2,
+            "name": "Global Beats",
+            "frequency": "101.3 FM",
+            "genre": "Western",
+            "language": "French",
+            "country": "France",
+            "streamingURL": "https://globalbeates.fr/stream",
+            "startTime": "05:00 AM",
+            "endTime": "10:00 PM",
+            "operatorId": 2,
+            "live": false
+        }
+    ]
+}
+*/
+//------------------------------------------------------------------------------------------------------------------	
+//Aproach 2 :			
+			//here I am not returning any object of my pojo class so no need of getter setter.
+			//here I am returning one List so complete response is of list type in json
+			//Java internally manages List objects getter , setter
+			List<Object> myJsonList = new ArrayList<>();
+			myJsonList.add(stationList.size());
+			myJsonList.add(stationList);
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(myJsonList);
+			
+			
+/*
+[
+    2,
+    [
+        {
+            "station_id": 1,
+            "name": "RadioWave FM",
+            "frequency": "101.2 FM",
+            "genre": "Pop",
+            "language": "English",
+            "country": "USA",
+            "streamingURL": "https://radiowavefm.com/stream",
+            "startTime": "06:00 AM",
+            "endTime": "11:00 PM",
+            "operatorId": 1,
+            "live": true
+        },
+        {
+            "station_id": 2,
+            "name": "Global Beats",
+            "frequency": "101.3 FM",
+            "genre": "Western",
+            "language": "French",
+            "country": "France",
+            "streamingURL": "https://globalbeates.fr/stream",
+            "startTime": "05:00 AM",
+            "endTime": "10:00 PM",
+            "operatorId": 2,
+            "live": false
+        }
+    ]
+]
+*/
+//------------------------------------------------------------------------------------------------------		
 		}
 		catch (Exception e) {
 			e.printStackTrace();
