@@ -90,7 +90,10 @@ public class JwtService {
 		//return Jwts.parser().setSigningKey(this.getSignKey()).build().parseSignedClaims(token).getPayload();//in 0.12.6 getSigningKey is deprecated here
 		//return Jwts.parser().setSigningKey(this.getSignKey()).parseClaimsJws(token).getBody();//in 0.11.5 parser, setsigningKey deprecated
 		
+		//return Jwts.parser().verifyWith(this.getSignKey()).build().parseSignedClaims(token).getPayload(); //in 0.12.6 must need SecretKey not Key
 		return Jwts.parserBuilder().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();
+		//s means signed here so in both 0.11 and 0.12 using signed
+		//parseClaimJwt is not for signed, so error came in my exam, //UnSupportedJwtWxception: Signed Claims JWSs are not supported
 		//in 0.11.5 we do not have verify with, get Payload, nothing deprecated here, 
 		//works with Key, Secret key both
 		

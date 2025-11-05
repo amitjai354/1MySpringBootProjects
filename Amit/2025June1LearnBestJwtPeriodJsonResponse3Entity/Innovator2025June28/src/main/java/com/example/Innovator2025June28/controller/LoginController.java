@@ -193,8 +193,8 @@ public class LoginController {
 		//be very carefull.. token 3 jagah generate hota hai.. jwtSevice me generation ka code
 		//authFilter me token nikalte hain from tokenHeader
 		//login api me token generate krte hain using jwtService method generate token
-		//String token = jwtService.extractUsername(authRequest.getUsername());
 		
+		//String token = jwtService.extractUsername(authRequest.getUsername());
 		String token = jwtService.generateToken(authRequest.getUsername());
 		
 		//now add station is giving below error:
