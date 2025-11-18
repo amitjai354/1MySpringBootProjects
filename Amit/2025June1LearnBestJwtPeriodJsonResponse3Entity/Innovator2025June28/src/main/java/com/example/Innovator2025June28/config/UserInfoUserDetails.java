@@ -36,6 +36,18 @@ public class UserInfoUserDetails implements UserDetails {
 		//maine khud se socha ki 403 kyu de rha.. means role nhi mil rha usko..
 		//Security filter chain me dekha sab sahi tha.. phir bhi 403 hi tha.
 		//authority ham yaha bhi assign krte hain so i checked here, and found the mistake
+		
+		
+		//public String getUsername() {		
+		//Amit, be very careful here, need to return name here not getUsername..
+		//otherwise will get user name not found exception
+		//return this.name;
+		//return this.getUsername();
+		//this will cause stack overflow error as will keep calling itself again and again
+		//statck overflow even in postStation api, as will try to authenticate user from Security config then 
+		//will go user details service to get user details, then will come here and find this getUsername
+		//now it will keep calling itself again and again as there is no stoping condition here
+	    //}
 	}
 	
 
@@ -52,9 +64,15 @@ public class UserInfoUserDetails implements UserDetails {
 	}
 
 	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
+	public String getUsername() {		
+		//Amit, be very careful here, need to return name here not getUsername..
+		//otherwise will get user name not found exception
 		return this.name;
+		//return this.getUsername();
+		//this will cause stack overflow error as will keep calling itself again and again
+		//statck overflow even in postStation api, as will try to authenticate user from Security config then 
+		//will go user details service to get user details, then will come here and find this getUsername
+		//now it will keep calling itself again and again as there is no stoping condition here
 	}
 	
 
