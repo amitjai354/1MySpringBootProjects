@@ -48,9 +48,11 @@ public class User implements UserDetails {
 	
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+	//@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_Id", referencedColumnName = "userId"))
 	@Enumerated(EnumType.STRING)
 	private Set<Role> roles;
 	
+	//Class where we are writing this JoinTable goes in normal joinColumns, while other class that we need to join by foreign key, that we write in inverseJoinColumns
 //	@ManyToMany(fetch=FetchType.EAGER, cascade= CascadeType.ALL)
 //	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name="user_id", referencedColumnName = "userId"),
 //			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "roleId"))

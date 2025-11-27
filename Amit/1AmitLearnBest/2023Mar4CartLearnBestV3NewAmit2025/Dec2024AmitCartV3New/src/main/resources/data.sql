@@ -1,8 +1,10 @@
 
 --insert INTO category (Category_name) VALUES ('Tech');
 insert INTO category (Category_name) VALUES ('Fashion');
+
 --insert into Category ("CATEGORY_NAME")  values ('Electronics');
 --"CATEGORY_Name" gives error column not found, but only "CATEGORY_NAME" works fine so do not use double quote
+
 --INSERT INTO CATEGORY (Category_name) values ('Books');
 --INSERT INTO CATEGORY (Category_name) values ('Medicines');
 

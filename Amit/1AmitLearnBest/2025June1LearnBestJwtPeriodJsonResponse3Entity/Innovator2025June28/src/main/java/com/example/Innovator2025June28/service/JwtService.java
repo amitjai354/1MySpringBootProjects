@@ -58,7 +58,26 @@ public class JwtService {
 	}
 	
 	private Claims exctractAllClaims(String token) {
-		return Jwts.parserBuilder().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();
+		return Jwts.parserBuilder().setSigningKey(this.getSignKey()).build().parseClaimsJws(token).getBody();//0.11.5
+		//return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();//0.12.6
+		
+		/*
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		*/
 	}
 	
 	private Boolean isTokenExpired(String token) {

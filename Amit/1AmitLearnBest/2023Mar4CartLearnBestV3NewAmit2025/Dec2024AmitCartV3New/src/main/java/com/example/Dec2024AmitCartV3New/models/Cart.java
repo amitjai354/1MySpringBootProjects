@@ -22,7 +22,12 @@ public class Cart {
 	
 	private Double totalAmount;
 	
+	//one user will have one cart only
+	//here join column is not written, also mapped by is not written.. so this is join column only so fk present here only
+	//actually if there is only one attribute as pk in user class then no need to write join column here, automatically done by spring boot
+	//userId is the fk in this cart table, not the complete user class, as if join column present there we mention user_id, referneced column name= userId
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	//@JoinColumn(name="user_id", referencedColumnName="userId") //not given in the exam paper, added by default by springboot id only attribute is pk in user table
 	@JsonIgnore
 	private User user;
 	//if we do not give Join Column and mapped By then by default join column is created with column name as 
@@ -41,6 +46,7 @@ public class Cart {
 	//only this cascade is written in complete exam..
 	
 	
+	//one cart may have multiple cart products
 	//if try to create fk here then fk will be list cartProduct ids, so better create fk in cartProduct
 	//as there fk is single unique cart id no list there
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cart")
@@ -48,6 +54,17 @@ public class Cart {
 	//if writting mappedBy then no need of JoinColumn
 	//mappedBy tells that we are maintaing bidirectional relationship with CartProduct class 
 	//but FK will not be present in this table, mapped by mean birectional relationship
+	//if mapped by written then fk is not in this table
+	//if join column written then fk is present in that table, sometimes when we have only pk in the table, join column is not written there
+	//spring boot automatically adds that.. but mapped by will also be not written there, so assume this is join column only
+	//like below present in cartProduct class
+	//@ManyToOne()
+	//@JoinColumn(name = "cart_id", referencedColumnName = "cartId")
+	//@JsonIgnore
+	//private Cart cart;//cartId is inside this Cart class
+	//so cart table does not have any column cartProduct but cart product class has a fk column cartId
+	//also attribute is written for class only like private Cart cart; but in table, only cart id goes.. 
+	//as mentioned inside.. @JoinColumn(name = "cart_id", referencedColumnName = "cartId") so cart_id present in the table not the cart
 	
 	public void updateTotalAmount(Double price) {
 		this.totalAmount += price;

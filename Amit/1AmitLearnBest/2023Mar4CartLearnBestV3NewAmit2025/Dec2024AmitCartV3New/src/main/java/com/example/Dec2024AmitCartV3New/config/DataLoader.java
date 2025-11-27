@@ -56,13 +56,15 @@ public class DataLoader implements ApplicationRunner{
 		//otherwise constraint exception while saving that save that first then save this
 		//Category category1 = categoryRepo.save(new Category("Fashion")); 
 		//saving Fashion category using data.sql from resources folder
+		//First data will be inserted from data.sql then this data loader will run so Fashion will get id 1
+		//Electronics will get id 2
 		Category category2 = categoryRepo.save(new Category("Electronics"));
 		Category category3 = categoryRepo.save(new Category("Books"));
 		Category category4 = categoryRepo.save(new Category("Groceries"));
 		Category category5 = categoryRepo.save(new Category("Medicines"));
 		
 		//Product has both seller and category so need to save user first
-		//user has role only so can save user as already saved role.. her no need to save role as role is enum
+		//user has role only so can save user as already saved role.. here no need to save role as role is enum
 		//User and Role has many to many relation.. so separate table user role created..
 		//in this new table check what is the role of user
 		//here constructor of User is taking Set<Role> to create user so create set of role first
@@ -96,6 +98,8 @@ public class DataLoader implements ApplicationRunner{
 		//mappedBy in join column
 		//we are creating cartId column in CartProduct.. so create cart first
 		
+		//Here we will pass complete user1 and in foreign key we will see userid in sql automatically
+		//this will be done by mapping that we do like one to one or many to one or one to many or many to many
 		Cart cart1 = cartRepo.save(new Cart(20.0, user1));
 		Cart cart2 = cartRepo.save(new Cart(0.0, user2));
 		
