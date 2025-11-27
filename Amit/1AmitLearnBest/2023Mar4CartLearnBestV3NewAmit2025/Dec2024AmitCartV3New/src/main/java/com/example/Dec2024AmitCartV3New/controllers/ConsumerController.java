@@ -52,6 +52,9 @@ public class ConsumerController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Cart cartFromDb = cartRepo.findByUserUsername(userDetails.getUsername()).orElse(null);
 			//each consumer will have 1 cart id.. in api response also not given list[] but single cart{}
+			if(cartFromDb==null) {
+				return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).body("no cart present");
+			}
 			return ResponseEntity.status(HttpServletResponse.SC_OK).body(cartFromDb);
 		}
 		catch (Exception e) {

@@ -22,7 +22,8 @@ public class Cart {
 	
 	private Double totalAmount;
 	
-	//one user will have one cart only
+	//json ignore means if showing cart details, do not show its user details
+	//one user will have one cart only, either user have cart id or cart has user id, generally in user table we do not put extra details other than user details
 	//here join column is not written, also mapped by is not written.. so this is join column only so fk present here only
 	//actually if there is only one attribute as pk in user class then no need to write join column here, automatically done by spring boot
 	//userId is the fk in this cart table, not the complete user class, as if join column present there we mention user_id, referneced column name= userId
@@ -47,7 +48,7 @@ public class Cart {
 	
 	
 	//one cart may have multiple cart products
-	//if try to create fk here then fk will be list cartProduct ids, so better create fk in cartProduct
+	//if try to create fk here then fk will be list of cartProduct ids, so better create fk in cartProduct
 	//as there fk is single unique cart id no list there
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cart")
 	private List<CartProduct> cartProducts;//cart is inside this cartProduct

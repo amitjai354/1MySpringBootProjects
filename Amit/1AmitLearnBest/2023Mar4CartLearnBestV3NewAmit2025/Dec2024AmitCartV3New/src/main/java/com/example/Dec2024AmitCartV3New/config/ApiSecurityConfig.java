@@ -38,7 +38,10 @@ public class ApiSecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.headers(h->h.frameOptions(f->f.disable()));
 		http.csrf(c->c.disable())
-		.authorizeHttpRequests(a->a.anyRequest().permitAll())
+		.authorizeHttpRequests(a->a.requestMatchers(HttpMethod.GET, "/api/auth/consumer/cart/**").hasAuthority("CONSUMER")
+				.requestMatchers("/api/auth/consumer/cart/**").hasAuthority("CONSUMER")//all cart api covered here
+				.requestMatchers("/api/auth/seller/product/**").hasAuthority("SELLER")//this will cover all post, get, put delete apis
+				.anyRequest().permitAll())
 		.exceptionHandling(e->e.authenticationEntryPoint(entryPoint));
 		
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

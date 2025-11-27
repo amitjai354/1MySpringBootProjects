@@ -35,6 +35,14 @@ public class Product {
 	//if writting mappedBy then no need of JoinColumn
 	//mappedBy tells that we are maintaing bidirectional relationship with CartProduct class 
 	//but FK will not be present in this table, mapped by mean birectional relationship
+	
+	
+	//Below code not given in exam paper
+	//this is unidirectional so mapped by is not written in the Product class
+	//@OneToMany(mappedBy="product")
+	//@josnIgnore
+	//private List<CartProduct> cartProductList;
+	
 
 	public Product() {
 		super();

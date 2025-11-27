@@ -19,7 +19,7 @@ public class CartProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cpId;
 	
-	
+	//one cart may have multiple cart products but one cart product can be part of any one cart only
 	//in paper, cart given in cartProdct and cartProduct given in cart , 
 	//so where to create fk and where to write mapped by..
 	//here cart to cartProduct is 1 to Many so if create fk in cart, fk will be list of cartProducts ids
@@ -30,9 +30,12 @@ public class CartProduct {
 	private Cart cart;//cartId is inside this Cart class
 	
 	
+	//this is unidirectional so mapped by is not written in the Product class
 	//in exam paper data loader given, productId inside cartProduct but not given cartProduct in Product
 	//so adding fk here in cartProduct
-	//one product can be added to many cart products, as many user may buy same product
+	//here cart product is many and product is one in Cart product class and in Product class if bidirectional, OneToMany so Product is one and cartProduct is many there
+	//means many cart products can be any one product added by seller
+	//or can say one product can be added as multiple cart products as one user may buy 2 iphone so product 1 but cart product quantity many
 	@ManyToOne()
 	@JoinColumn(name = "product_id", referencedColumnName = "productId")
 	private Product product;
