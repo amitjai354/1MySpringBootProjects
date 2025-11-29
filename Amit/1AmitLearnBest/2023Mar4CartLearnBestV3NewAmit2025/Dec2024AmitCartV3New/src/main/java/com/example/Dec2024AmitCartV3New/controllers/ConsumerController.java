@@ -83,6 +83,23 @@ public class ConsumerController {
 		//{"productId":3,"category":
 		//{"categoryName":"Electronics","categoryId":"2"},"price":"98000.0","productName":"iPhone 12"}
 		
+		//my new comment with query written
+		//Take product and add to comsumer cart means add as cart product to consumer cart
+		//product can be added by SZeller only, consumer can add cart product to cart only
+		//if product already in cart then 409 that added again
+		//cart prduct has product as fk and product has category as fk
+		
+		//we need to fecth cart of the consumer, if not present then add new
+		//findByUserUsername
+		//we need to find the product but not by user as consumer not added the product
+		//if product not found means out of stock
+		//also find cartProduct by user or cart , if already present then error msg added again
+		//cart product has cart and product as fk, not the user as fk
+		//since we already fetched the cart so can use the cart id : findByCartCartId
+		//findByCartUserUsernameAndProductProductId , we need product id as well we are trying to 
+		//find if product already present or not
+		//we have to call save on cart product finally
+		
 		try {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication();
 			User user = userRepo.findByUsername(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("username not found"));
@@ -221,6 +238,7 @@ public class ConsumerController {
 			}
 			
 			cartFromDb.setTotalAmount(newCartAmount);
+			cartFromDb = cartRepo.save(cartFromDb);//save cart new Total Amount in db
 			
 			cartProductFromDb.setProduct(productFromDb);
 			cartProductFromDb.setCart(cartFromDb);

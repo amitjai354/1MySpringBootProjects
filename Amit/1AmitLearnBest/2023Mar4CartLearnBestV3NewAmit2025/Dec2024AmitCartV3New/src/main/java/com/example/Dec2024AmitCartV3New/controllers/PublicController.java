@@ -62,6 +62,20 @@ public class PublicController {
  		 "productName":"Crocin pain relief tablet",
  		 "price":10.0,
  		 "category":{"categoryName":"Medicines"}}]
+		 
+		try {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userRepo.findByUsername(userDetails.getUsername())
+					.orElseThrow(()->new UsernameNotFoundException("username not found"));
+			
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in getting product");
+		}
+		
+		here can not write userDetails from Security context holder as this is public api so no security context holder so will give null pointer exception
 		 */
 		try {
 			List<Product> productList = productRepo.findByProductNameContainingIgnoreCaseOrCategoryCategoryNameContainingIgnoreCase(keyword, keyword);  
@@ -91,6 +105,23 @@ public class PublicController {
 	//request body - {"username": "bob","password": "pass_word"}
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody JwtRequest jwtRequest){
+		
+		/*
+		try {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userRepo.findByUsername(userDetails.getUsername())
+					.orElseThrow(()->new UsernameNotFoundException("username not found"));
+			
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("error in getting product");
+		}
+		
+		here can not write userDetails from Security context holder as this is public api so no security context holder so will give null pointer exception
+		*/
+		
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 				jwtRequest.getUsername(), jwtRequest.getPassword());
 		try {

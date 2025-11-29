@@ -82,7 +82,7 @@ public class SellerController {
 			}
 			product.setCategory(categoryFromDb); //otherwise gives some transient error..
 			
-			product.setSeller(user);
+			product.setSeller(user);//as user detail wil not be passed in th input, take it from security context
 			
 			product = productRepo.save(product);
 			
@@ -188,6 +188,7 @@ public class SellerController {
 			}
 
 			product.setCategory(categoryFromDb); //otherwise gives some transient error..
+			product.setSeller(user);
 			product = productRepo.save(product);
 			return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(product);
 		}
