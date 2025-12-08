@@ -37,7 +37,15 @@ public class UserInfo {
 	
 	@Column(nullable = false)
 	private String roles;
+	
+	
+	//test cases errors can see in the order of test cases execution, as all test cases executed in one go, so all error comes in the main log
+	//so if error coming in the top test cases then check at top of the main log as sometimes test case separate log does not give full information
+	//like assertion is failing but why assertion is failing this we will check in the main log not the test case log
 
+
+	//if missed this default constrtuctor then user repo will not be able to save the user, it uses default constructor
+	//even if all argument constructor is present, this error will come that default constructor is not present
 	public UserInfo() {
 		super();
 	}

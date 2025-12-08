@@ -36,6 +36,9 @@ public class LoginService implements UserDetailsService {
         //use this one method in filter for authentication
         //we can generate usermodel from jwt util and then use this method to get user details
         return userModel;
+		
+		//can user constructor of any class that implements user details and take usermodel as input
+        //this is done when userModel does not implements user details but some other class does
     }
 
 //    //my method
@@ -45,5 +48,7 @@ public class LoginService implements UserDetailsService {
 
     private List<GrantedAuthority> buildUserAuthority(String u){
         return null;
+		//SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role);
+        //return List.of(grantedAuthority);
     }
 }

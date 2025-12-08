@@ -58,6 +58,8 @@ public class StationService {
 			//different operator id for different user
 			
 			//station.setOperatorId(userInfo.getId());
+			//in Ticket project, since clientId they are passing from test case, but if do not save client id from userInfo 
+			//then giving strange errors..
 			
 			station = stationRepo.save(station);
 			
@@ -76,6 +78,8 @@ public class StationService {
 				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("data not found");
 			}
 			//return ResponseEntity.status(HttpServletResponse.SC_OK).body(stationList);
+
+//-------------------------------------------------------------------------------------------------------
 			
 			
 //--------------------------------------------------------------------------------------------------------			

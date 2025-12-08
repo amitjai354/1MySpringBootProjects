@@ -30,7 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String tokenHeader = request.getHeader("Authorization");
+		//String tokenHeader = request.getHeader("Authorization"); //insteasd of tokenHeader , use authHeader so less chances of error here
+		String authHeader = request.getHeader("Authorization");
 		//ab finally station add par ye error aa rhi : Cannot invoke "String.startsWith(String)" because "token" is null
 		//actually i had written here : token.startWith("Bearer ") instead of tokenHeader , so it was null
 		//yad rkhna ye error bhi
@@ -46,8 +47,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(authToken);
+					
+					//I had missed ! in the validateToken code, so this validate token was failing so, 
+					//api was directly giving 401 even without hittinhg any api
+					//if filter fails, request will be rejected immediately and authentication enyry point will give 401 unauthenticated
+					//debug point of test case will not go to the api code even, it immediatly give api failed
+					//but everything ok then before hitting test case coede, api code is hit if we put debug point in api code and test case code
 				}
 				else {
+					//this is must to write as if let say validation was failing dute to wrong code of jwt validate
+					//we will get one sentence in the log that filter validation failed
 					System.out.println("amit Filter validate token");
 				}
 			}

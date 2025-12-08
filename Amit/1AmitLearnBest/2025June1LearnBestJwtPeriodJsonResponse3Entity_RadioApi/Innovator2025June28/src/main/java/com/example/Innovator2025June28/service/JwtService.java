@@ -89,6 +89,10 @@ public class JwtService {
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		String username = this.extractUsername(token);
 		return username.equals(userDetails.getUsername()) && (!this.isTokenExpired(token));
+		//I missed to write ! here, so always it was token expired so token was invalid always
+		//we call this method in the jwt filter so jwt filter was failing so api was not even executed
+		//even before going to api, request was cancelled by JWT filter and authyentication entry point gave 401 unauthenticated
+		//403 is forbidden if user is authenticated but authority is wrong
 	}
 	
 	public String generateToken(String username) {

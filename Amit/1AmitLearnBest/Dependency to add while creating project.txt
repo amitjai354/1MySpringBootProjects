@@ -1,0 +1,83 @@
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-jpa</artifactId>
+
+------4 starter dependency-----------------------------------
+starter web
+starter data jpa
+starter test
+starter security
+
+------2 other spring dependency-------------------------------------------
+spring security
+devtools -- if do not add this then application propert for h2 enable is not recognised by spring boot
+--for all property to work fine and spring boot to have all required development tools
+
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-test</artifactId>
+	<scope>test</scope>
+</dependency>
+		
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<scope>runtime</scope>
+	<optional>true</optional>
+</dependency>
+
+------4 dependency for h2 and jjwt-----------------------------------------------
+
+h2    ---com.h2database, h2
+jjwt-api    ---io.jsonwebtoken. 
+jjwt-impl
+jjwt-jackson
+
+-----------------------------------------------------------------------------------
+
+
+
+
+
+------1 maven plugin--------------------------------------
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+	</plugins>
+</build>
+
+
+
+----------------------------------------------------------------------
+//model version is 4.0.0, spring tool suit is also 4.0.0
+//but spring version is 3.4.4
+
+<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>Innovator2025June28</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Innovator2025June28</name>
+	<description>Demo project for Spring Boot</description>
+	<url/>
+----------------------------------------------------------
+
+<properties>
+	<java.version>17</java.version>
+</properties>
+
+here can change java version if it says that java files were compiled by some other version
+//if give 21 here then gives this error
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------

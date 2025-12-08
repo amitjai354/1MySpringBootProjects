@@ -26,21 +26,30 @@ public class UserModel implements UserDetails {
 
     @Column(name = "email", unique = true)
     private String email;
-
+	
+	//if write fetch and cascade here, giving strange errors
+    //@ManyToOne()
+	@ManyToOne //this one is correct
+    @JoinColumn(name="role_Id", referencedColumnName = "id")
     private RoleModel role;
+    //implements Serializable
+    //Caused by: org.hibernate.type.descriptor.java.spi.JdbcTypeRecommendationException: Could not determine 
+    //recommended JdbcType for Java type 'com.example.demoTcsArtWorkNov23Innovator.model.RoleModel'
+    //no annotation baove rolmodel here  and even granted authority was retrurning null
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //Here return any collection, ? means collection can be anything list set vector
         //but it should extend GrantedAuthority
-        //return Collections.singletonList(grantedAuthority);
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRolename());
+        //return List.of(authority);
+        return Collections.singletonList(grantedAuthority);
         //used in security filter chain to get authority
         //we are returning singleton list because ManyToOne means each user has only one role
         //but if manyToMany then this will be list of roles
         //return role.stream.map(r-> new SimpleGrantedAuthority(r.getName()).collect(Collectors.toList());
-    	
-    	return null;
     }
+	
 
     //constructor
 
