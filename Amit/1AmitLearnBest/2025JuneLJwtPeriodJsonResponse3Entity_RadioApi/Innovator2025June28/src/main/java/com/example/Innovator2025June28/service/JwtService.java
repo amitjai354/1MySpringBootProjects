@@ -106,7 +106,10 @@ public class JwtService {
 				.setSubject(username)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
-				.signWith(this.getSignKey())
+				//.signWith(this.getSignKey())
+				//HS512 needs even more large secret string, double the size of HS256
+				//current SECRET string is working with HS256 but HS512 is giving error that string is small
+				.signWith(this.getSignKey(), Jwts.SIG.HS256)
 				//if missed writing this signWith() here
 				//now getting : io.jsonwebtoken.UnsupportedJwtException: Unsigned Claims JWTs are not supported. for stationAdd test case
 				//even i have written parseClaimJws this time
