@@ -35,6 +35,8 @@ public class Show {
 	//Actual foreign key field (used in request and response)
 	private int station_id;
 	
+	//Below code given in example
+	//but can not use this as in constructor only given station id , nothing about station, so need to use station id only for foreign key mapping
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="station_Id", insertable=false, updatable = false)
 	@JsonIgnore

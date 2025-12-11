@@ -37,7 +37,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.io.IOException;
 
-@SpringBootTest
+
+//code to run h2 console in debug test mode
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, // Starts server on defined port (e.g., 8080)
+//        properties = {"spring.h2.console.enabled=true"}) // Overrides property to enable console, already written in the properties file so not needed here
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+//@SpringBootTest //this is given in the exam
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class Innovator2025June28ApplicationTests {
 

@@ -68,6 +68,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			System.out.println("amit Filter tokenheader bearer");
 		}
 		filterChain.doFilter(request, response);
+		//code to run h2 console in debug test mode
+		//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, // Starts server on defined port (e.g., 8080)
+        // 
 	}
 
 }

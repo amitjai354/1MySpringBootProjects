@@ -206,6 +206,10 @@ public class LoginController {
 		//means if token is not correct to if check expiration, it will give expired
 		JwtResponse jwtResponse = new JwtResponse(token, 200);
 		return ResponseEntity.status(HttpServletResponse.SC_OK).body(jwtResponse);
+		
+		//code to run h2 console in debug test mode
+		//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, // Starts server on defined port (e.g., 8080)
+        //        properties = {"spring.h2.console.enabled=true"}) // Overrides property to enable console
 	}
 
 }

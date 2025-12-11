@@ -22,11 +22,11 @@ public class UserInfoUserDetails implements UserDetails {
 		this.password = userInfo.getPassword();
 		
 		//this will also work as role is single only, this is easier to do in exam no confusion in anxiety
-//		SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userInfo.getRoles());
-//		this.authorities = List.of(grantedAuthority);
+		SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userInfo.getRoles());
+		this.authorities = List.of(grantedAuthority);
 		
-		String[] rolesArray = userInfo.getRoles().split(", ");
-		this.authorities = Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
+		//String[] rolesArray = userInfo.getRoles().split(", ");
+		//this.authorities = Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
 		
 		//Stream.of(rolesArray).map(r-> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
 
