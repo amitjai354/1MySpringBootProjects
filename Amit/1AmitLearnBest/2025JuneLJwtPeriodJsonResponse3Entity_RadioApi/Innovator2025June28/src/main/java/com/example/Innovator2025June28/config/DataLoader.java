@@ -53,6 +53,7 @@ public class DataLoader implements ApplicationRunner{
 		
 		//2025 june 28 mistakes summary:
 		
+		
 		//as you write just then check that line once, check each line as you keep writting them
 		//baad me upar se dekhane me kabhi error nhi milti.. dekh rho to aram se ek ek line dekho.. 
 		//but best hai ki jaise hi likhte ho koi ek line, turant ek bar dekh lena ki sahi hai ki nhi..
@@ -64,6 +65,11 @@ public class DataLoader implements ApplicationRunner{
 		//but maine dono exam me ek baar bhi poora security code dobara nhi dekha.. jabrdasti logs ke peeche pada tha..
 		//ek baar bhi maine dobar dekha hota code to aaj paper nikal gya hota mera.. pata nhi kya ho jata hai papapr me ki dobara
 		//code dekhna hi nhi hai..
+		
+		
+		//.signWith(getSignKey(), SignatureAlgorithm.HS256)  if write ES256 instead of HS256 then all autenticated test cases failed belwo error
+		//Caused by: io.jsonwebtoken.security.InvalidKeyException: ECDSA signing keys must be PrivateKey instances.
+		//in getSignKey, we can use SecretKey instead of Key
 		
 		//0. signUp gave emails nulls first then said primary key or unique violation, this is confusing emails nulls first
 		//but actually tried to enter same username and email again so this error as these are unique
