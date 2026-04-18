@@ -42,8 +42,20 @@ public class DataLoader implements ApplicationRunner{
 
 		Show show1 = showRepo.save(new Show("Morning Vibes", "refreshing morning show with great music and positive talks", "08:00 AM - 10:00 AM", 120, "Emma Roberts", "Music & Talk", 5, station1.getStation_id()));
 		
+		//Most Important POINT
+		//Just debug if any issue is there, put the pointer in the method where error is coming.. you can put pointer first in test java file at line start
+		//then once pointer comes to there then put pointer inside the service method and controller as sometimes same apis may be called by multiple testcases
+		//so if put pointer in the metyhod then each time poin ter will go to method for all test cases which are passed even
+		//then just click on debug test case.. immediately can find the error by just checking the values
+		//if exception then put muse cursor on e, it will give exception and error//it is best to always write e.printstachtrace as it will give stack trace why failing
+		//this is best as can not use post man in the exam, very lengthy as we will have to create the inout json also then call the api
+		//but with debug, can find issue in within 1 min so always debyug the issue if unable to find the issue//but best is while writing the coee itself, once crosscheck each line
 		
 		//2025 june 28 mistakes summary:
+		
+		//as you write just then check that line once, check each line as you keep writting them
+		//baad me upar se dekhane me kabhi error nhi milti.. dekh rho to aram se ek ek line dekho.. 
+		//but best hai ki jaise hi likhte ho koi ek line, turant ek bar dekh lena ki sahi hai ki nhi..
 		
 		//jais ehi koi  class ka cod elikhte ho 2 min me ek baar poora code recheck karo.. jhar ek line..
 		//last time bhi socha tha but kiya nhi iss baar ye.. same mistake happened.. imported wrong class/called wrong method
