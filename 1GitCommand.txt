@@ -5,7 +5,7 @@ Steps:
 git status
 
 
-step1:  git add .
+step1:  git add .  or git add -A
 
 step2:  git commit -m "added 2024 dec exam empty paper"
 
