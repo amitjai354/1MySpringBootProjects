@@ -19,6 +19,9 @@ public enum Role {
 //	private int roleId;
 //	
 //	private String roleName;
+//	@ManyToMany()
+//	@JsonIgnore
+//	private List<User> userList;
 //
 //	public Role() {
 //		super();

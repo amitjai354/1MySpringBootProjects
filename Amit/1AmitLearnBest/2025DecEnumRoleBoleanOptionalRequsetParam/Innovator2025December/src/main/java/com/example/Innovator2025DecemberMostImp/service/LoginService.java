@@ -1,9 +1,16 @@
 package com.example.Innovator2025DecemberMostImp.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.example.Innovator2025DecemberMostImp.entity.UserInfo;
+import com.example.Innovator2025DecemberMostImp.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletResponse;
+
+@Service
 public class LoginService {
 	
 	
@@ -24,9 +31,23 @@ public class LoginService {
 // /station/update : authenticated user have role ADMIN and is creator of id object, 200, Forbidden if not the creator, 400 if no data found
 // /show/add : 201 400 is any validation issue like missing required fields or invalid station id
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	public ResponseEntity addUser(UserInfo userInfo) {
-		return null;
+		try {
+			String encPassword = passwordEncoder.encode(userInfo.getPassword());
+			userInfo.setPassword(encPassword);
+			userInfo = userRepository.save(userInfo);
+			return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(userInfo);
+		}
+		catch (Exception e) {
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("amit signup failed");
+		}
+	
 	}
 
 }

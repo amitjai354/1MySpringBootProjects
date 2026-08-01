@@ -42,6 +42,67 @@ public class User implements UserDetails {
 	
 	private String password;
 	
+	
+////===================================================================================================================
+//	//--------------------------------------
+//	//here nothing to write like mapped by in role class as it enum not a class
+//	@Enumerated(EnumType.STRING)
+//	private UserRoles userRoles;
+//	
+//	SimpleGrantedAuthority authorityEnum = new SimpleGrantedAuthority(userRoles.name());
+//	List<SimpleGrantedAuthority> listAuthEnum1 = List.of(authorityEnum);
+//	
+//	//--------------------------------------------
+//	//where we write joincolumn, fk is created in that class
+//	//in other classs we write mappedBy to tell that to which fk that table is joined
+//	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JoinColumn(name="user_id", referencedColumnName = "userId") 
+//	private UserRoles userRolesClass;
+//
+//	@OneToMany(mappedBy = "id")
+//	private UserInfo userInfoRoleClass;
+//	
+//	//if role is a classs then it will be------------------------userRolesClass.getRoleName()
+//	SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRolesClass.name());
+//	List<SimpleGrantedAuthority> listAuth = List.of(authority);
+//	
+//	//--------------------------------
+//	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JoinTable(name="user_role", joinColumns = @JoinColumn(name="user_id", referencedColumnName = "userId"),
+//			inverseJoinColumns = @JoinColumn(name ="role_id", referencedColumnName = "roleId"))
+//	private List<UserRoles> userRolesClassList;
+//	
+//	//normally it will r.getRole as userRole will be a class with getter-------------------------------r.getRoleName()
+//	List<SimpleGrantedAuthority> listAuth1 = userRolesClassList.stream().map(r->new SimpleGrantedAuthority(r.name()))
+//															.collect(Collectors.toList());
+//	
+//	You must use mappedBy on the inverse side to avoid creating two join tables when using Bidirectiona ManyToMAny
+//	Unidirectional ManyToMAny means defining ManyToMany n opne table only
+//	Bidirection ManyToMany means defining ManyToMany in bith joining table
+//	where we write @JoinTable, that is owning side and where we write mapped by that is inverse side
+//	@ManyToMany(mappedBy = "userId")
+//	@JsonIgnoreProperties({"id", "name"})
+//	private List<UserInfo> userInfoListInRole;
+//	
+//	//-------------------------------------------------
+//	//here nothing to write like mapped by in role class as it enum not a class
+//	@ElementCollection(targetClass = UserRoles.class, fetch = FetchType.EAGER)
+//	@CollectionTable(name="user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"))
+//	private List<UserRoles> userRolesListEnum;
+//	
+//	List<SimpleGrantedAuthority> listAuthEnum = userRolesClassList.stream().map(r->new SimpleGrantedAuthority(r.name()))
+//			.collect(Collectors.toList());
+//	
+//	//-----------------------------------------
+//	//-------UserDetails class-----------
+//	List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRoles.name()));
+//	
+//	String[] roleStringArray = name.split(", ");
+//	List<GrantedAuthority> listAuthUserDetails = Stream.of(roleStringArray).map(r->new SimpleGrantedAuthority(r))
+//						.collect(Collectors.toList());
+////====================================================================================================================================
+	
+	
 //	@JsonIgnore
 //	@JsonIgnoreProperties("roleId", "roleName") 
 //	when do not want to ignore complete class but just some attributes

@@ -181,6 +181,8 @@ public class DataLoader implements ApplicationRunner {
 		UserInfo userInfo5 = userRepo.save(new UserInfo("citizenThree", passwordEncoder.encode("citizen789$"), roleC));
 		
 		
+
+		
 		/*
 		//@CreationTimestamp //I added this
 		private LocalDate postDate;
@@ -190,11 +192,11 @@ public class DataLoader implements ApplicationRunner {
 		
 		//in exam in desc i have written just : plant trees  not zsuree if this was given in test cases or what 
 		//but i have update response from problem statement, there complete statememnt is given
-		//Locatiomn is also given as : CentralPark, NewYork but in exam in dataloader i have written: CentralPark only
+		//Location is also given as : CentralPark, NewYork but in exam in dataloader i have written: CentralPark only
 		
-//		VIMP, in exam oroblem statement , they have given different description
+//		VIMP, in exam problem statement , they have given different description
 //		but in test case they have given different description
-//		Now if I match with test cases then here it will pass but if foinal evaluation if they check for the origuinal 
+//		Now if I match with test cases then here it will pass but in final evaluation if they check for the origuinal 
 //		desc then it will fail.
 //		
 //		this is planning to fail as in update api, they are checking complete response

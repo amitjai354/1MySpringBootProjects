@@ -8,11 +8,14 @@ import org.springframework.data.repository.query.Param;
 import com.example.Innovator2025DecemberMostImp.entity.UserInfo;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+
 
 public interface UserRepository extends JpaRepository<UserInfo, Integer> {
 	
 	
-	
+	Optional<UserInfo> findByName(String name);
 	
 
 	@Transactional

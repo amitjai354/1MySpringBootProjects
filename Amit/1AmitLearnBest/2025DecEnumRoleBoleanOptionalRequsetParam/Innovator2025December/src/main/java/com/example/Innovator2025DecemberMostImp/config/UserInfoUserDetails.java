@@ -2,8 +2,11 @@ package com.example.Innovator2025DecemberMostImp.config;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.Innovator2025DecemberMostImp.entity.UserInfo;
@@ -15,26 +18,32 @@ public class UserInfoUserDetails implements UserDetails {
 	private List<GrantedAuthority> authorities;
 	
 	public UserInfoUserDetails(UserInfo userInfo) {
+		this.name = userInfo.getName();
+		this.password = userInfo.getPassword();
+		authorities = List.of(new SimpleGrantedAuthority(userInfo.getUserRoles().name()));
 		
+		String[] roleStringArray = name.split(", ");
+		List<GrantedAuthority> listAuth = Stream.of(roleStringArray).map(r->new SimpleGrantedAuthority(r))
+							.collect(Collectors.toList());
 	}
 	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.authorities;
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.password;
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 	
 

@@ -1,13 +1,24 @@
 package com.example.Innovator2025DecemberMostImp.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Innovator2025DecemberMostImp.config.UserInfoUserDetailsService;
 import com.example.Innovator2025DecemberMostImp.dto.AuthRequest;
+import com.example.Innovator2025DecemberMostImp.dto.JwtResponse;
 import com.example.Innovator2025DecemberMostImp.entity.UserInfo;
 import com.example.Innovator2025DecemberMostImp.service.JwtService;
 import com.example.Innovator2025DecemberMostImp.service.LoginService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
+@RestController
 public class LoginController {
 	
 	
@@ -46,24 +57,44 @@ public class LoginController {
 	400 Bad Request
 	*/
 	
+	@Autowired
 	private LoginService service;
 	 
+	@Autowired
 	private JwtService jwtService;
 	
+	@Autowired
+	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	UserInfoUserDetailsService userDetailsService;
 	 
 	 
 	//Error: email null first, primary key or unique constraint violation
 	//this was confusing due to email nulls first but email was not null, it was unique but test case was trying to insert same email again
 	@PostMapping("/signUp")
-	public ResponseEntity addNewUser(UserInfo userInfo) {
-		return null;
+	public ResponseEntity addNewUser(@RequestBody UserInfo userInfo) {
+		return service.addUser(userInfo);
 	}
 	
 	
 	//Error: JWT strings must contain exactly 2 period characters. Found: 0
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateAndGetToken(AuthRequest authRequest){
-		return null;
+	public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequest authRequest){
+		UsernamePasswordAuthenticationToken authToken = new
+				UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
+		try {
+			authenticationManager.authenticate(authToken);
+		}
+		catch (Exception e) {
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("amit error in login");
+		}
+		
+		UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+		
+		String token = jwtService.generateToken(userDetails.getUsername());
+		JwtResponse jwtResponse = new JwtResponse(token, 200);
+		return ResponseEntity.status(HttpServletResponse.SC_OK).body(jwtResponse);
 	}
 
 }
